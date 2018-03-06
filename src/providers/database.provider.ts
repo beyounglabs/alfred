@@ -46,8 +46,10 @@ export class DatabaseProvider {
         logging: process.env.DB_LOGGING === 'true',
         logger: 'file',
         cache: false,
-        entities: [__dirname + '/../entities/*.entity{.ts,.js}'],
-        migrations: [__dirname + '/../../database/migrations/*.{.ts,.js}'],
+        entities: [__dirname + '/../../../../src/entities/*.entity{.ts,.js}'],
+        migrations: [
+          __dirname + '/../../../../database/migrations/*.{.ts,.js}',
+        ],
       };
 
       if (process.env.REDIS_CACHE_HOST) {
@@ -70,8 +72,10 @@ export class DatabaseProvider {
         database,
         logging: process.env.DB_LOGGING === 'true',
         logger: 'file',
-        entities: [__dirname + '/../entities/*.entity{.ts,.js}'],
-        migrations: [__dirname + '/../../database/migrations/*.{.ts,.js}'],
+        entities: [__dirname + '/../../../../src/entities/*.entity{.ts,.js}'],
+        migrations: [
+          __dirname + '/../../../../database/migrations/*.{.ts,.js}',
+        ],
       };
 
       this.connection = await createConnection(connectionOptions);
