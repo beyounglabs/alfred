@@ -1,25 +1,24 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "declaration": false,
+    "declaration": true,
     "noImplicitAny": false,
     "removeComments": true,
     "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "strictPropertyInitialization": false,
     "target": "es2017",
     "sourceMap": true,
     "allowJs": false,
     "strict": true,
     "moduleResolution": "node",
-    "baseUrl": "./src/",
     "outDir": "dist",
+    "baseUrl": "./src/",
     "paths": {
       "tests/*": ["./../__tests__/*"],
       "*": ["./*"]
     }
   },
-  "include": ["src/**/*", "scripts/**/*", "database/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.test.ts"]
 }
