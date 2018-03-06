@@ -18,16 +18,24 @@
   "dependencies": {
     "brain-js-sdk": "bitbucket.org:beautybrands/brain-js-sdk.git",
     "bluebird": "^3.5.1",
+    "dotenv": "^4.0.0",
+    "elasticsearch": "^14.0.0",
     "redis": "^2.8.0",
+    "reflect-metadata": "^0.1.10",
     "typedi": "^0.7.1",
     "typeorm": "^0.1.1",
-    "typescript": "2.6.1"
+    "typescript": "2.6.1",
+    "slack-winston": "^0.0.9",
+    "winston": "^2.4.0",
+    "winston-elasticsearch": "^0.5.6"
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",
+    "@types/elasticsearch": "^5.0.19",
     "@types/mocha": "^2.2.44",
     "@types/node": "^8.0.53",
     "@types/redis": "^2.8.1",
+    "@types/winston": "^2.3.7",
     "chai": "^4.1.2",
     "mocha": "^4.0.1",
     "nodemon": "^1.12.1",
