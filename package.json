@@ -18,7 +18,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "bluebird": "^3.5.1",
-    "brain-js-sdk": "bitbucket.org:beautybrands/brain-js-sdk.git",
+    "brain-js-sdk": "bitbucket.org:beautybrands/brain-js-sdk.git#master",
     "dotenv": "^4.0.0",
     "elasticsearch": "^14.0.0",
     "express": "^4.16.2",
