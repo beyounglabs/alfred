@@ -10,7 +10,7 @@
     "test":
       "NODE_ENV=testing nyc mocha -A --opts ./mocha.opts --require ts-node/register -r tsconfig-paths/register",
     "test:watch": "nodemon -e js,ts  --exec yarn test:clear",
-    "install2": "tsc && cp -r dist/* .",
+    "install": "tsc && cp -r dist/* .",
     "ts-node": "ts-node",
     "npm:publish":
       "yarn build && cp package.json dist/ && cd dist/ && npm publish"
