@@ -1,0 +1,26 @@
+{
+  "name": "alfred",
+  "version": "0.0.1",
+  "description": "Alfred JS Framework",
+  "main": "dist/index.js",
+  "repository": "git@bitbucket.com:beautybrands/alfred.git",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "install": "tsc && cp -r dist/* .",
+    "ts-node": "ts-node",
+    "npm:publish":
+      "yarn build && cp package.json dist/ && cd dist/ && npm publish"
+  },
+  "dependencies": {
+    "typescript": "2.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.53",
+    "nodemon": "^1.12.1",
+    "ts-node": "^3.3.0",
+    "tsconfig-paths": "^2.4.0",
+    "tslint": "^5.8.0",
+    "tslint-config-airbnb": "^5.4.2"
+  }
+}
