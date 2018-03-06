@@ -918,7 +918,7 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
-elasticsearch@^14.0.0, elasticsearch@^14.1.0:
+elasticsearch@^14.0.0:
   version "14.1.0"
   resolved "https://registry.yarnpkg.com/elasticsearch/-/elasticsearch-14.1.0.tgz#9a5e461fa3bacc1bd91411534650c63408121f81"
   dependencies:
@@ -1945,7 +1945,7 @@ lodash@2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-2.4.2.tgz#fadd834b9683073da179b3eae6d9c0d15053f73e"
 
-lodash@^4.14.0, lodash@^4.17.4, lodash@^4.17.5:
+lodash@^4.14.0, lodash@^4.17.4:
   version "4.17.5"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"
 
@@ -2961,7 +2961,7 @@ signal-exit@^3.0.0, signal-exit@^3.0.1, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
-slack-winston@^0.0.9:
+slack-winston@0.0.9:
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/slack-winston/-/slack-winston-0.0.9.tgz#cbb43e5a9476af7743d4f4e5c44c813854985364"
   dependencies:
@@ -3621,19 +3621,19 @@ window-size@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/window-size/-/window-size-0.1.0.tgz#5438cd2ea93b202efa3a19fe8887aee7c94f9c9d"
 
-winston-elasticsearch@^0.5.6:
-  version "0.5.7"
-  resolved "https://registry.yarnpkg.com/winston-elasticsearch/-/winston-elasticsearch-0.5.7.tgz#4d929a09c979bba6985b412a305e6e216eb703a4"
+winston-elasticsearch@0.5.6:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/winston-elasticsearch/-/winston-elasticsearch-0.5.6.tgz#c05281580b0d66cdda7b50c4767b5c00cff69ad6"
   dependencies:
     debug "^3.1.0"
-    elasticsearch "^14.1.0"
-    lodash "^4.17.5"
+    elasticsearch "^14.0.0"
+    lodash "^4.17.4"
     moment "^2.20.1"
     promise "^8.0.1"
     retry "^0.10.1"
     winston "^2.4.0"
 
-winston@^2.4.0:
+winston@2.4.0, winston@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/winston/-/winston-2.4.0.tgz#808050b93d52661ed9fb6c26b3f0c826708b0aee"
   dependencies:

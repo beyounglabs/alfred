@@ -10,8 +10,7 @@
     "test":
       "NODE_ENV=testing nyc mocha -A --opts ./mocha.opts --require ts-node/register -r tsconfig-paths/register",
     "test:watch": "nodemon -e js,ts  --exec yarn test:clear",
-    "install:local": "yarn install --ignore-scripts",
-    "install": "tsc && cp -r dist/* .",
+    "install": "./scripts/install.sh",
     "ts-node": "ts-node",
     "npm:publish":
       "yarn build && cp package.json dist/ && cd dist/ && npm publish"
@@ -28,15 +27,15 @@
     "mysql": "^2.15.0",
     "redis": "^2.8.0",
     "reflect-metadata": "^0.1.10",
-    "slack-winston": "^0.0.9",
+    "slack-winston": "0.0.9",
     "typedi": "^0.7.1",
     "typeorm-typedi-extensions": "^0.1.1",
     "typeorm": "^0.1.1",
     "typescript": "2.6.1",
     "uniqid": "^4.1.1",
     "validator": "^9.2.0",
-    "winston-elasticsearch": "^0.5.6",
-    "winston": "^2.4.0",
+    "winston-elasticsearch": "0.5.6",
+    "winston": "2.4.0",
     "yargs": "^10.0.3"
   },
   "devDependencies": {
