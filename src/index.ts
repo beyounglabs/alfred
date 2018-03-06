@@ -1,4 +1,5 @@
 import { loadEnv } from './env/load.env';
+import { Logger } from './logger/logger';
 import { DatabaseProvider } from './providers/database.provider';
 import { RedisProvider } from './providers/redis.provider';
 import { FixtureAbstract } from './tests/fixture.abstract';
@@ -11,6 +12,7 @@ export {
   BaseRepository,
   DefaultMetadata,
   DatabaseProvider,
+  Logger,
   RedisProvider,
   TestCase,
   FixtureAbstract,
