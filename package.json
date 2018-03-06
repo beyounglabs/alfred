@@ -7,17 +7,30 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "install": "tsc && cp -r dist/* .",
+    "test":
+      "NODE_ENV=testing nyc mocha -A --opts ./mocha.opts --require ts-node/register -r tsconfig-paths/register",
+    "test:watch": "nodemon -e js,ts  --exec yarn test:clear",
+    "install2": "tsc && cp -r dist/* .",
     "ts-node": "ts-node",
     "npm:publish":
       "yarn build && cp package.json dist/ && cd dist/ && npm publish"
   },
   "dependencies": {
+    "bluebird": "^3.5.1",
+    "redis": "^2.8.0",
+    "typedi": "^0.7.1",
+    "typeorm": "^0.1.1",
     "typescript": "2.6.1"
   },
   "devDependencies": {
+    "@types/chai": "^4.0.4",
+    "@types/mocha": "^2.2.44",
     "@types/node": "^8.0.53",
+    "@types/redis": "^2.8.1",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
     "nodemon": "^1.12.1",
+    "nyc": "^11.4.1",
     "ts-node": "^3.3.0",
     "tsconfig-paths": "^2.4.0",
     "tslint": "^5.8.0",

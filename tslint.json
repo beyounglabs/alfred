@@ -8,10 +8,10 @@
     "exclude": ["database/*"]
   },
   "rules": {
-    "max-line-length": [150],
     "object-shorthand-properties-first": false,
     "no-parameter-reassignment": false,
     "member-access": [true],
-    "await-promise": true
+    "await-promise": true,
+    "ter-arrow-parens": false
   }
 }

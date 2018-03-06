@@ -1,33 +1,25 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "declaration": true,
+    "declaration": false,
     "noImplicitAny": false,
     "removeComments": true,
     "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es6",
+    "strictPropertyInitialization": false,
+    "target": "es2017",
     "sourceMap": true,
-    "allowJs": false,
+    "allowJs": true,
     "strict": true,
     "moduleResolution": "node",
-    "outDir": "dist",
     "baseUrl": "./src/",
+    "outDir": "dist",
     "paths": {
-      "tests/*": [
-        "./../__tests__/*"
-      ],
-      "*": [
-        "./*"
-      ]
+      "tests/*": ["./../__tests__/*"],
+      "*": ["./*"]
     }
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.test.ts"
-  ]
+  "include": ["src/**/*", "scripts/**/*", "database/**/*"],
+  "exclude": ["node_modules", "**/*.test.ts"]
 }
