@@ -10,7 +10,7 @@
     "strictPropertyInitialization": false,
     "target": "es2017",
     "sourceMap": true,
-    "allowJs": true,
+    "allowJs": false,
     "strict": true,
     "moduleResolution": "node",
     "baseUrl": "./src/",
