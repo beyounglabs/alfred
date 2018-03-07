@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e # fail on firstfail
 echo "127.0.0.1	redis" >> /etc/hosts
+echo "127.0.0.1	redis_consul" >> /etc/hosts
 
 # Access to other bitbucket repos
 echo "Host bitbucket.org" >> ~/.ssh/config
