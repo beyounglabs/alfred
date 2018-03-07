@@ -11,6 +11,7 @@ echo "  IdentityFile \"/opt/atlassian/pipelines/agent/data/id_rsa\"" >> ~/.ssh/c
 echo "  IdentitiesOnly yes" >> ~/.ssh/config
 
 yarn install
-git remote -v | awk "{print $2}" | head -n 1 | grep -Po "(?<=\/)(\w+)(?! .git)" > repository.txt
-git branch | awk "{print $2}" | head -n 1 | tr -s "* " " " >> repository.txt
-yarn test:reload
+git remote -v
+# git remote -v | awk "{print $2}" | head -n 1 | grep -Po "(?<=\/)(\w+)(?! .git)" > repository.txt
+# git branch | awk "{print $2}" | head -n 1 | tr -s "* " " " >> repository.txt
+# yarn test:reload
