@@ -1,0 +1,17 @@
+{
+  "defaultSeverity": "error",
+  "extends": "tslint-config-airbnb",
+  "jsRules": {
+    "no-unused-expression": true
+  },
+  "cliOptions": {
+    "exclude": ["database/*"]
+  },
+  "rules": {
+    "object-shorthand-properties-first": false,
+    "no-parameter-reassignment": false,
+    "member-access": [true],
+    "await-promise": true,
+    "ter-arrow-parens": false
+  }
+}
