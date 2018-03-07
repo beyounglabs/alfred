@@ -8,7 +8,9 @@ export class RedisProvider {
 
   constructor() {
     const redisClient = redis.createClient({
-      host: 'redis',
+      host: process.env.REDIS_HOST || 'redis',
+      port: process.env.REDIS_PORT ? Number(process.env.REDIS_PORT) : 6379,
+      db: process.env.REDIS_DB || '0',
     });
 
     this.connection = bluebird.promisifyAll(redisClient);
