@@ -10,8 +10,9 @@ echo "  User git" >> ~/.ssh/config
 echo "  IdentityFile \"/opt/atlassian/pipelines/agent/data/id_rsa\"" >> ~/.ssh/config
 echo "  IdentitiesOnly yes" >> ~/.ssh/config
 
+printenv
 yarn install
-git remote -v
+git remote -v | awk "{print $2}"
 # git remote -v | awk "{print $2}" | head -n 1 | grep -Po "(?<=\/)(\w+)(?! .git)" > repository.txt
 # git branch | awk "{print $2}" | head -n 1 | tr -s "* " " " >> repository.txt
 # yarn test:reload

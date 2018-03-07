@@ -9,5 +9,5 @@ if [ $NODEMODULES_DIR == "node_modules" ]
 then
     yarn tsc
     cp -r dist/* .
-    cp -r defaults/* "$NODEMODULES_PATH/../"
+    cp -r defaults/. "$NODEMODULES_PATH/../"
 fi
