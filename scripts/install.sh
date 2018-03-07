@@ -9,5 +9,8 @@ if [ $NODEMODULES_DIR == "node_modules" ]
 then
     yarn tsc
     cp -r dist/* .
-    cp -r defaults/. "$NODEMODULES_PATH/../"
+    if [ $BITBUCKET_BRANCH == "" ]
+    then
+      cp -r defaults/. "$NODEMODULES_PATH/../"
+    fi
 fi
