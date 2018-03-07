@@ -21,6 +21,12 @@ export class DefaultMetadata {
       params.type = this.getDecimalDataType();
     }
 
+    if (params.type === 'integer') {
+      if (process.env.DB_TYPE !== 'mysql') {
+        delete params.length;
+      }
+    }
+
     if (params.type === 'boolean') {
       params.type = 'tinyint';
       params.transformer = new BooleanTransformer();
