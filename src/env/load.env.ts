@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
-import { BrainParameter } from 'brain-js-sdk';
+
+import { BrainParameter } from '../brain/brain.parameter';
 
 export async function loadEnv(subscribe: boolean) {
   let dotenvPath = '.env';
