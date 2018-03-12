@@ -13,8 +13,8 @@ export class ObjectConverter {
 
     const newObject: any = {};
     for (const key of Object.keys(object)) {
-      const newKey = key;
-      newObject[newKey] = camelCase(object[key]);
+      const newKey = camelCase(key);
+      newObject[newKey] = object[key];
     }
 
     return newObject;
