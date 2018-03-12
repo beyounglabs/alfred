@@ -1,11 +1,14 @@
 #!/bin/bash
 # SCRIPT_PATH=`realpath $0`
 #SCRIPT_DIR=`basename $(pwd)`
+ORIGINAL_PATH=`pwd`;
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 cd "${SCRIPT_DIR}/../../";
 
 NODEMODULES_DIR=`basename $(pwd)`;
+
+cd $ORIGINAL_PATH;
 
 # NODEMODULES_PATH=`realpath "$SCRIPT_DIR/../../"`
 # NODEMODULES_DIR=`basename "$SCRIPT_DIR/../../"`
