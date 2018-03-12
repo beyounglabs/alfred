@@ -8,7 +8,6 @@ cd "${SCRIPT_DIR}/../../";
 
 NODEMODULES_DIR=`basename $(pwd)`;
 
-cd $ORIGINAL_PATH;
 
 # NODEMODULES_PATH=`realpath "$SCRIPT_DIR/../../"`
 # NODEMODULES_DIR=`basename "$SCRIPT_DIR/../../"`
@@ -21,6 +20,8 @@ then
     cp -r dist/* .
     if [ ! $BITBUCKET_BRANCH ]
     then
-      cp -r defaults/. "$NODEMODULES_PATH/../"
+      cp -r defaults/. ../
     fi
 fi
+
+cd $ORIGINAL_PATH;
