@@ -22,7 +22,8 @@ then
     cp -r dist/* .
     if [ ! $BITBUCKET_BRANCH ]
     then
-      cp -r defaults/. ..
+      pwd
+      cp -r defaults/. ../
     fi
 fi
 
