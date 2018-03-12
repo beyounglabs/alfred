@@ -4,15 +4,12 @@
 ORIGINAL_PATH=`pwd`;
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+
 cd "${SCRIPT_DIR}/../../";
 
+NODEMODULES_PATH=`pwd`;
+
 NODEMODULES_DIR=`basename $(pwd)`;
-
-
-# NODEMODULES_PATH=`realpath "$SCRIPT_DIR/../../"`
-# NODEMODULES_DIR=`basename "$SCRIPT_DIR/../../"`
-
-echo $NODEMODULES_DIR;
 
 cd $ORIGINAL_PATH;
 
@@ -22,8 +19,7 @@ then
     cp -r dist/* .
     if [ ! $BITBUCKET_BRANCH ]
     then
-      pwd
-      cp -r defaults/. ../
+      cp -r "${NODEMODULES_PATH}/alfred/defaults/." "${NODEMODULES_PATH}/../"
     fi
 fi
 
