@@ -14,14 +14,16 @@ NODEMODULES_DIR=`basename $(pwd)`;
 
 echo $NODEMODULES_DIR;
 
+cd $ORIGINAL_PATH;
+
 if [ $NODEMODULES_DIR == "node_modules" ]
 then
     yarn tsc
     cp -r dist/* .
     if [ ! $BITBUCKET_BRANCH ]
     then
-      cp -r defaults/. ../
+      cp -r defaults/. ..
     fi
 fi
 
-cd $ORIGINAL_PATH;
+

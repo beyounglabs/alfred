@@ -2,11 +2,11 @@ import { ClientOpts, createClient, RedisClient } from 'redis';
 
 let client: RedisClient;
 let subscribeClient: RedisClient;
-let statiClientOpts: ClientOpts;
+let staticClientOpts: ClientOpts;
 export class RedisManager {
   constructor(clientOpts?: ClientOpts) {
     if (clientOpts) {
-      statiClientOpts = clientOpts;
+      staticClientOpts = clientOpts;
     }
   }
 
@@ -15,7 +15,7 @@ export class RedisManager {
       return client;
     }
 
-    const redisClient = createClient(statiClientOpts);
+    const redisClient = createClient(staticClientOpts);
     return new Promise<RedisClient>(resolve => {
       redisClient.on('ready', () => {
         client = redisClient;
@@ -29,7 +29,7 @@ export class RedisManager {
       return subscribeClient;
     }
 
-    const redisClient = createClient(statiClientOpts);
+    const redisClient = createClient(staticClientOpts);
     return new Promise<RedisClient>(resolve => {
       redisClient.on('ready', () => {
         subscribeClient = redisClient;
