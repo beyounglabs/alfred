@@ -27,6 +27,13 @@ export class DatabaseProvider {
       return this.connection;
     }
 
+    let prefix = '';
+    let extension = '.ts';
+    if (['staging', 'production'].includes(String(process.env.NODE_ENV))) {
+      prefix = 'dist/';
+      extension = '.js';
+    }
+
     let database = process.env.DB_DATABASE;
     if (databaseName) {
       database = databaseName;
@@ -46,9 +53,11 @@ export class DatabaseProvider {
         logging: process.env.DB_LOGGING === 'true',
         logger: 'file',
         cache: false,
-        entities: [__dirname + '/../../../../src/entities/*.entity{.ts,.js}'],
+        entities: [
+          `${__dirname}/../../../../${prefix}src/entities/*.entity{.ts,.js}`,
+        ],
         migrations: [
-          __dirname + '/../../../../database/migrations/*.{.ts,.js}',
+          `${__dirname}/../../../../${prefix}database/migrations/*.{.ts,.js}`,
         ],
       };
 
@@ -72,9 +81,11 @@ export class DatabaseProvider {
         database,
         logging: process.env.DB_LOGGING === 'true',
         logger: 'file',
-        entities: [__dirname + '/../../../../src/entities/*.entity{.ts,.js}'],
+        entities: [
+          `${__dirname}/../../../../${prefix}src/entities/*.entity{.ts,.js}`,
+        ],
         migrations: [
-          __dirname + '/../../../../database/migrations/*.{.ts,.js}',
+          `${__dirname}/../../../../${prefix}database/migrations/*.{.ts,.js}`,
         ],
       };
 
