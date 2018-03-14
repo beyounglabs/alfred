@@ -55,6 +55,7 @@ export class InfoLogger implements LoggerInterface {
     const logger: winston.LoggerInstance = this.getLogger();
 
     const message = data['message'] ? data['message'] : 'log_default';
-    const logResponse = logger.info(message, data);
+
+    logger.info(message, data);
   }
 }

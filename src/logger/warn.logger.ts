@@ -53,6 +53,7 @@ export class WarnLogger implements LoggerInterface {
     const logger: winston.LoggerInstance = this.getLogger();
 
     const message = data['message'] ? data['message'] : 'log_default';
-    const logResponse = logger.warn(message, data);
+
+    logger.warn(message, data);
   }
 }

@@ -46,7 +46,9 @@ export class ErrorLogger implements LoggerInterface {
 
   public async log(data: any) {
     const logger: winston.LoggerInstance = this.getLogger();
+
     const message = data['message'] ? data['message'] : 'log_default';
-    const logResponse = logger.error(message, data);
+
+    logger.error(message, data);
   }
 }
