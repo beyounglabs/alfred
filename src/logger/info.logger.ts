@@ -3,7 +3,7 @@ import { Slack as WinstonSlack } from 'slack-winston';
 import * as winston from 'winston';
 import * as WinstonElasticsearch from 'winston-elasticsearch';
 
-import { ElasticsearchInterface } from './contracts/elasticsearch.interface';
+import { ElasticsearchInfoInterface } from './contracts/elasticsearch.info.interface';
 import { LoggerInterface } from './contracts/logger.interface';
 import { SlackInterface } from './contracts/slack.interface';
 import { transformer } from './transformers/kibana.transformer';
@@ -11,9 +11,9 @@ import { transformer } from './transformers/kibana.transformer';
 let logger: winston.LoggerInstance;
 
 export class InfoLogger implements LoggerInterface {
-  protected elasticsearch: ElasticsearchInterface;
+  protected elasticsearch: ElasticsearchInfoInterface;
 
-  constructor(elasticsearch: ElasticsearchInterface) {
+  constructor(elasticsearch: ElasticsearchInfoInterface) {
     this.elasticsearch = elasticsearch;
   }
 

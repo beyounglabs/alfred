@@ -2,16 +2,16 @@ import { Client } from 'elasticsearch';
 import * as winston from 'winston';
 import * as WinstonElasticsearch from 'winston-elasticsearch';
 
-import { ElasticsearchInterface } from './contracts/elasticsearch.interface';
+import { ElasticsearchWarnInterface } from './contracts/elasticsearch.warn.interface';
 import { LoggerInterface } from './contracts/logger.interface';
 import { transformer } from './transformers/kibana.transformer';
 
 let logger: winston.LoggerInstance;
 
 export class WarnLogger implements LoggerInterface {
-  protected elasticsearch: ElasticsearchInterface;
+  protected elasticsearch: ElasticsearchWarnInterface;
 
-  constructor(elasticsearch: ElasticsearchInterface) {
+  constructor(elasticsearch: ElasticsearchWarnInterface) {
     this.elasticsearch = elasticsearch;
   }
 
