@@ -49,6 +49,7 @@
     "slack-winston": "0.0.9",
     "sqlite3": "^3.1.13",
     "ts-node": "^3.3.0",
+    "tsc-watch": "^1.0.17",
     "typedi": "^0.7.1",
     "typeorm": "^0.1.1",
     "typeorm-typedi-extensions": "^0.1.1",

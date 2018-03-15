@@ -27,12 +27,8 @@ export class DatabaseProvider {
       return this.connection;
     }
 
-    let prefix = '';
-    let extension = '.ts';
-    if (['staging', 'production'].includes(String(process.env.NODE_ENV))) {
-      prefix = 'dist/';
-      extension = '.js';
-    }
+    const prefix = 'dist/';
+    const extension = '.js';
 
     let database = process.env.DB_DATABASE;
     if (databaseName) {
