@@ -5,12 +5,8 @@ if (process.env.NODE_ENV === 'testing') {
   dotenvPath = '.env.testing';
 }
 
-let prefix = '';
-let extension = '.ts';
-if (['staging', 'production'].includes(process.env.NODE_ENV)) {
-  prefix = 'dist/';
-  extension = '.js';
-}
+const prefix = 'dist/';
+const extension = '.js';
 
 dotenv.config({ path: dotenvPath });
 
