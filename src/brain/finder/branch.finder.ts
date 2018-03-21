@@ -1,27 +1,35 @@
+import { promisify } from 'util';
+
 import { ObjectConverter } from '../../helpers/object.converter';
 import { RedisManager } from '../redis.manager';
 
 export class BranchFinder {
+  public async findAll(): Promise<any> {
+    const redisManager = new RedisManager();
+    const redisClient = await redisManager.getClient();
+
+    const getAsync = promisify(redisClient.get).bind(redisClient);
+    const keysAsync = promisify(redisClient.keys).bind(redisClient);
+
+    const keys = await keysAsync(`Branch:*`);
+    const items: any[] = [];
+    for (const key of keys) {
+      items.push(JSON.parse(await getAsync(key)));
+    }
+
+    return ObjectConverter.underscoreToCamelCase(items);
+  }
+
   public async findOneByCode(code: string): Promise<any> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getClient();
 
-    return new Promise((resolve, reject) => {
-      const key = `Branch:${code}`;
-      redisClient.get(key, (error, result) => {
-        if (error) {
-          reject(error);
-          return;
-        }
+    const getAsync = promisify(redisClient.get).bind(redisClient);
+    const key = `Branch:${code}`;
 
-        if (!result) {
-          resolve();
-          return;
-        }
-
-        resolve(ObjectConverter.underscoreToCamelCase(JSON.parse(result)));
-      });
-    });
+    return ObjectConverter.underscoreToCamelCase(
+      JSON.parse(await getAsync(key)),
+    );
   }
 
   public async findOneByCompanyCodeAndState(
@@ -30,22 +38,11 @@ export class BranchFinder {
   ): Promise<any> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getClient();
+    const getAsync = promisify(redisClient.get).bind(redisClient);
+    const key = `Branch_CompanyState:${companyCode}_${state}`;
 
-    return new Promise((resolve, reject) => {
-      const key = `Branch_CompanyState:${companyCode}_${state}`;
-      redisClient.get(key, (error, result) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-
-        if (!result) {
-          resolve();
-          return;
-        }
-
-        resolve(ObjectConverter.underscoreToCamelCase(JSON.parse(result)));
-      });
-    });
+    return ObjectConverter.underscoreToCamelCase(
+      JSON.parse(await getAsync(key)),
+    );
   }
 }
