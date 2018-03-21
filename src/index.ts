@@ -1,4 +1,5 @@
 import { loadEnv } from './env/load.env';
+import { ObjectConverter } from './helpers/object.converter';
 import { ErrorLogger } from './logger/error.logger';
 import { InfoLogger } from './logger/info.logger';
 import { WarnLogger } from './logger/warn.logger';
@@ -19,6 +20,7 @@ export {
   ErrorLogger,
   WarnLogger,
   InfoLogger,
+  ObjectConverter,
   RedisProvider,
   TestCase,
   FixtureAbstract,
