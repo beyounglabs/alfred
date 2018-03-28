@@ -27,8 +27,11 @@ export class CompanyFinder {
     const getAsync = promisify(redisClient.get).bind(redisClient);
     const key = `Company:${code}`;
 
-    return ObjectConverter.underscoreToCamelCase(
-      JSON.parse(await getAsync(key)),
-    );
+    const result = await getAsync(key);
+    if (!result) {
+      return;
+    }
+
+    return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
   }
 }

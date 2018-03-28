@@ -27,9 +27,12 @@ export class BranchFinder {
     const getAsync = promisify(redisClient.get).bind(redisClient);
     const key = `Branch:${code}`;
 
-    return ObjectConverter.underscoreToCamelCase(
-      JSON.parse(await getAsync(key)),
-    );
+    const result = await getAsync(key);
+    if (!result) {
+      return;
+    }
+
+    return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
   }
 
   public async findOneByCompanyCodeAndState(
@@ -41,8 +44,11 @@ export class BranchFinder {
     const getAsync = promisify(redisClient.get).bind(redisClient);
     const key = `Branch_CompanyState:${companyCode}_${state}`;
 
-    return ObjectConverter.underscoreToCamelCase(
-      JSON.parse(await getAsync(key)),
-    );
+    const result = await getAsync(key);
+    if (!result) {
+      return;
+    }
+
+    return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
   }
 }
