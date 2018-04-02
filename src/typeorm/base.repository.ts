@@ -16,6 +16,13 @@ let useCache: boolean = false;
 export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
   Entity
 > {
+  protected entityManager: EntityManager;
+
+  public constructor(@TransactionManager() entityManager: EntityManager) {
+    super();
+    this.entityManager = entityManager;
+  }
+
   public getUseCache() {
     return useCache;
   }
@@ -117,14 +124,13 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return entity;
   }
 
-  public async save2<T extends DeepPartial<Entity>>(
-    @TransactionManager() manager: EntityManager,
+  public async save<T extends DeepPartial<Entity>>(
     entity: T,
     options?: SaveOptions,
   ): Promise<T> {
     // const queryRunner = await QueryRunner.getQueryRunner();
     // return await queryRunner.manager.save(entity, options);
-    console.log(manager);
-    return await manager.save(entity, options);
+
+    return await this.entityManager.save(entity, options);
   }
 }
