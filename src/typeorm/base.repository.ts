@@ -126,8 +126,11 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
   public getQueryRunner(): QueryRunner {
     if (this.entityManager.queryRunner) {
+      console.log('GET QUERY RUNNER');
       return this.entityManager.queryRunner;
     }
+
+    console.log('CREATE QUERY RUNNER');
 
     return this.entityManager.connection.createQueryRunner();
   }
