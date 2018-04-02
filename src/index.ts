@@ -10,6 +10,7 @@ import { FixtureAbstract } from './tests/fixture.abstract';
 import { TestCase } from './tests/test.case';
 import { BaseRepository } from './typeorm/base.repository';
 import { DefaultMetadata } from './typeorm/default.metadata';
+import { QueryRunner } from './typeorm/query.runner';
 
 export {
   loadEnv,
@@ -24,4 +25,5 @@ export {
   RedisProvider,
   TestCase,
   FixtureAbstract,
+  QueryRunner,
 };
