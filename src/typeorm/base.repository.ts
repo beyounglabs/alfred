@@ -125,14 +125,16 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
   }
 
   public getQueryRunner(): QueryRunner {
-    if (this.entityManager.queryRunner) {
-      console.log('GET QUERY RUNNER');
-      return this.entityManager.queryRunner;
+    if (!this.entityManager.queryRunner) {
+      console.log('CREATE QUERY RUNNER');
+      Object.assign(this.entityManager, {
+        queryRunner: this.entityManager.connection.createQueryRunner(),
+      });
     }
 
-    console.log('CREATE QUERY RUNNER');
+    console.log('GET QUERY RUNNER');
 
-    return this.entityManager.connection.createQueryRunner();
+    return this.entityManager.queryRunner!;
   }
 
   public async startTransaction(): Promise<void> {
