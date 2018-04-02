@@ -18,8 +18,7 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 > {
   protected entityManager: EntityManager;
 
-  public constructor(@TransactionManager() entityManager: EntityManager) {
-    super();
+  public setEntityManager(entityManager: EntityManager) {
     this.entityManager = entityManager;
   }
 
@@ -122,28 +121,6 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     }
 
     return entity;
-  }
-
-  public getQueryRunner(): QueryRunner {
-    if (!this.entityManager.queryRunner) {
-      Object.assign(this.entityManager, {
-        queryRunner: this.entityManager.connection.createQueryRunner(),
-      });
-    }
-
-    return this.entityManager.queryRunner!;
-  }
-
-  public async startTransaction(): Promise<void> {
-    await this.getQueryRunner().startTransaction();
-  }
-
-  public async commitTransaction(): Promise<void> {
-    await this.getQueryRunner().commitTransaction();
-  }
-
-  public async rollbackTransaction(): Promise<void> {
-    await this.getQueryRunner().rollbackTransaction();
   }
 
   public async save<T extends DeepPartial<Entity>>(
