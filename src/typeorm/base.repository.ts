@@ -124,13 +124,22 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return entity;
   }
 
+  public async startTransaction(): Promise<void> {
+    await this.entityManager.queryRunner!.startTransaction();
+  }
+
+  public async commitTransaction(): Promise<void> {
+    await this.entityManager.queryRunner!.commitTransaction();
+  }
+
+  public async rollbackTransaction(): Promise<void> {
+    await this.entityManager.queryRunner!.rollbackTransaction();
+  }
+
   public async save<T extends DeepPartial<Entity>>(
     entity: T,
     options?: SaveOptions,
   ): Promise<T> {
-    // const queryRunner = await QueryRunner.getQueryRunner();
-    // return await queryRunner.manager.save(entity, options);
-
     return await this.entityManager.save(entity, options);
   }
 }
