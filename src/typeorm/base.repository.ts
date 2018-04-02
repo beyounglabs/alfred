@@ -1,10 +1,18 @@
-import { Entity, Repository } from 'typeorm';
+import {
+  DeepPartial,
+  FindManyOptions,
+  FindOneOptions,
+  QueryRunner,
+  Repository,
+  SaveOptions,
+  SelectQueryBuilder,
+  getConnection,
+} from 'typeorm';
+
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
-import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
-import { FindOneOptions } from 'typeorm/find-options/FindOneOptions';
-import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
 
 let useCache: boolean = false;
+let queryRunner: QueryRunner | undefined;
 
 export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
   Entity
@@ -108,5 +116,38 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     }
 
     return entity;
+  }
+
+  public async getQueryRunner(): Promise<QueryRunner> {
+    if (queryRunner) {
+      return queryRunner;
+    }
+
+    const connection = getConnection();
+    queryRunner = connection.createQueryRunner();
+    return queryRunner;
+  }
+
+  public async save<T extends DeepPartial<Entity>>(
+    entity: T,
+    options?: SaveOptions,
+  ): Promise<T> {
+    const qr = await this.getQueryRunner();
+    return await qr.manager.save(entity, options);
+  }
+
+  public async startTransaction(): Promise<void> {
+    const qr = await this.getQueryRunner();
+    await qr.startTransaction();
+  }
+
+  public async commitTransaction(): Promise<void> {
+    const qr = await this.getQueryRunner();
+    await qr.commitTransaction();
+  }
+
+  public async rollbackTransaction(): Promise<void> {
+    const qr = await this.getQueryRunner();
+    await qr.rollbackTransaction();
   }
 }
