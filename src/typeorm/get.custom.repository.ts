@@ -1,12 +1,12 @@
 import {
   getCustomRepository as typeORMGetCustomRepository,
   ObjectType,
-  EntityManager,
+  QueryRunner,
 } from 'typeorm';
 
 export function getCustomRepository<T>(
   customRepository: ObjectType<T>,
-  entityManager: EntityManager,
+  queryRunner: QueryRunner,
   connectionName?: string,
 ): T {
   const repository: any = typeORMGetCustomRepository(
@@ -14,7 +14,7 @@ export function getCustomRepository<T>(
     connectionName,
   );
 
-  repository.setEntityManager(entityManager);
+  repository.setQueryRunner(queryRunner);
 
   return repository;
 }

@@ -1,13 +1,9 @@
 import {
-  DeepPartial,
   FindManyOptions,
   FindOneOptions,
-  Repository,
-  SaveOptions,
-  SelectQueryBuilder,
-  TransactionManager,
-  EntityManager,
   QueryRunner,
+  Repository,
+  SelectQueryBuilder,
 } from 'typeorm';
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
 
@@ -16,10 +12,11 @@ let useCache: boolean = false;
 export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
   Entity
 > {
-  protected entityManager: EntityManager;
-
-  public setEntityManager(entityManager: EntityManager) {
-    this.entityManager = entityManager;
+  public setQueryRunner(queryRunner: QueryRunner) {
+    Object.assign(this, {
+      queryRunner: queryRunner,
+      manager: queryRunner.manager,
+    });
   }
 
   public getUseCache() {
@@ -121,12 +118,5 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     }
 
     return entity;
-  }
-
-  public async save<T extends DeepPartial<Entity>>(
-    entity: T,
-    options?: SaveOptions,
-  ): Promise<T> {
-    return await this.entityManager.save(entity, options);
   }
 }
