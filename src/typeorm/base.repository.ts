@@ -5,6 +5,8 @@ import {
   Repository,
   SaveOptions,
   SelectQueryBuilder,
+  TransactionManager,
+  EntityManager,
 } from 'typeorm';
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
 import { QueryRunner } from './query.runner';
@@ -115,11 +117,14 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return entity;
   }
 
-  public async save<T extends DeepPartial<Entity>>(
+  public async save2<T extends DeepPartial<Entity>>(
+    @TransactionManager() manager: EntityManager,
     entity: T,
     options?: SaveOptions,
   ): Promise<T> {
-    const queryRunner = await QueryRunner.getQueryRunner();
-    return await queryRunner.manager.save(entity, options);
+    // const queryRunner = await QueryRunner.getQueryRunner();
+    // return await queryRunner.manager.save(entity, options);
+    console.log(manager);
+    return await manager.save(entity, options);
   }
 }
