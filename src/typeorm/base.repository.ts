@@ -7,9 +7,9 @@ import {
   SelectQueryBuilder,
   TransactionManager,
   EntityManager,
+  QueryRunner,
 } from 'typeorm';
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
-import { QueryRunner } from './query.runner';
 
 let useCache: boolean = false;
 
@@ -124,16 +124,24 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return entity;
   }
 
+  public getQueryRunner(): QueryRunner {
+    if (this.entityManager.queryRunner) {
+      return this.entityManager.queryRunner;
+    }
+
+    return this.entityManager.connection.createQueryRunner();
+  }
+
   public async startTransaction(): Promise<void> {
-    await this.entityManager.queryRunner!.startTransaction();
+    await this.getQueryRunner().startTransaction();
   }
 
   public async commitTransaction(): Promise<void> {
-    await this.entityManager.queryRunner!.commitTransaction();
+    await this.getQueryRunner().commitTransaction();
   }
 
   public async rollbackTransaction(): Promise<void> {
-    await this.entityManager.queryRunner!.rollbackTransaction();
+    await this.getQueryRunner().rollbackTransaction();
   }
 
   public async save<T extends DeepPartial<Entity>>(
