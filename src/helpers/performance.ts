@@ -16,7 +16,7 @@ export class Performance {
     this.startedAt = Date.now();
     this.shouldLog = shouldLog;
 
-    shouldLog === true && console.info('  '.repeat(pending * 2) + `"${id}"`);
+    shouldLog === true && console.info('  '.repeat(pending * 2) + `${id}`);
 
     pending++;
   }
@@ -33,7 +33,7 @@ export class Performance {
 
     this.shouldLog === true &&
       console.info(
-        '  '.repeat(pending * 2) + `"/${this.id}" after ${diff}ms\n`,
+        '  '.repeat(pending * 2) + `/${this.id} after ${diff}ms\n`,
       );
 
     return diff;
