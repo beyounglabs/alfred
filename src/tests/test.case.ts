@@ -46,7 +46,8 @@ export class TestCase {
   public async runFixtures(fixtures: string[]) {
     const databaseProvider: DatabaseProvider = Container.get(DatabaseProvider);
 
-    await databaseProvider.connect();
+    const connection = await databaseProvider.connect();
+    const queryRunner = connection.createQueryRunner();
 
     for (const fixture of fixtures) {
       const fixtureName = kebabCase(fixture).replace(/\-/g, '.');
@@ -54,7 +55,7 @@ export class TestCase {
         `${fixture}Fixture`
       ];
 
-      const fixtureObjext: FixtureAbstract = new fixtureClass();
+      const fixtureObjext: FixtureAbstract = new fixtureClass(queryRunner);
       await fixtureObjext.run();
     }
   }

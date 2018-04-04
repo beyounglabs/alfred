@@ -1,14 +1,24 @@
-import { Entity, Repository } from 'typeorm';
+import {
+  FindManyOptions,
+  FindOneOptions,
+  QueryRunner,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
-import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
-import { FindOneOptions } from 'typeorm/find-options/FindOneOptions';
-import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
 
 let useCache: boolean = false;
 
 export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
   Entity
 > {
+  public setQueryRunner(queryRunner: QueryRunner) {
+    Object.assign(this, {
+      queryRunner: queryRunner,
+      manager: queryRunner.manager,
+    });
+  }
+
   public getUseCache() {
     return useCache;
   }

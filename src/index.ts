@@ -1,4 +1,5 @@
 import { loadEnv } from './env/load.env';
+import { ObjectConverter } from './helpers/object.converter';
 import { ErrorLogger } from './logger/error.logger';
 import { InfoLogger } from './logger/info.logger';
 import { WarnLogger } from './logger/warn.logger';
@@ -9,6 +10,7 @@ import { FixtureAbstract } from './tests/fixture.abstract';
 import { TestCase } from './tests/test.case';
 import { BaseRepository } from './typeorm/base.repository';
 import { DefaultMetadata } from './typeorm/default.metadata';
+import { getCustomRepository } from './typeorm/get.custom.repository';
 
 export {
   loadEnv,
@@ -19,7 +21,9 @@ export {
   ErrorLogger,
   WarnLogger,
   InfoLogger,
+  ObjectConverter,
   RedisProvider,
   TestCase,
   FixtureAbstract,
+  getCustomRepository,
 };

@@ -1,26 +1,37 @@
+import { promisify } from 'util';
+
 import { ObjectConverter } from '../../helpers/object.converter';
 import { RedisManager } from '../redis.manager';
 
 export class StoreFinder {
+  public async findAll(): Promise<any> {
+    const redisManager = new RedisManager();
+    const redisClient = await redisManager.getClient();
+
+    const getAsync = promisify(redisClient.get).bind(redisClient);
+    const keysAsync = promisify(redisClient.keys).bind(redisClient);
+
+    const keys = await keysAsync(`Store:*`);
+    const items: any[] = [];
+    for (const key of keys) {
+      items.push(JSON.parse(await getAsync(key)));
+    }
+
+    return ObjectConverter.underscoreToCamelCase(items);
+  }
+
   public async findOneByCode(code: string): Promise<any> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getClient();
 
-    return new Promise((resolve, reject) => {
-      const key = `Store:${code}`;
-      redisClient.get(key, (error, result) => {
-        if (error) {
-          reject(error);
-          return;
-        }
+    const getAsync = promisify(redisClient.get).bind(redisClient);
+    const key = `Store:${code}`;
 
-        if (!result) {
-          resolve();
-          return;
-        }
+    const result = await getAsync(key);
+    if (!result) {
+      return;
+    }
 
-        resolve(ObjectConverter.underscoreToCamelCase(JSON.parse(result)));
-      });
-    });
+    return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
   }
 }
