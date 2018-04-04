@@ -5,21 +5,23 @@ const isTesting = process.env.NODE_ENV === 'testing';
 export class Performance {
   protected id: string;
   protected startedAt: number;
+  protected shouldLog: boolean
 
-  constructor(id: string, log: boolean = true) {
+  constructor(id: string, shouldLog: boolean = true) {
     if (isTesting) {
       return;
     }
 
     this.id = id;
     this.startedAt = Date.now();
+    this.shouldLog = shouldLog;
 
-    log === true && console.info('  '.repeat(pending * 2) + `Started: "${id}"`);
+    shouldLog === true && console.info('  '.repeat(pending * 2) + `Started: "${id}"`);
 
     pending++;
   }
 
-  public finish(log: boolean = true) {
+  public finish() {
     if (isTesting) {
       return;
     }
@@ -29,7 +31,7 @@ export class Performance {
 
     pending--;
 
-    log === true &&
+    this.shouldLog === true &&
       console.info(
         '  '.repeat(pending * 2) + `Finished: "${this.id}" after ${diff}ms\n`,
       );
