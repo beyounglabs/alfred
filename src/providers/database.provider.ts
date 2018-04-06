@@ -59,6 +59,9 @@ export class DatabaseProvider {
         migrations: [
           `${__dirname}/../../../../${prefix}database/migrations/*.{.ts,.js}`,
         ],
+        extra: {
+          connectionLimit: 20,
+        },
       };
 
       if (process.env.REDIS_CACHE_HOST) {
