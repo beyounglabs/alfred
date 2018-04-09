@@ -1,6 +1,7 @@
 import { ColumnOptions } from 'typeorm/decorator/options/ColumnOptions';
 import { JsonTransformer } from './transformers/json.transformer';
 import { BooleanTransformer } from './transformers/boolean.transformer';
+import { NumberTransformer } from './transformers/number.transformer';
 
 export class DefaultMetadata {
   public static getDefaultEngine(): string {
@@ -19,12 +20,14 @@ export class DefaultMetadata {
 
     if (params.type === 'decimal') {
       params.type = this.getDecimalDataType();
+      params.transformer = new NumberTransformer();
     }
 
     if (params.type === 'integer') {
       if (process.env.DB_TYPE !== 'mysql') {
         delete params.length;
       }
+      params.transformer = new NumberTransformer();
     }
 
     if (params.type === 'boolean') {
