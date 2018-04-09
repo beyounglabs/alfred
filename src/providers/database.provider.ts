@@ -60,7 +60,7 @@ export class DatabaseProvider {
           `${__dirname}/../../../../${prefix}database/migrations/*.{.ts,.js}`,
         ],
         extra: {
-          connectionLimit: 20,
+          connectionLimit: process.env.DB_POOL_CONNECTION_LIMIT || 10,
         },
       };
 
