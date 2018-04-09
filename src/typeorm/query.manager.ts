@@ -1,7 +1,7 @@
 import { QueryRunner, getConnection } from 'typeorm';
 
 export class QueryManager {
-  protected queryRunner: QueryRunner;
+  protected queryRunner: QueryRunner | undefined;
 
   public getQueryRunner(): QueryRunner {
     if (this.queryRunner) {
@@ -32,6 +32,7 @@ export class QueryManager {
   public async release() {
     if (!this.getQueryRunner().isReleased) {
       await this.getQueryRunner().release();
+      this.queryRunner = undefined;
     }
   }
 }
