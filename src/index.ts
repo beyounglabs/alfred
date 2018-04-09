@@ -11,6 +11,7 @@ import { TestCase } from './tests/test.case';
 import { BaseRepository } from './typeorm/base.repository';
 import { DefaultMetadata } from './typeorm/default.metadata';
 import { getCustomRepository } from './typeorm/get.custom.repository';
+import { QueryManager } from './typeorm/query.manager';
 
 export {
   loadEnv,
@@ -26,4 +27,5 @@ export {
   TestCase,
   FixtureAbstract,
   getCustomRepository,
+  QueryManager,
 };
