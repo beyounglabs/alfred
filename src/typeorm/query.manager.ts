@@ -30,6 +30,10 @@ export class QueryManager {
   }
 
   public async release() {
+    if (!this.queryRunner) {
+      return;
+    }
+
     if (!this.getQueryRunner().isReleased) {
       await this.getQueryRunner().release();
       this.queryRunner = undefined;
