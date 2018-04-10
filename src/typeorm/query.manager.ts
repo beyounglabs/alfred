@@ -4,7 +4,7 @@ export class QueryManager {
   protected queryRunner: QueryRunner | undefined;
 
   public getQueryRunner(): QueryRunner {
-    if (this.queryRunner) {
+    if (this.queryRunner && !this.queryRunner.isReleased) {
       return this.queryRunner;
     }
 
