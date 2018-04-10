@@ -1,31 +1,17 @@
-import { loadEnv } from './env/load.env';
-import { ObjectConverter } from './helpers/object.converter';
-import { ErrorLogger } from './logger/error.logger';
-import { InfoLogger } from './logger/info.logger';
-import { WarnLogger } from './logger/warn.logger';
-import { DatabaseProvider } from './providers/database.provider';
-import { RedisProvider } from './providers/redis.provider';
-import { QueueGenerator } from './queue/queue.generator';
-import { FixtureAbstract } from './tests/fixture.abstract';
-import { TestCase } from './tests/test.case';
-import { BaseRepository } from './typeorm/base.repository';
-import { DefaultMetadata } from './typeorm/default.metadata';
-import { getCustomRepository } from './typeorm/get.custom.repository';
-import { QueryManager } from './typeorm/query.manager';
-
-export {
-  loadEnv,
-  QueueGenerator,
-  BaseRepository,
-  DefaultMetadata,
-  DatabaseProvider,
-  ErrorLogger,
-  WarnLogger,
-  InfoLogger,
-  ObjectConverter,
-  RedisProvider,
-  TestCase,
-  FixtureAbstract,
-  getCustomRepository,
-  QueryManager,
-};
+export { loadEnv } from './env/load.env';
+export { loadRoutes } from './express/load.routes';
+export { ResponseInterface } from './express/response.interface';
+export { jsonRequestMiddleware } from './express/json.request.middleware';
+export { ObjectConverter } from './helpers/object.converter';
+export { ErrorLogger } from './logger/error.logger';
+export { InfoLogger } from './logger/info.logger';
+export { WarnLogger } from './logger/warn.logger';
+export { DatabaseProvider } from './providers/database.provider';
+export { RedisProvider } from './providers/redis.provider';
+export { QueueGenerator } from './queue/queue.generator';
+export { FixtureAbstract } from './tests/fixture.abstract';
+export { TestCase } from './tests/test.case';
+export { BaseRepository } from './typeorm/base.repository';
+export { DefaultMetadata } from './typeorm/default.metadata';
+export { getCustomRepository } from './typeorm/get.custom.repository';
+export { QueryManager } from './typeorm/query.manager';
