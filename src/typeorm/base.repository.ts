@@ -119,4 +119,16 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
     return entity;
   }
+
+  public paginate(
+    qb: SelectQueryBuilder<Entity>,
+    page: number,
+    limit: number,
+  ): SelectQueryBuilder<Entity> {
+    qb.offset(page * limit - limit);
+    qb.limit(limit);
+
+    return qb;
+  }
+
 }
