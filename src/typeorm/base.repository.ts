@@ -107,17 +107,15 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return `repository/${methodName}/${propList.join('|')}`;
   }
 
+  /**
+   *
+   * @deprecated use findOneOrFail instead
+   */
   public async findOneByIdOrFail(
     id: any,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity> {
-    const entity = await this.findOneById(id, options);
-
-    if (!entity) {
-      throw new Error(`Entity ${this.target} not find with Id ${id}`);
-    }
-
-    return entity;
+    return await this.findOneOrFail(id, options);
   }
 
   public paginate(
@@ -130,5 +128,4 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
     return qb;
   }
-
 }
