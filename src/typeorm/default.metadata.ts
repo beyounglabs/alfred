@@ -24,9 +24,8 @@ export class DefaultMetadata {
     }
 
     if (params.type === 'integer') {
-      if (process.env.DB_TYPE !== 'mysql') {
-        delete params.length;
-      }
+      delete params.length;
+
       params.transformer = new NumberTransformer();
     }
 
