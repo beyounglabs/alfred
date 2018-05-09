@@ -18,6 +18,7 @@
   "dependencies": {
     "@types/bluebird": "^3.5.18",
     "@types/chai": "^4.0.4",
+    "@types/chalk": "^2.2.0",
     "@types/elasticsearch": "^5.0.19",
     "@types/express": "^4.0.39",
     "@types/fs-extra": "^5.0.0",
@@ -31,6 +32,7 @@
     "axios": "^0.17.1",
     "bluebird": "^3.5.1",
     "chai": "^4.1.2",
+    "chalk": "^2.3.0",
     "child-process-async": "^1.0.1",
     "dotenv": "^4.0.0",
     "elasticsearch": "^14.0.0",
