@@ -7,11 +7,13 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "test": "NODE_ENV=testing nyc mocha -A --opts ./mocha.opts --require ts-node/register -r tsconfig-paths/register",
+    "test":
+      "NODE_ENV=testing nyc mocha -A --opts ./mocha.opts --require ts-node/register -r tsconfig-paths/register",
     "test:watch": "nodemon -e js,ts  --exec yarn test:clear",
     "install": "./scripts/install.sh",
     "ts-node": "ts-node",
-    "npm:publish": "yarn build && cp package.json dist/ && cd dist/ && npm publish"
+    "npm:publish":
+      "yarn build && cp package.json dist/ && cd dist/ && npm publish"
   },
   "dependencies": {
     "@types/bluebird": "^3.5.18",
@@ -41,7 +43,7 @@
     "newrelic": "^3.1.0",
     "nodemon": "^1.12.1",
     "nyc": "^11.4.1",
-    "prettier": "^1.8.2",
+    "prettier": "^1.10.2",
     "redis": "^2.8.0",
     "reflect-metadata": "^0.1.10",
     "slack-winston": "0.0.9",
