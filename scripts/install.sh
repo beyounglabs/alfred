@@ -1,6 +1,4 @@
 #!/bin/bash
-# SCRIPT_PATH=`realpath $0`
-#SCRIPT_DIR=`basename $(pwd)`
 ORIGINAL_PATH=`pwd`;
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
@@ -19,7 +17,12 @@ then
     cp -r dist/* .
     if [ ! $BITBUCKET_BRANCH ]
     then
-      cp -r "${NODEMODULES_PATH}/alfred/defaults/." "${NODEMODULES_PATH}/../"
+      FILES=$(find defaults -type f)
+      while IFS= read -r FILE
+      do
+        echo "$FILE"
+        node cp.js "${NODEMODULES_PATH}/alfred/${FILE}"
+      done < <(printf '%s\n' "$FILES")
     fi
 fi
 
