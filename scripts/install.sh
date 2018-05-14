@@ -21,7 +21,7 @@ then
       while IFS= read -r FILE
       do
         echo "$FILE"
-        node cp.js "${NODEMODULES_PATH}/alfred/${FILE}"
+        node ${NODEMODULES_PATH}/alfred/scripts/cp.js "${NODEMODULES_PATH}/alfred/${FILE}"
       done < <(printf '%s\n' "$FILES")
     fi
 fi
