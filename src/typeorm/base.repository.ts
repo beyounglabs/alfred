@@ -1,3 +1,4 @@
+import { camelCase } from 'lodash';
 import {
   FindManyOptions,
   FindOneOptions,
@@ -107,15 +108,18 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return `repository/${methodName}/${propList.join('|')}`;
   }
 
-  /**
-   *
-   * @deprecated use findOneOrFail instead
-   */
+  public async upsert(entity: Entity, data: any): Promise<Entity> {
+    for (const key of Object.keys(data)) {
+      entity[camelCase(key)] = data[key];
+    }
+    return await this.save(entity);
+  }
+
   public async findOneByIdOrFail(
     id: any,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity> {
-    return await this.findOneOrFail(id, options);
+    return await this.findOneOrFail(id || 0, options);
   }
 
   public paginate(

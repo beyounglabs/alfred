@@ -7,4 +7,4 @@ cd "${SCRIPT_DIR}/../";
 
 rm -Rf dist
 yarn build
-yarn cli migrations:run
+yarn cli migration:run
