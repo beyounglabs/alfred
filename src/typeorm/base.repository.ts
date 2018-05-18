@@ -122,7 +122,7 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
         continue;
       }
 
-      qb.andWhere(`p.${searchField} = :${searchField}`, {
+      qb.andWhere(`e.${searchField} = :${searchField}`, {
         [searchField]: search[field],
       });
     }
