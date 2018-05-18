@@ -1,15 +1,15 @@
-import 'reflect-metadata';
-
 import * as bluebird from 'bluebird';
 import * as dotenv from 'dotenv';
 import * as fsImport from 'fs';
 import { kebabCase } from 'lodash';
 import * as Mocha from 'mocha';
+import 'reflect-metadata';
 import { Container } from 'typedi';
 import { Connection } from 'typeorm';
-
 import { DatabaseProvider } from '../providers/database.provider';
 import { FixtureAbstract } from './fixture.abstract';
+
+
 
 const fs: any = bluebird.promisifyAll(fsImport);
 
@@ -72,7 +72,7 @@ export class TestCase {
 
       let connection: Connection = await databaseProvider.connect(databaseName);
 
-      await connection.createQueryRunner().clearDatabase([], databaseName);
+      await connection.createQueryRunner().clearDatabase(databaseName);
       await connection.createQueryRunner().createDatabase(databaseName);
       await connection.close();
 

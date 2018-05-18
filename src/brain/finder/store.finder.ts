@@ -1,5 +1,5 @@
+import { orderBy } from 'lodash';
 import { promisify } from 'util';
-
 import { ObjectConverter } from '../../helpers/object.converter';
 import { RedisManager } from '../redis.manager';
 
@@ -17,7 +17,11 @@ export class StoreFinder {
       items.push(JSON.parse(await getAsync(key)));
     }
 
-    return ObjectConverter.underscoreToCamelCase(items);
+    return orderBy(
+      ObjectConverter.underscoreToCamelCase(items),
+      ['name', 'code'],
+      ['ASC', 'ASC'],
+    );
   }
 
   public async findOneByCode(code: string): Promise<any> {
@@ -26,6 +30,21 @@ export class StoreFinder {
 
     const getAsync = promisify(redisClient.get).bind(redisClient);
     const key = `Store:${code}`;
+
+    const result = await getAsync(key);
+    if (!result) {
+      return;
+    }
+
+    return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
+  }
+
+  public async findOneByDomain(domain: string): Promise<any> {
+    const redisManager = new RedisManager();
+    const redisClient = await redisManager.getClient();
+
+    const getAsync = promisify(redisClient.get).bind(redisClient);
+    const key = `Store_Domain:${domain}`;
 
     const result = await getAsync(key);
     if (!result) {

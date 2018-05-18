@@ -1,5 +1,5 @@
+import { orderBy } from 'lodash';
 import { promisify } from 'util';
-
 import { ObjectConverter } from '../../helpers/object.converter';
 import { RedisManager } from '../redis.manager';
 
@@ -17,7 +17,11 @@ export class BranchFinder {
       items.push(JSON.parse(await getAsync(key)));
     }
 
-    return ObjectConverter.underscoreToCamelCase(items);
+    return orderBy(
+      ObjectConverter.underscoreToCamelCase(items),
+      ['name', 'code'],
+      ['ASC', 'ASC'],
+    );
   }
 
   public async findOneByCode(code: string): Promise<any> {
