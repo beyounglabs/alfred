@@ -108,6 +108,41 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return `repository/${methodName}/${propList.join('|')}`;
   }
 
+  public searchQueryBuilder(search: any): SelectQueryBuilder<Entity> {
+    const qb = this.createQueryBuilder('e');
+
+    for (const field of Object.keys(search)) {
+      if (!search[field]) {
+        continue;
+      }
+
+      const searchField = camelCase(field);
+
+      if (!this.metadata.propertiesMap[searchField]) {
+        continue;
+      }
+
+      qb.andWhere(`p.searchField = :searchField`, {
+        [searchField]: search[field],
+      });
+    }
+
+    qb.orderBy('e.id', 'DESC');
+
+    return qb;
+  }
+
+  public async searchCount(search: any): Promise<number> {
+    const qb = this.searchQueryBuilder(search);
+    return await qb.getCount();
+  }
+
+  public async search(search: any): Promise<Entity[]> {
+    const qb = this.searchQueryBuilder(search);
+    this.paginate(qb, search.current_page, search.per_page);
+    return await qb.getMany();
+  }
+
   public async upsert(entity: Entity, data: any): Promise<Entity> {
     for (const key of Object.keys(data)) {
       entity[camelCase(key)] = data[key];
