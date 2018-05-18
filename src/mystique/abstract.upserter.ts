@@ -118,10 +118,19 @@ export abstract class AbstractUpserter<
       ? await this.repository.findOneByIdOrFail(query.id)
       : this.repository.create();
 
+    const columnObjects: any = {};
+    for (const column of this.repository.metadata.columns) {
+      columnObjects[column.propertyName] = column;
+    }
+
     for (const field of fields) {
       field.value = entity[camelCase(field.name)];
-      // @todo change that to verify boolean
-      if (field.name === 'active') {
+
+      if (
+        columnObjects[field.name].transformer &&
+        columnObjects[field.name].transformer.constructor.name ===
+          'BooleanTransformer'
+      ) {
         field.value = field.value ? '1' : '0';
       }
     }
