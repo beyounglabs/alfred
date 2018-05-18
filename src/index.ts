@@ -15,3 +15,13 @@ export { BaseRepository } from './typeorm/base.repository';
 export { DefaultMetadata } from './typeorm/default.metadata';
 export { getCustomRepository } from './typeorm/get.custom.repository';
 export { QueryManager } from './typeorm/query.manager';
+export { AbstractUpserter } from './mystique/abstract.upserter';
+export {
+  MystiqueActionInterface,
+} from './mystique/contracts/mystique.action.interface';
+export {
+  MystiqueFieldInterface,
+} from './mystique/contracts/mystique.field.interface';
+export {
+  MystiqueResultHeaderInterface,
+} from './mystique/contracts/mystique.result.header.interface';
