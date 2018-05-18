@@ -128,6 +128,7 @@ export abstract class AbstractUpserter<
       field.value = entity[entityName];
 
       if (
+        columnObjects[entityName] &&
         columnObjects[entityName].transformer &&
         columnObjects[entityName].transformer.constructor.name ===
           'BooleanTransformer'
