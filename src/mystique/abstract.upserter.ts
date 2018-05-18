@@ -124,11 +124,12 @@ export abstract class AbstractUpserter<
     }
 
     for (const field of fields) {
-      field.value = entity[camelCase(field.name)];
+      const entityName = camelCase(field.name);
+      field.value = entity[entityName];
 
       if (
-        columnObjects[field.name].transformer &&
-        columnObjects[field.name].transformer.constructor.name ===
+        columnObjects[entityName].transformer &&
+        columnObjects[entityName].transformer.constructor.name ===
           'BooleanTransformer'
       ) {
         field.value = field.value ? '1' : '0';
