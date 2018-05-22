@@ -1,4 +1,5 @@
-import { NextFunction, Request, Express } from 'express';
+import { Express, NextFunction, Request } from 'express';
+import * as trimRequest from 'trim-request';
 import { QueryManager } from '../typeorm/query.manager';
 import { ResponseInterface } from './response.interface';
 
@@ -6,6 +7,7 @@ export async function loadRoutes(app: Express, routes: any[]) {
   for (const route of routes) {
     app[route.method](
       route.path,
+      trimRequest.all,
       async (
         request: Request,
         response: ResponseInterface,
