@@ -222,7 +222,6 @@ export class RemoveAccents {
       const changes = RemoveAccents.defaultDiacriticsRemovalMap;
   
       for (var i = 0; i < changes.length; i++) {
-        console.log(changes[i].letters);
         str = str.replace(changes[i].letters, changes[i].base);
       }
   
