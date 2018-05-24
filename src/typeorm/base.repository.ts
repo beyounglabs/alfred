@@ -105,7 +105,9 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
     const methodName = this.getCalledMethodName().replace('.', '/');
 
-    return `repository/${methodName}/${propList.join('|')}`;
+    const prefix = process.env.BRAIN_SERVICE || '';
+
+    return `${prefix}:repository/${methodName}/${propList.join('|')}`;
   }
 
   public searchQueryBuilder(search: any): SelectQueryBuilder<Entity> {
