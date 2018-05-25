@@ -135,6 +135,10 @@ export abstract class AbstractUpserter<
       ) {
         field.value = field.value ? '1' : '0';
       }
+
+      if (typeof field.value === 'object') {
+        field.value = JSON.stringify(field.value);
+      }
     }
 
     return {
