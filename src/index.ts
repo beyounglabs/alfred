@@ -3,6 +3,7 @@ export { loadRoutes } from './express/load.routes';
 export { ResponseInterface } from './express/response.interface';
 export { jsonRequestMiddleware } from './express/json.request.middleware';
 export { ObjectConverter } from './helpers/object.converter';
+export { RemoveAccents } from './helpers/remove.accents';
 export { ErrorLogger } from './logger/error.logger';
 export { InfoLogger } from './logger/info.logger';
 export { WarnLogger } from './logger/warn.logger';
