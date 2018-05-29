@@ -44,5 +44,7 @@ export class Validator {
     if (fails) {
       return validator.errors.errors;
     }
+
+    return {};
   }
 }
