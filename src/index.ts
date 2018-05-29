@@ -26,3 +26,4 @@ export {
 export {
   MystiqueResultHeaderInterface,
 } from './mystique/contracts/mystique.result.header.interface';
+export { Validator } from './validator/validator';
