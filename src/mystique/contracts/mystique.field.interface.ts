@@ -1,20 +1,5 @@
-interface MystiqueBaseFieldInterface {
-  name: string;
-  label: string;
-  value?: string;
-}
-
-interface MystiqueSelectFieldInterface extends MystiqueBaseFieldInterface {
-  type: 'select';
-  values: {
-    label: string;
-    value: string | number;
-  }[];
-}
-
-interface MystiqueTextFieldInterface extends MystiqueBaseFieldInterface {
-  type: 'text';
-}
+import { MystiqueSelectFieldInterface } from './mystique.select.field.interface';
+import { MystiqueTextFieldInterface } from './mystique.text.field.interface';
 
 export type MystiqueFieldInterface =
   | MystiqueSelectFieldInterface
