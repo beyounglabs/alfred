@@ -61,6 +61,21 @@ export abstract class AbstractUpserter<
             },
             props: {},
           },
+          {
+            icon: 'delete',
+            label: 'Apagar',
+            component: {
+              path: './pages/Services/Delete',
+              props: {
+                params: {
+                  id: attribute.id,
+                  service,
+                  resource,
+                },
+              },
+            },
+            props: {},
+          },
         ],
       },
     }));
