@@ -137,7 +137,7 @@ export abstract class AbstractUpserter<
       }
 
       if (typeof field.value === 'object') {
-        field.value = JSON.stringify(field.value);
+        field.value = JSON.stringify(field.value, null, 2);
       }
     }
 
