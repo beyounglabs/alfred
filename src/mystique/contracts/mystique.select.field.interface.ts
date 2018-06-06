@@ -7,4 +7,5 @@ export interface MystiqueSelectFieldInterface
     label: string;
     value: string | number;
   }[];
+  multiple?: boolean;
 }
