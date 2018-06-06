@@ -155,6 +155,16 @@ export abstract class AbstractUpserter<
         field.value = field.value ? '1' : '0';
       }
 
+      if (Array.isArray(field.value)) {
+        field.value = field.value.map(item => {
+          if (item.id) {
+            return item.id;
+          }
+
+          return item;
+        });
+      }
+
       if (!Array.isArray(field.value) && typeof field.value === 'object') {
         field.value = JSON.stringify(field.value, null, 2);
       }
