@@ -165,7 +165,11 @@ export abstract class AbstractUpserter<
         });
       }
 
-      if (!Array.isArray(field.value) && typeof field.value === 'object') {
+      if (
+        !Array.isArray(field.value) &&
+        field.value !== null &&
+        typeof field.value === 'object'
+      ) {
         field.value = JSON.stringify(field.value, null, 2);
       }
     }
