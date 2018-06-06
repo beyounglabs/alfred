@@ -124,8 +124,10 @@ export abstract class AbstractUpserter<
     };
   }
 
-  public async findOneToUpsertForm(id: number) {
-    return await this.repository.findOneByIdOrFail(id);
+  public async findOneToUpsertForm(id: number | undefined) {
+    return id
+      ? await this.repository.findOneByIdOrFail(id)
+      : this.repository.create();
   }
 
   public async upsertForm(query: any, fields: MystiqueFieldInterface[]) {
@@ -133,9 +135,7 @@ export abstract class AbstractUpserter<
     const resource = this.getResource();
     const { id } = query;
 
-    const entity = id
-      ? await this.findOneToUpsertForm(query.id)
-      : this.repository.create();
+    const entity = await this.findOneToUpsertForm(query.id);
 
     const columnObjects: any = {};
     for (const column of this.repository.metadata.columns) {
