@@ -124,7 +124,7 @@ export abstract class AbstractUpserter<
     };
   }
 
-  public async findOneToUpsertForm(id: number | undefined) {
+  public async findOneToUpsertForm(id: number | undefined): Promise<E> {
     return id
       ? await this.repository.findOneByIdOrFail(id)
       : this.repository.create();
