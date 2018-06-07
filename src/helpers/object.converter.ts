@@ -14,7 +14,11 @@ export class ObjectConverter {
     const newObject: any = {};
     for (const key of Object.keys(object)) {
       const newKey = camelCase(key);
-      newObject[newKey] = object[key];
+      if (Array.isArray(object[key])) {
+        newObject[newKey] = ObjectConverter.underscoreToCamelCase(object[key]);
+      } else {
+        newObject[newKey] = object[key];
+      }
     }
 
     return newObject;
@@ -33,7 +37,11 @@ export class ObjectConverter {
     const newObject: any = {};
     for (const key of Object.keys(object)) {
       const newKey = snakeCase(key);
-      newObject[newKey] = object[key];
+      if (Array.isArray(object[key])) {
+        newObject[newKey] = ObjectConverter.camelCaseToUnderscore(object[key]);
+      } else {
+        newObject[newKey] = object[key];
+      }
     }
 
     return newObject;
