@@ -1,18 +1,10 @@
 import { Slack as WinstonSlack } from 'slack-winston';
 import * as winston from 'winston';
-
 import { LoggerInterface } from './contracts/logger.interface';
-import { SlackInterface } from './contracts/slack.interface';
 
 let logger: winston.LoggerInstance;
 
 export class ErrorLogger implements LoggerInterface {
-  protected slack: SlackInterface;
-
-  constructor(slack: SlackInterface) {
-    this.slack = slack;
-  }
-
   public getLogger(): winston.LoggerInstance {
     if (logger) {
       return logger;
@@ -26,11 +18,13 @@ export class ErrorLogger implements LoggerInterface {
       transports.push(
         new WinstonSlack({
           webhook_url: slackWebhookUrl,
-          channel: this.slack.channel,
+          channel: process.env.SLACK_CHANNEL || 'logger',
           level: 'error',
           icon_emoji: ':shit:',
           username: 'Logger',
-          message: `*${this.slack.system} - ${
+          message: `*${process.env.BRAIN_SERVICE} - ${
+            process.env.BRAIN_PROFILE
+          } - ${
             process.env.NODE_ENV
           }*\n*Message*: {{ message }}. \n\n {{ meta }}`,
         }),
