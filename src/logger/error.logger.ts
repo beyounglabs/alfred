@@ -14,11 +14,13 @@ export class ErrorLogger implements LoggerInterface {
 
     const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
 
+    const defaultChannel = process.env.NODE_ENV === 'production' ? 'logger' : 'logger-staging';
+
     if (slackWebhookUrl) {
       transports.push(
         new WinstonSlack({
           webhook_url: slackWebhookUrl,
-          channel: process.env.SLACK_CHANNEL || 'logger',
+          channel: process.env.SLACK_CHANNEL || defaultChannel,
           level: 'error',
           icon_emoji: ':shit:',
           username: 'Logger',
