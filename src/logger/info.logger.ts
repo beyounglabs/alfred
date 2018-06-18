@@ -1,11 +1,8 @@
 import { Client } from 'elasticsearch';
-import { Slack as WinstonSlack } from 'slack-winston';
 import * as winston from 'winston';
 import * as WinstonElasticsearch from 'winston-elasticsearch';
-
 import { ElasticsearchInfoInterface } from './contracts/elasticsearch.info.interface';
 import { LoggerInterface } from './contracts/logger.interface';
-import { SlackInterface } from './contracts/slack.interface';
 import { transformer } from './transformers/kibana.transformer';
 
 let logger: winston.LoggerInstance;
