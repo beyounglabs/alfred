@@ -8,6 +8,7 @@ export function jsonRequestMiddleware(
   if (
     String(req.headers['content-type']).includes('application/json') === false
   ) {
+    next();
     return;
   }
 
