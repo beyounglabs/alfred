@@ -7,13 +7,11 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "test":
-      "NODE_ENV=testing nyc mocha -A --opts ./mocha.opts --require ts-node/register -r tsconfig-paths/register",
+    "test": "NODE_ENV=testing nyc mocha -A --opts ./mocha.opts --require ts-node/register -r tsconfig-paths/register",
     "test:watch": "nodemon -e js,ts  --exec yarn test:clear",
     "install": "./scripts/install.sh",
     "ts-node": "ts-node",
-    "npm:publish":
-      "yarn build && cp package.json dist/ && cd dist/ && npm publish"
+    "npm:publish": "yarn build && cp package.json dist/ && cd dist/ && npm publish"
   },
   "dependencies": {
     "@types/bluebird": "^3.5.18",
@@ -36,7 +34,7 @@
     "dotenv": "^4.0.0",
     "elasticsearch": "^14.0.0",
     "express": "^4.16.2",
-    "express-formidable": "^1.0.0",
+    "formidable": "^1.2.1",
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.4",
     "mocha": "^4.0.1",
