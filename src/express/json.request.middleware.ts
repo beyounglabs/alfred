@@ -5,6 +5,12 @@ export function jsonRequestMiddleware(
   res: Response,
   next: NextFunction,
 ) {
+  if (
+    String(req.headers['content-type']).includes('application/json') === false
+  ) {
+    return;
+  }
+
   let data = '';
   req.setEncoding('utf8');
   req.on('data', chunk => {
@@ -14,9 +20,7 @@ export function jsonRequestMiddleware(
     if (data) {
       req.body = data;
       try {
-        if (String(req.headers['content-type']).includes('application/json')) {
-          req.body = JSON.parse(data);
-        }
+        req.body = JSON.parse(data);
       } catch (e) {}
     }
     next();
