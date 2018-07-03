@@ -107,7 +107,11 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
     const prefix = process.env.BRAIN_SERVICE || '';
 
-    return `${prefix}:repository/${methodName}/${propList.join('|')}`;
+    const build = process.env.BUILD || '';
+
+    return `${prefix}:repository/${methodName}/${propList.join(
+      '|',
+    )}:BUILD-${build}`;
   }
 
   public searchQueryBuilder(search: any): SelectQueryBuilder<Entity> {
