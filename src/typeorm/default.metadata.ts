@@ -66,6 +66,10 @@ export class DefaultMetadata {
       return 'varchar';
     }
 
+    if (process.env.DB_TYPE === 'sqlite') {
+      return this.getTextDataType();
+    }
+
     return 'longtext';
   }
 
