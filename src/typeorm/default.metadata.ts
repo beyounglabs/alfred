@@ -62,6 +62,8 @@ export class DefaultMetadata {
   }
 
   public static getLongTextDataType(): any {
+    console.log('process.env.DB_TYPE', process.env.DB_TYPE);
+
     if (this.getDefaultEngine() === 'memory') {
       return 'varchar';
     }
