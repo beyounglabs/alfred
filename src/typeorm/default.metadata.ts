@@ -1,6 +1,6 @@
 import { ColumnOptions } from 'typeorm/decorator/options/ColumnOptions';
-import { JsonTransformer } from './transformers/json.transformer';
 import { BooleanTransformer } from './transformers/boolean.transformer';
+import { JsonTransformer } from './transformers/json.transformer';
 import { NumberTransformer } from './transformers/number.transformer';
 
 export class DefaultMetadata {
@@ -16,6 +16,10 @@ export class DefaultMetadata {
 
     if (params.type === 'text') {
       params.type = this.getTextDataType();
+    }
+
+    if (params.type === 'longtext') {
+      params.type = this.getLongTextDataType();
     }
 
     if (params.type === 'decimal') {
@@ -55,6 +59,14 @@ export class DefaultMetadata {
     }
 
     return 'text';
+  }
+
+  public static getLongTextDataType(): any {
+    if (this.getDefaultEngine() === 'memory') {
+      return 'varchar';
+    }
+
+    return 'longtext';
   }
 
   public static getDecimalDataType(): any {
