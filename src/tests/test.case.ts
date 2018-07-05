@@ -9,8 +9,6 @@ import { Connection } from 'typeorm';
 import { DatabaseProvider } from '../providers/database.provider';
 import { FixtureAbstract } from './fixture.abstract';
 
-
-
 const fs: any = bluebird.promisifyAll(fsImport);
 
 let executed = true;
