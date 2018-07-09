@@ -107,6 +107,10 @@ export class BrainParameter {
     }
 
     for (const code of Object.keys(params)) {
+      if (process.env[code]) {
+        console.info(`Skiping ${code} parameter from Brain`);
+        continue;
+      }
       process.env[code] = params[code];
     }
   }

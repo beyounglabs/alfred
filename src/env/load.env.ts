@@ -10,11 +10,10 @@ export async function loadEnv(subscribe: boolean) {
 
   const { parsed } = dotenv.config({ path: dotenvPath });
 
-  process.env = Object.assign(
-    {},
-    parsed,
-    JSON.parse(JSON.stringify(process.env)),
-  );
+  process.env = {
+    ...JSON.parse(JSON.stringify(process.env)),
+    ...parsed,
+  };
 
   const brainRedisOpts = {
     host: process.env.BRAIN_REDIS_HOST,
