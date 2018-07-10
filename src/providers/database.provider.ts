@@ -62,6 +62,11 @@ export class DatabaseProvider {
         ],
         extra: {
           connectionLimit: process.env.DB_POOL_CONNECTION_LIMIT || 10,
+          stream: (opts) => {
+            const socket = net.connect(opts.config.port, opts.config.host);
+            socket.setKeepAlive(true);
+            return socket;
+          },
         },
       };
 
