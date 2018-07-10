@@ -63,12 +63,6 @@ export class DatabaseProvider {
         extra: {
           connectionLimit: process.env.DB_POOL_CONNECTION_LIMIT || 10,
         },
-        stream: (opts) => {
-          console.log('stream');
-          const socket = net.connect(opts.config.port, opts.config.host);
-          socket.setKeepAlive(true);
-          return socket;
-        },
       };
 
       if (process.env.REDIS_CACHE_HOST) {
