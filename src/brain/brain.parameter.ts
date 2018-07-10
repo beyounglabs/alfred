@@ -100,17 +100,18 @@ export class BrainParameter {
     });
   }
 
-  public async updateEnv() {
+  public async updateEnv(skipIfExists: boolean = false) {
     const params = await this.getFromRedis();
     if (params === null || params === undefined) {
       throw new Error('Unable to get parameters from Brain');
     }
 
     for (const code of Object.keys(params)) {
-      if (process.env[code]) {
+      if (process.env[code] && skipIfExists) {
         console.info(`Skiping ${code} parameter from Brain`);
         continue;
       }
+
       process.env[code] = params[code];
     }
   }

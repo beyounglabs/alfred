@@ -26,7 +26,7 @@ export async function loadEnv(subscribe: boolean) {
     process.env.BRAIN_PROFILE || '',
   );
 
-  await brainParameter.updateEnv();
+  await brainParameter.updateEnv(true);
 
   if (subscribe) {
     brainParameter.subscribe().then();
