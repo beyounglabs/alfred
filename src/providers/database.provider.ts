@@ -43,6 +43,7 @@ export class DatabaseProvider {
     }
 
     if (process.env.DB_TYPE === 'mysql') {
+      console.log('mysql');
       const connectionOptions: any = {
         type: 'mysql',
         host: process.env.DB_HOST,
@@ -63,6 +64,7 @@ export class DatabaseProvider {
         extra: {
           connectionLimit: process.env.DB_POOL_CONNECTION_LIMIT || 10,
         },
+        socketPath: '/cloudsql/bbrands-production:us-east4:marvel',
       };
 
       if (process.env.REDIS_CACHE_HOST) {

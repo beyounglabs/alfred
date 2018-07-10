@@ -20,7 +20,6 @@ export async function loadRoutes(app: Express, routes: any[]) {
         } catch (e) {
           next(e);
         } finally {
-          console.log('release');
           await response.locals.queryManager.release();
         }
       },
