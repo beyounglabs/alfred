@@ -1,4 +1,4 @@
-import { QueryRunner, getConnection } from 'typeorm';
+import { getConnection, QueryRunner } from 'typeorm';
 
 export class QueryManager {
   protected queryRunner: QueryRunner | undefined;
