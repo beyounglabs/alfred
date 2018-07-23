@@ -160,7 +160,7 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     id: any,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity | undefined> {
-    return await this.findOne(id || 0, options);
+    return await super.findOne(id || 0, options);
   }
 
   public async findOneByIdOrFail(
