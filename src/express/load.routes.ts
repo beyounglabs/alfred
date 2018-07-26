@@ -13,6 +13,13 @@ export async function loadRoutes(app: Express, routes: any[]) {
         response: ResponseInterface,
         next: NextFunction,
       ) => {
+        // 2 minutes
+        const defaultTimeout = 2 * 60 * 1000;
+        const timeout =
+          route.timeout || process.env.SERVER_TIMEOUT || defaultTimeout;
+
+        request.setTimeout(Number(timeout), () => {});
+
         response.locals.queryManager = new QueryManager();
         try {
           await route.action(request, response);
