@@ -156,6 +156,13 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return await this.save(entity);
   }
 
+  public async findOne(
+    id: any,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity | undefined> {
+    return await super.findOne(id || 0, options);
+  }
+
   public async findOneByIdOrFail(
     id: any,
     options?: FindOneOptions<Entity>,
