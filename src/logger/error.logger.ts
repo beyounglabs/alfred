@@ -14,7 +14,8 @@ export class ErrorLogger implements LoggerInterface {
 
     const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
 
-    const defaultChannel = process.env.NODE_ENV === 'production' ? 'logger' : 'logger-staging';
+    const defaultChannel =
+      process.env.NODE_ENV === 'production' ? 'logger' : 'logger-staging';
 
     if (slackWebhookUrl) {
       transports.push(
@@ -46,5 +47,10 @@ export class ErrorLogger implements LoggerInterface {
     const message = data['message'] ? data['message'] : 'log_default';
 
     logger.error(message, data);
+  }
+
+  public close() {
+    const logger: winston.LoggerInstance = this.getLogger();
+    logger.close();
   }
 }

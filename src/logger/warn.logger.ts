@@ -56,4 +56,9 @@ export class WarnLogger implements LoggerInterface {
 
     logger.warn(message, data);
   }
+
+  public close() {
+    const logger: winston.LoggerInstance = this.getLogger();
+    logger.close();
+  }
 }

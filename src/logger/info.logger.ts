@@ -55,4 +55,9 @@ export class InfoLogger implements LoggerInterface {
 
     logger.info(message, data);
   }
+
+  public close() {
+    const logger: winston.LoggerInstance = this.getLogger();
+    logger.close();
+  }
 }
