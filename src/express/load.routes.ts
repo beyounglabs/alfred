@@ -18,7 +18,9 @@ export async function loadRoutes(app: Express, routes: any[]) {
         const timeout =
           route.timeout || process.env.SERVER_TIMEOUT || defaultTimeout;
 
-        request.setTimeout(Number(timeout) * 1000, () => {});
+        request.setTimeout(Number(timeout) * 1000, () => {
+          console.info(`Route ${route.path} got timeout of ${timeout} seconds`);
+        });
 
         response.locals.queryManager = new QueryManager();
         try {
