@@ -81,6 +81,11 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return methodName;
   }
 
+  public getCachePrefix(): string {
+    const prefix = process.env.BRAIN_SERVICE || '';
+    return `${prefix}:repository/`;
+  }
+
   protected getCacheKey(props: IArguments): string {
     if (!this.getUseCache()) {
       return '';
@@ -105,11 +110,9 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
     const methodName = this.getCalledMethodName().replace('.', '/');
 
-    const prefix = process.env.BRAIN_SERVICE || '';
-
     const build = process.env.BUILD || '';
 
-    return `${prefix}:repository/${methodName}/${propList.join(
+    return `${this.getCachePrefix()}${methodName}/${propList.join(
       '|',
     )}:BUILD-${build}`;
   }
