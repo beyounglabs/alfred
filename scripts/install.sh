@@ -17,6 +17,7 @@ then
     cp -r dist/* .
     if [ ! $BITBUCKET_BRANCH ]
     then
+      rm -Rf dist
       FILES=$(find defaults -type f)
       while IFS= read -r FILE
       do

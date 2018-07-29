@@ -1,5 +1,6 @@
 import { ClientOpts } from 'redis';
 import { RedisManager } from './redis.manager';
+import { writeFile } from 'fs-extra';
 
 let hasCache: boolean = false;
 let cache: any = {};
@@ -100,6 +101,17 @@ export class BrainParameter {
     });
   }
 
+  public async dumpEnv() {
+    let content = '';
+    for (const code of Object.keys(process.env)) {
+      content += `${code}=${process.env[code]}\n`;
+    }
+
+    const file = `${__dirname}/../../../.env.dump`;
+
+    await writeFile(file, content);
+  }
+
   public async updateEnv(skipIfExists: boolean = false) {
     const params = await this.getFromRedis();
     if (params === null || params === undefined) {
@@ -114,6 +126,8 @@ export class BrainParameter {
 
       process.env[code] = params[code];
     }
+
+    this.dumpEnv().then();
   }
 
   public async refresh() {
