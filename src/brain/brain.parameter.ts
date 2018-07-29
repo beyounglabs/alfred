@@ -103,7 +103,12 @@ export class BrainParameter {
 
   public async dumpEnv() {
     let content = '';
-    const keys = Object.keys(process.env).sort();
+    const keys = Object.keys(process.env)
+      .sort()
+      .filter(key => {
+        return key.startsWith('npm_') === false;
+      });
+
     for (const code of keys) {
       content += `${code}=${process.env[code]}\n`;
     }
