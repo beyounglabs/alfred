@@ -7,6 +7,7 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
+import { Cache } from './cache';
 
 let useCache: boolean = false;
 
@@ -81,11 +82,6 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return methodName;
   }
 
-  public getCachePrefix(): string {
-    const prefix = process.env.BRAIN_SERVICE || '';
-    return `${prefix}:repository/`;
-  }
-
   protected getCacheKey(props: IArguments): string {
     if (!this.getUseCache()) {
       return '';
@@ -112,7 +108,7 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
     const build = process.env.BUILD || '';
 
-    return `${this.getCachePrefix()}${methodName}/${propList.join(
+    return `${Cache.getPrefix()}${methodName}/${propList.join(
       '|',
     )}:BUILD-${build}`;
   }
