@@ -29,10 +29,9 @@ export class DatabaseProvider {
     }
 
     let prefix = 'dist/';
-    let extension = '.js';
+
     if (['testing'].includes(String(process.env.NODE_ENV))) {
       prefix = '';
-      extension = '.ts';
     }
 
     let database = process.env.DB_DATABASE;
