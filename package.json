@@ -2,16 +2,18 @@
   "name": "alfred",
   "version": "0.0.2",
   "description": "Alfred JS Framework",
-  "main": "dist/index.js",
+  "main": "index.js",
   "repository": "git@bitbucket.com:beautybrands/alfred.git",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "test": "NODE_ENV=testing nyc mocha -A --opts ./mocha.opts --require ts-node/register -r tsconfig-paths/register",
+    "test":
+      "NODE_ENV=testing nyc mocha -A --opts ./mocha.opts --require ts-node/register -r tsconfig-paths/register",
     "test:watch": "nodemon -e js,ts  --exec yarn test:clear",
     "install": "./scripts/install.sh",
     "ts-node": "ts-node",
-    "npm:publish": "yarn build && cp package.json dist/ && cd dist/ && npm publish"
+    "npm:publish":
+      "yarn build && cp package.json dist/ && cd dist/ && npm publish"
   },
   "dependencies": {
     "@types/bluebird": "^3.5.18",
