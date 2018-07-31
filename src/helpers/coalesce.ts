@@ -1,6 +1,11 @@
 export function coalesce(getter, fallback) {
   try {
-    return getter();
+    const value = getter();
+    if (value === null || value === undefined) {
+      return fallback;
+    }
+
+    return value;
   } catch (e) {
     return fallback;
   }
