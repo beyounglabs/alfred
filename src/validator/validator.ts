@@ -32,13 +32,14 @@ export class Validator {
     );
 
     const fails = await new Promise(resolve => {
-      validator.fails(() => {
-        resolve(true);
-      });
-
-      validator.passes(() => {
-        resolve(false);
-      });
+      validator.checkAsync(
+        () => {
+          resolve(false);
+        },
+        () => {
+          resolve(true);
+        },
+      );
     });
 
     if (fails) {
