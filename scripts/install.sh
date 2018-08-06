@@ -9,25 +9,11 @@ NODEMODULES_PATH=`pwd`;
 
 NODEMODULES_DIR=`basename $(pwd)`;
 
-cd "${SCRIPT_DIR}/../../../";
-
-REPOSITORY_NAME=`basename $(pwd)`;
-
-echo 'REPOSITORY:';
-echo $REPOSITORY_NAME;
-
 cd $ORIGINAL_PATH;
-
-echo $PWD
-echo $NODEMODULES_PATH
-
-if [ $REPOSITORY_NAME == "optimus" ]
-then
-  sed -i "s@es2017@es5@g" "${NODEMODULES_PATH}/alfred/tsconfig.json"
-fi
 
 if [ $NODEMODULES_DIR == "node_modules" ]
 then
+    cat "${NODEMODULES_PATH}/../.git/config" | grep optimus && sed -i "s@es2017@es5@g" "${NODEMODULES_PATH}/alfred/tsconfig.json"
     yarn tsc
     cp -r dist/* .
     if [ ! $BITBUCKET_BRANCH ]
