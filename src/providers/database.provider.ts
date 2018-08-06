@@ -30,7 +30,7 @@ export class DatabaseProvider {
 
     let prefix = 'dist/';
 
-    if (['testing'].includes(String(process.env.NODE_ENV))) {
+    if (['testing'].indexOf(String(process.env.NODE_ENV)) !== -1) {
       prefix = '';
     }
 

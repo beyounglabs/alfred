@@ -19,7 +19,7 @@ export function request(
     method: method,
     url: (baseUrl || '') + url,
     params: method === 'get' ? params : {},
-    data: ['put', 'delete', 'post'].includes(method) ? params : {},
+    data: ['put', 'delete', 'post'].indexOf(method) !== -1 ? params : {},
     ...config,
   };
 
