@@ -1,11 +1,11 @@
 import axios from 'axios';
-
+import { trimEnd } from 'lodash';
 import { QueueRequestInterface } from './contracts/queue.request.interface';
 
 export class QueueGenerator {
   public async generate(queueRequest: QueueRequestInterface): Promise<any> {
     try {
-      const furyUrl = process.env.FURY_URL;
+      let furyUrl = process.env.FURY_URL;
 
       if (!furyUrl) {
         throw new Error('Fury URL Not Configured');
@@ -20,6 +20,12 @@ export class QueueGenerator {
       ) {
         queueRequest.name = `${queueRequest.service}_${queueRequest.name}`;
       }
+
+      if (furyUrl.split('://').length === 1) {
+        furyUrl = `http://${furyUrl}`;
+      }
+
+      furyUrl = trimEnd(furyUrl, '/');
 
       const response = await axios.post(
         `${furyUrl}/api/v1/queue/generate`,

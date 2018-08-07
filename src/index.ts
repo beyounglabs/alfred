@@ -9,6 +9,7 @@ export { roundNumber } from './helpers/round.number';
 export { ErrorLogger } from './logger/error.logger';
 export { InfoLogger } from './logger/info.logger';
 export { WarnLogger } from './logger/warn.logger';
+export { DebugLogger } from './logger/debug.logger';
 export { AbstractUpserter } from './mystique/abstract.upserter';
 export {
   MystiqueActionInterface,
