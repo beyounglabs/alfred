@@ -1,17 +1,10 @@
 import * as winston from 'winston';
-import { ElasticsearchInfoInterface } from './contracts/elasticsearch.info.interface';
 import { LoggerInterface } from './contracts/logger.interface';
 import { LoggingWinston } from '@google-cloud/logging-winston';
 
 let logger: winston.LoggerInstance;
 
 export class DebugLogger implements LoggerInterface {
-  protected elasticsearch: ElasticsearchInfoInterface;
-
-  constructor(elasticsearch: ElasticsearchInfoInterface) {
-    this.elasticsearch = elasticsearch;
-  }
-
   public getLogger(): winston.LoggerInstance {
     if (logger) {
       return logger;
