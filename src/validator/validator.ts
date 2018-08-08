@@ -28,7 +28,10 @@ export class Validator {
     const validator = new ValidatorJS(
       data,
       rules,
-      merge(customErrorMessages, this.getDefaultErrorMessages()),
+      merge(
+        this.getDefaultErrorMessages(),
+        customErrorMessages,
+      ),
     );
 
     const fails = await new Promise(resolve => {
