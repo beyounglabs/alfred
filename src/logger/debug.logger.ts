@@ -25,6 +25,12 @@ export class DebugLogger implements LoggerInterface {
       transports.push(new winston.transports.Console());
     }
 
+    transports.push(
+      new winston.transports.Console({
+        handleExceptions: true,
+      })
+    );
+
     logger = new winston.Logger({
       transports,
       exitOnError: false,
