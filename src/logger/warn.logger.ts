@@ -44,6 +44,7 @@ export class WarnLogger implements LoggerInterface {
 
     logger = new winston.Logger({
       transports,
+      exitOnError: false,
     });
 
     return logger;

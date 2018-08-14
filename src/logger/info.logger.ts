@@ -43,6 +43,7 @@ export class InfoLogger implements LoggerInterface {
 
     logger = new winston.Logger({
       transports,
+      exitOnError: false,
     });
 
     return logger;

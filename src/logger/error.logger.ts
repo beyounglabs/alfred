@@ -36,6 +36,7 @@ export class ErrorLogger implements LoggerInterface {
 
     logger = new winston.Logger({
       transports,
+      exitOnError: false,
     });
 
     return logger;
