@@ -42,12 +42,6 @@ export class WarnLogger implements LoggerInterface {
       );
     }
 
-    transports.push(
-      new winston.transports.Console({
-        handleExceptions: true,
-      })
-    );
-
     logger = new winston.Logger({
       transports,
       exitOnError: false,
