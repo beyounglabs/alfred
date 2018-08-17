@@ -49,7 +49,7 @@ export class TestCase {
 
     for (const fixture of fixtures) {
       const fixtureName = kebabCase(fixture).replace(/\-/g, '.');
-      const fixtureClass = (await import(`${__dirname}/../../../../__tests__/fixtures/${fixtureName}.fixture`))[
+      const fixtureClass = (await import(`${__dirname}/../../../__tests__/fixtures/${fixtureName}.fixture`))[
         `${fixture}Fixture`
       ];
 
