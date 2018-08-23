@@ -7,8 +7,15 @@ const repositoryFile = join(__dirname, '..', 'repository.txt');
 
 const SLACK_URL = process.env.SLACK_URL;
 
-let [repository, branch] = [process.env.REPOSITORY_NAME, process.env.BRANCH_NAME] || readFileSync(repositoryFile, 'utf8').split('\n');
-const [firstLetter, ...restLetters] = repository;
+let info = [process.env.REPOSITORY_NAME, process.env.BRANCH_NAME].filter(
+  Boolean,
+);
+
+if (!info.length) {
+  info = readFileSync(repositoryFile, 'utf8').split('\n');
+}
+
+let [repository, branch] = info;
 
 repository = [
   firstLetter.toUpperCase(),
