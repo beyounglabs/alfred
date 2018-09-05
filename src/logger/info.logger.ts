@@ -4,31 +4,31 @@ import * as uniqidGenerator from 'uniqid';
 import { ElasticsearchInfoInterface } from './contracts/elasticsearch.info.interface';
 import { LoggerInterface } from './contracts/logger.interface';
 import { transformer } from './transformers/kibana.transformer';
-
-let logger: Client;
+import * as moment from 'moment';
 
 export class InfoLogger implements LoggerInterface {
   protected elasticsearch: ElasticsearchInfoInterface;
+  protected logger: Client;
 
   constructor(elasticsearch: ElasticsearchInfoInterface) {
     this.elasticsearch = elasticsearch;
   }
 
   public getLogger(): Client {
-    if (logger) {
-      return logger;
+    if (this.logger) {
+      return this.logger;
     }
 
     const esHost = process.env.ELASTICSEARCH_LOG_HOST;
     const esPort = process.env.ELASTICSEARCH_LOG_PORT;
 
     if (esHost && esPort) {
-      logger = new Client({
+      this.logger = new Client({
         host: `${esHost}:${esPort}`,
       });
     }
 
-    return logger;
+    return this.logger;
   }
 
   public async log(data: any): Promise<CreateDocumentResponse> {
@@ -37,7 +37,11 @@ export class InfoLogger implements LoggerInterface {
     const meta = omit(data, ['level']);
 
     return logger.create({
-      index: this.elasticsearch.infoIndex,
+      index: [
+        this.elasticsearch.infoIndex,
+        process.env.BUILD,
+        moment().format('YYYY-MM-DD'),
+      ].join('-'),
       type: 'info',
       id: uniqidGenerator(),
       body: transformer({
