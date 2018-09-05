@@ -39,7 +39,7 @@ export class InfoLogger implements LoggerInterface {
     return logger.create({
       index: [
         this.elasticsearch.infoIndex,
-        process.env.BUILD,
+        String(process.env.BUILD).toLowerCase(),
         moment().format('YYYY-MM-DD'),
       ].join('-'),
       type: 'info',
