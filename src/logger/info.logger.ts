@@ -1,11 +1,11 @@
-import { Client } from 'elasticsearch';
-import * as winston from 'winston';
-import * as WinstonElasticsearch from 'winston-elasticsearch';
+import { Client, CreateDocumentResponse } from 'elasticsearch';
+import { omit } from 'lodash';
+import * as uniqidGenerator from 'uniqid';
 import { ElasticsearchInfoInterface } from './contracts/elasticsearch.info.interface';
 import { LoggerInterface } from './contracts/logger.interface';
 import { transformer } from './transformers/kibana.transformer';
 
-let logger: winston.LoggerInstance;
+let logger: Client;
 
 export class InfoLogger implements LoggerInterface {
   protected elasticsearch: ElasticsearchInfoInterface;
@@ -14,51 +14,43 @@ export class InfoLogger implements LoggerInterface {
     this.elasticsearch = elasticsearch;
   }
 
-  public getLogger(): winston.LoggerInstance {
+  public getLogger(): Client {
     if (logger) {
       return logger;
     }
-
-    const transports: any[] = [];
 
     const esHost = process.env.ELASTICSEARCH_LOG_HOST;
     const esPort = process.env.ELASTICSEARCH_LOG_PORT;
 
     if (esHost && esPort) {
-      const client = new Client({
+      logger = new Client({
         host: `${esHost}:${esPort}`,
       });
-
-      transports.push(
-        new WinstonElasticsearch({
-          name: 'ELASTIC_SEARCH_INFO',
-          level: 'info',
-          client,
-          flushInterval: 2000,
-          index: this.elasticsearch.infoIndex,
-          transformer,
-        }),
-      );
     }
-
-    logger = new winston.Logger({
-      transports,
-      exitOnError: false,
-    });
 
     return logger;
   }
 
-  public async log(data: any) {
-    const logger: winston.LoggerInstance = this.getLogger();
+  public async log(data: any): Promise<CreateDocumentResponse> {
+    const logger = this.getLogger();
+    const { message } = data;
+    const meta = omit(data, ['level']);
 
-    const message = data['message'] ? data['message'] : 'log_default';
-
-    logger.info(message, data);
+    return logger.create({
+      index: this.elasticsearch.infoIndex,
+      type: 'info',
+      id: uniqidGenerator(),
+      body: transformer({
+        message: message || 'log_default',
+        level: 'info',
+        meta,
+      }),
+    });
   }
 
   public close() {
-    const logger: winston.LoggerInstance = this.getLogger();
+    const logger = this.getLogger();
+
     logger.close();
   }
 }

@@ -1,11 +1,11 @@
 export function transformer(logData) {
-  const transformed: any = {};
-  transformed['@timestamp'] = logData.timestamp
-    ? logData.timestamp
-    : new Date().toISOString();
-  transformed.channel = process.env.NODE_ENV;
-  transformed.message = logData.message;
-  transformed.severity = logData.level;
-  transformed.context = logData.meta;
-  return transformed;
+  return {
+    '@timestamp': logData.timestamp
+      ? logData.timestamp
+      : new Date().toISOString(),
+    channel: process.env.NODE_ENV,
+    message: logData.message,
+    severity: logData.level,
+    context: logData.meta,
+  };
 }
