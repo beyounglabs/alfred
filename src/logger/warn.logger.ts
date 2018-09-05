@@ -39,7 +39,7 @@ export class WarnLogger implements LoggerInterface {
     return logger.create({
       index: [
         this.elasticsearch.errorIndex,
-        process.env.BUILD,
+        String(process.env.BUILD).toLowerCase(),
         moment().format('YYYY-MM-DD'),
       ].join('-'),
       type: 'log',
