@@ -17,10 +17,7 @@ if (!info.length) {
 
 let [repository, branch] = info;
 
-repository = [
-  firstLetter.toUpperCase(),
-  ...restLetters.filter(value => value !== '\n'),
-].join('');
+repository = repository.toUpperCase().replace("\n", '');
 
 branch = branch.trim();
 
