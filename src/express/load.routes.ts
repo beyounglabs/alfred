@@ -37,7 +37,7 @@ export async function loadRoutes(app: Express, routes: any[]) {
             throw new Error('Token Bearer not found');
           }
 
-          const auth = await JwtHelper.verify(authorization.length[1]);
+          const auth = await JwtHelper.verify(authorization[1]);
 
           if (!auth) {
             throw new Error('Token Bearer invalid');
