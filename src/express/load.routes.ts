@@ -23,6 +23,7 @@ export async function loadRoutes(app: Express, routes: any[]) {
         });
 
         response.locals.queryManager = new QueryManager();
+        response.locals.route = route;
         try {
           await route.action(request, response);
           next();
