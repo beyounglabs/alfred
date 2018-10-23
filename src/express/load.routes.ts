@@ -26,24 +26,29 @@ export async function loadRoutes(app: Express, routes: any[]) {
         response.locals.queryManager = new QueryManager();
 
         if (route.protected) {
-          let authorization: any = request.headers['authorization'];
-          if (!authorization) {
-            throw new Error('Token Bearer not found');
+          try {
+            let authorization: any = request.headers['authorization'];
+            if (!authorization) {
+              throw new Error('Token Bearer not found');
+            }
+
+            authorization = authorization.split('Bearer ');
+
+            if (authorization.length === 1) {
+              throw new Error('Token Bearer not found');
+            }
+
+            const auth = await JwtHelper.verify(authorization[1]);
+
+            if (!auth) {
+              throw new Error('Token Bearer invalid');
+            }
+
+            response.locals.auth = auth;
+          } catch (e) {
+            response.status(403).send({ message: e.message });
+            return next();
           }
-
-          authorization = authorization.split('Bearer ');
-
-          if (authorization.length === 1) {
-            throw new Error('Token Bearer not found');
-          }
-
-          const auth = await JwtHelper.verify(authorization[1]);
-
-          if (!auth) {
-            throw new Error('Token Bearer invalid');
-          }
-
-          response.locals.auth = auth;
         }
 
         try {
