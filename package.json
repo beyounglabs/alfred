@@ -49,7 +49,7 @@
     "redis": "^2.8.0",
     "reflect-metadata": "^0.1.10",
     "slack-winston": "0.0.9",
-    "sqlite3": "^3.1.13",
+    "sqlite3": "^4.0.3",
     "trim-request": "^1.0.6",
     "ts-node": "^3.3.0",
     "tsc-watch": "^1.0.17",
