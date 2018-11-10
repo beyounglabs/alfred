@@ -165,9 +165,12 @@ export abstract class AbstractUpserter<
         });
       }
 
+      const isDate = field.value instanceof Date;
+
       if (
         !Array.isArray(field.value) &&
         field.value !== null &&
+        !isDate &&
         typeof field.value === 'object'
       ) {
         field.value = JSON.stringify(field.value, null, 2);
