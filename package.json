@@ -7,13 +7,11 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "test":
-      "NODE_ENV=testing nyc mocha -A --opts ./mocha.opts --require ts-node/register -r tsconfig-paths/register",
+    "test": "NODE_ENV=testing nyc mocha -A --opts ./mocha.opts --require ts-node/register -r tsconfig-paths/register",
     "test:watch": "nodemon -e js,ts  --exec yarn test:clear",
     "install": "./scripts/install.sh",
     "ts-node": "ts-node",
-    "npm:publish":
-      "yarn build && cp package.json dist/ && cd dist/ && npm publish"
+    "npm:publish": "yarn build && cp package.json dist/ && cd dist/ && npm publish"
   },
   "dependencies": {
     "@google-cloud/logging-winston": "^0.9.0",
@@ -24,6 +22,7 @@
     "@types/fs-extra": "^5.0.0",
     "@types/lodash": "^4.14.82",
     "@types/mocha": "^2.2.44",
+    "@types/moment": "^2.13.0",
     "@types/node": "^8.0.53",
     "@types/redis": "^2.8.1",
     "@types/validator": "^6.3.0",

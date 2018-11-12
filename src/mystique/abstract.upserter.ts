@@ -1,4 +1,5 @@
 import { camelCase, snakeCase } from 'lodash';
+import * as moment from 'moment';
 import { QueryRunner } from 'typeorm';
 import { ObjectConverter } from '../helpers/object.converter';
 import { BaseRepository } from '../typeorm/base.repository';
@@ -174,6 +175,15 @@ export abstract class AbstractUpserter<
         typeof field.value === 'object'
       ) {
         field.value = JSON.stringify(field.value, null, 2);
+      }
+
+      if (field.type.startsWith('datetime')) {
+        field.type = 'datetime-local';
+        field.value = moment(field.value).format('YYYY-MM-DDTHH:mm');
+      }
+
+      if (field.type === 'date') {
+        field.value = moment(field.value).format('YYYY-MM-DD');
       }
     }
 
