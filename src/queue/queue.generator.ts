@@ -15,7 +15,7 @@ export class QueueGenerator {
       queueRequest.service = queueRequest.service.toUpperCase();
 
       if (
-        queueRequest.name.substr(0, queueRequest.service.length - 1) !==
+        queueRequest.name.substr(0, queueRequest.service.length) !==
         queueRequest.service
       ) {
         queueRequest.name = `${queueRequest.service}_${queueRequest.name}`;
