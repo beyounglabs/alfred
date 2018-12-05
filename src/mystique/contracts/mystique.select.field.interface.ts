@@ -8,4 +8,5 @@ export interface MystiqueSelectFieldInterface
     value: string | number;
   }[];
   multiple?: boolean;
+  required?: boolean;
 }
