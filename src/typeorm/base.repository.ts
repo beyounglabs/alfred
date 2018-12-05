@@ -117,18 +117,26 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     const qb = this.createQueryBuilder('e');
 
     for (const field of Object.keys(search)) {
-      if (!search[field]) {
+      const value = search[field];
+      const searchField = camelCase(field);
+      let whereField = `:${searchField}`;
+      let operator = '=';
+
+      if (!value) {
         continue;
       }
-
-      const searchField = camelCase(field);
 
       if (!this.metadata.propertiesMap[searchField]) {
         continue;
       }
 
-      qb.andWhere(`e.${searchField} = :${searchField}`, {
-        [searchField]: search[field],
+      if (Array.isArray(value)) {
+        operator = 'IN';
+        whereField = `(:...${searchField})`;
+      }
+
+      qb.andWhere(`e.${searchField} ${operator} ${whereField}`, {
+        [searchField]: value,
       });
     }
 
