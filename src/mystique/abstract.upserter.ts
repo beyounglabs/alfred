@@ -179,11 +179,15 @@ export abstract class AbstractUpserter<
 
       if (field.type.startsWith('datetime')) {
         field.type = 'datetime-local';
-        field.value = moment(field.value).format('YYYY-MM-DDTHH:mm');
+        field.value = field.value
+          ? moment(field.value).format('YYYY-MM-DDTHH:mm')
+          : null;
       }
 
       if (field.type === 'date') {
-        field.value = moment(field.value).format('YYYY-MM-DD');
+        field.value = field.value
+          ? moment(field.value).format('YYYY-MM-DD')
+          : null;
       }
     }
 
