@@ -6,6 +6,12 @@ import { BaseRepository } from '../typeorm/base.repository';
 import { MystiqueActionInterface } from './contracts/mystique.action.interface';
 import { MystiqueFieldInterface } from './contracts/mystique.field.interface';
 
+type MystiqueActionsType = Record<string, Partial<MystiqueActionInterface>>;
+
+interface MystiqueSearchConfigInterface<E extends any> {
+  getActions?: (entity: E) => MystiqueActionsType;
+}
+
 export abstract class AbstractUpserter<
   E extends any,
   R extends BaseRepository<E>
@@ -30,56 +36,93 @@ export abstract class AbstractUpserter<
     return resource;
   }
 
-  public async search(query: any) {
-    const { per_page, current_page } = query;
+  protected getService(): string {
     const service = String(process.env.BRAIN_SERVICE).toLowerCase();
 
+    return service;
+  }
+
+  protected getDefaultActions(entity: E): MystiqueActionsType {
+    const service = this.getService();
     const resource = this.getResource();
+
+    return {
+      EDIT: {
+        icon: 'edit',
+        label: 'Editar',
+        component: {
+          path: './pages/Services/Upsert',
+          props: {
+            params: {
+              id: entity.id,
+              service,
+              resource,
+            },
+          },
+        },
+        props: {},
+      },
+      DELETE: {
+        icon: 'delete',
+        label: 'Apagar',
+        component: {
+          path: './pages/Services/Delete',
+          props: {
+            params: {
+              id: entity.id,
+              service,
+              resource,
+            },
+          },
+        },
+        props: {},
+      },
+    };
+  }
+
+  protected mergeActionsToArray(
+    ...allActions: MystiqueActionsType[]
+  ): MystiqueActionsType {
+    const mergedActions: MystiqueActionsType = {};
+
+    for (let actions of allActions) {
+      for (let actionCode in actions) {
+        if (!mergedActions[actionCode]) {
+          mergedActions[actionCode] = {};
+        }
+
+        Object.assign(mergedActions[actionCode], actions[actionCode]);
+      }
+    }
+
+    return mergedActions;
+  }
+
+  public async search(query: any, config?: MystiqueSearchConfigInterface<E>) {
+    const { per_page, current_page } = query;
 
     query.per_page = !per_page ? 50 : Number(per_page);
     query.current_page = !current_page ? 1 : Number(current_page);
 
     const total = await this.repository.searchCount(query);
 
-    const attributes = await this.repository.search(query);
+    const entities = await this.repository.search(query);
 
-    const data = attributes.map(attribute => ({
-      ...ObjectConverter.camelCaseToUnderscore(attribute),
-      ['__mystique']: {
-        actions: <MystiqueActionInterface[]>[
-          {
-            icon: 'edit',
-            label: 'Editar',
-            component: {
-              path: './pages/Services/Upsert',
-              props: {
-                params: {
-                  id: attribute.id,
-                  service,
-                  resource,
-                },
-              },
-            },
-            props: {},
-          },
-          {
-            icon: 'delete',
-            label: 'Apagar',
-            component: {
-              path: './pages/Services/Delete',
-              props: {
-                params: {
-                  id: attribute.id,
-                  service,
-                  resource,
-                },
-              },
-            },
-            props: {},
-          },
-        ],
-      },
-    }));
+    const data = entities.map(entity => {
+      let actions = this.getDefaultActions(entity);
+
+      if (config !== undefined && config.getActions) {
+        const receivedActions = config.getActions(entity);
+        actions = this.mergeActionsToArray(actions, receivedActions);
+      }
+
+      return {
+        ...ObjectConverter.camelCaseToUnderscore(entity),
+        __mystique: {
+          actions,
+        },
+      };
+    });
 
     const from = query.per_page * query.current_page - query.per_page + 1;
     let to = query.per_page * query.current_page;
@@ -99,10 +142,11 @@ export abstract class AbstractUpserter<
   }
 
   public async searchForm(fields: MystiqueFieldInterface[]) {
-    const service = String(process.env.BRAIN_SERVICE).toLowerCase();
+    const service = this.getService();
     const resource = this.getResource();
+
     return {
-      actions: <{ [code: string]: MystiqueActionInterface }>{
+      actions: <MystiqueActionsType>{
         ADD: {
           service,
           icon: 'add',
@@ -132,7 +176,7 @@ export abstract class AbstractUpserter<
   }
 
   public async upsertForm(query: any, fields: MystiqueFieldInterface[]) {
-    const service = String(process.env.BRAIN_SERVICE).toLowerCase();
+    const service = this.getService();
     const resource = this.getResource();
     const { id } = query;
 
