@@ -4,13 +4,9 @@ import { QueryRunner } from 'typeorm';
 import { ObjectConverter } from '../helpers/object.converter';
 import { BaseRepository } from '../typeorm/base.repository';
 import { MystiqueActionInterface } from './contracts/mystique.action.interface';
+import { MystiqueActionsType } from './contracts/mystique.actions.type';
 import { MystiqueFieldInterface } from './contracts/mystique.field.interface';
-
-type MystiqueActionsType = Record<string, Partial<MystiqueActionInterface>>;
-
-interface MystiqueSearchConfigInterface<E extends any> {
-  getActions?: (entity: E) => MystiqueActionsType;
-}
+import { MystiqueSearchConfigInterface } from './contracts/mystique.search.config.interface';
 
 export abstract class AbstractUpserter<
   E extends any,
