@@ -33,6 +33,7 @@
     "chai": "^4.1.2",
     "chalk": "^2.3.0",
     "child-process-async": "^1.0.1",
+    "date-fns": "^1.30.1",
     "dotenv": "^4.0.0",
     "elasticsearch": "^14.0.0",
     "express": "^4.16.2",
