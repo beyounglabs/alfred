@@ -1,6 +1,6 @@
-import { camelCase, snakeCase } from 'lodash';
+import { camelCase, kebabCase, snakeCase } from 'lodash';
 import * as moment from 'moment';
-import { QueryRunner } from 'typeorm';
+import { getConnection, QueryRunner } from 'typeorm';
 import { ObjectConverter } from '../helpers/object.converter';
 import { BaseRepository } from '../typeorm/base.repository';
 import { MystiqueActionInterface } from './contracts/mystique.action.interface';
@@ -178,6 +178,9 @@ export abstract class AbstractUpserter<
 
     const entity = await this.findOneToUpsertForm(query.id);
 
+    const connection = getConnection();
+    const metadata = connection.getMetadata(entity.constructor);
+
     const columnObjects: any = {};
     for (const column of this.repository.metadata.columns) {
       columnObjects[column.propertyName] = column;
@@ -228,6 +231,27 @@ export abstract class AbstractUpserter<
         field.value = field.value
           ? moment(field.value).format('YYYY-MM-DD')
           : null;
+      }
+
+      if (field.type === 'group') {
+        // @todo: Tratar fields
+      }
+
+      if (field.type === 'relation') {
+        const relation = metadata.relations.find(
+          relation => relation.inverseEntityMetadata.name === field.entityName,
+        );
+
+        field.value = null;
+        field.resource = kebabCase(field.entityName);
+
+        if (!relation) {
+          continue;
+        }
+
+        field.value = ObjectConverter.camelCaseToUnderscore(
+          await entity[relation.propertyPath],
+        );
       }
     }
 
