@@ -1,6 +1,6 @@
 import { camelCase, kebabCase, snakeCase } from 'lodash';
 import * as moment from 'moment';
-import { getConnection, QueryRunner } from 'typeorm';
+import { EntityMetadata, getConnection, QueryRunner } from 'typeorm';
 import { ObjectConverter } from '../helpers/object.converter';
 import { BaseRepository } from '../typeorm/base.repository';
 import { MystiqueActionInterface } from './contracts/mystique.action.interface';
@@ -174,19 +174,46 @@ export abstract class AbstractUpserter<
   public async upsertForm(query: any, fields: MystiqueFieldInterface[]) {
     const service = this.getService();
     const resource = this.getResource();
-    const { id } = query;
+    const connection = getConnection();
 
     const entity = await this.findOneToUpsertForm(query.id);
 
-    const connection = getConnection();
-    const metadata = connection.getMetadata(entity.constructor);
+    const entityMetadata = connection.getMetadata(entity.constructor);
 
     const columnObjects: any = {};
     for (const column of this.repository.metadata.columns) {
       columnObjects[column.propertyName] = column;
     }
 
-    for (const field of fields) {
+    return {
+      actions: <{ [code: string]: MystiqueActionInterface }>{
+        SAVE: {
+          endpoint: `POST:/${resource}/upsert/`,
+          service,
+          label: 'Salvar',
+          props: {
+            id: entity.id,
+          },
+        },
+      },
+      fields: await this.transformFields(
+        fields,
+        entity,
+        entityMetadata,
+        columnObjects,
+      ),
+    };
+  }
+
+  protected async transformFields(
+    fields: MystiqueFieldInterface[],
+    entity: E,
+    entityMetadata: EntityMetadata,
+    columnObjects: any,
+  ) {
+    const transformedFields = [...fields];
+
+    for (const field of transformedFields) {
       const entityName = camelCase(field.name);
       field.value = entity[entityName];
 
@@ -233,12 +260,19 @@ export abstract class AbstractUpserter<
           : null;
       }
 
-      if (field.type === 'group') {
-        // @todo: Tratar fields
+      if (field.type === 'group' || field.type === 'tab') {
+        field.fields = field.fields
+          ? await this.transformFields(
+              field.fields,
+              entity,
+              entityMetadata,
+              columnObjects,
+            )
+          : [];
       }
 
       if (field.type === 'relation') {
-        const relation = metadata.relations.find(
+        const relation = entityMetadata.relations.find(
           relation => relation.inverseEntityMetadata.name === field.entityName,
         );
 
@@ -255,18 +289,6 @@ export abstract class AbstractUpserter<
       }
     }
 
-    return {
-      actions: <{ [code: string]: MystiqueActionInterface }>{
-        SAVE: {
-          endpoint: `POST:/${resource}/upsert/`,
-          service,
-          label: 'Salvar',
-          props: {
-            id: entity.id,
-          },
-        },
-      },
-      fields,
-    };
+    return transformedFields;
   }
 }

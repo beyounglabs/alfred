@@ -4,6 +4,7 @@ import { MystiqueDatetimeFieldInterface } from './mystique.datetime.field.interf
 import { MystiqueGroupFieldInterface } from './mystique.group.field.interface';
 import { MystiqueRelationFieldInterface } from './mystique.relation.field.interface';
 import { MystiqueSelectFieldInterface } from './mystique.select.field.interface';
+import { MystiqueTabFieldInterface } from './mystique.tab.field.interface';
 import { MystiqueTextFieldInterface } from './mystique.text.field.interface';
 
 export type MystiqueFieldInterface =
@@ -13,4 +14,5 @@ export type MystiqueFieldInterface =
   | MystiqueDatetimeFieldInterface
   | MystiqueComponentFieldInterface
   | MystiqueGroupFieldInterface
-  | MystiqueRelationFieldInterface;
+  | MystiqueRelationFieldInterface
+  | MystiqueTabFieldInterface;
