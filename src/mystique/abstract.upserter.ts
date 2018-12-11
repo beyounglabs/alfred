@@ -283,7 +283,7 @@ export abstract class AbstractUpserter<
           continue;
         }
 
-        field.name = relation.propertyPath;
+        field.name = snakeCase(relation.propertyPath);
 
         field.value = ObjectConverter.camelCaseToUnderscore(
           await entity[relation.propertyPath],
