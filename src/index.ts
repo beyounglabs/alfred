@@ -2,14 +2,15 @@ export { loadEnv } from './env/load.env';
 export { jsonRequestMiddleware } from './express/json.request.middleware';
 export { loadRoutes } from './express/load.routes';
 export { ResponseInterface } from './express/response.interface';
+export { JwtHelper } from './helpers/jwt.helpers';
 export { ObjectConverter } from './helpers/object.converter';
 export { RemoveAccents } from './helpers/remove.accents';
 export { request } from './helpers/request';
 export { roundNumber } from './helpers/round.number';
+export { DebugLogger } from './logger/debug.logger';
 export { ErrorLogger } from './logger/error.logger';
 export { InfoLogger } from './logger/info.logger';
 export { WarnLogger } from './logger/warn.logger';
-export { DebugLogger } from './logger/debug.logger';
 export { AbstractUpserter } from './mystique/abstract.upserter';
 export {
   MystiqueActionInterface,
