@@ -29,6 +29,12 @@ export class Validator {
     ValidatorJS.setAttributeFormatter(formatter);
   }
 
+  public setAttributeArrayFormatter(): void {
+    this.setAttributeFormatter((attribute) => {
+      return attribute.split('.').filter(v => Number.isNaN(Number(v))).join('.');
+    })
+  }
+
   public async validate(data, rules, customErrorMessages?) {
     const validator = new ValidatorJS(
       data,
