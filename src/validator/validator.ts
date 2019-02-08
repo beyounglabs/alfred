@@ -1,5 +1,6 @@
 import { merge } from 'lodash';
 import * as ValidatorJS from 'validatorjs';
+
 export class Validator {
   public getDefaultErrorMessages(): any {
     return {
@@ -22,6 +23,10 @@ export class Validator {
 
   public register(rule: string, callback: Function, message: string) {
     ValidatorJS.registerAsync(rule, callback, message);
+  }
+
+  public setAttributeFormatter(formatter: (attribute: string) => void): void {
+    ValidatorJS.setAttributeFormatter(formatter);
   }
 
   public async validate(data, rules, customErrorMessages?) {
