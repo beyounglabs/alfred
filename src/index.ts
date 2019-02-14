@@ -10,6 +10,10 @@ export { roundNumber } from './helpers/round.number';
 export { DebugLogger } from './logger/debug.logger';
 export { ErrorLogger } from './logger/error.logger';
 export { InfoLogger } from './logger/info.logger';
+export {
+  performanceLoggerEnd,
+  performanceLoggerStart,
+} from './logger/performance.logger';
 export { WarnLogger } from './logger/warn.logger';
 export { AbstractUpserter } from './mystique/abstract.upserter';
 export {
