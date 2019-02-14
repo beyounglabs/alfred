@@ -1,3 +1,4 @@
+import { Dictionary, lowerFirst } from 'lodash';
 import {
   getCustomRepository as typeORMGetCustomRepository,
   ObjectType,
@@ -17,4 +18,26 @@ export function getCustomRepository<T>(
   repository.setQueryRunner(queryRunner);
 
   return repository;
+}
+
+export function getCustomRepositories<T>(
+  customRepositories: ObjectType<T>[],
+  queryRunner: QueryRunner,
+  connectionName?: string,
+): Dictionary<T> {
+  const repositories: Dictionary<T> = {};
+
+  for (let customRepository of customRepositories) {
+    const repositoryName = lowerFirst(customRepository.name);
+
+    const repository: any = getCustomRepository(
+      customRepository,
+      queryRunner,
+      connectionName,
+    );
+
+    repositories[repositoryName] = repository;
+  }
+
+  return repositories;
 }
