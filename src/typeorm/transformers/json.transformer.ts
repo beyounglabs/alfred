@@ -10,6 +10,10 @@ export class JsonTransformer implements ValueTransformer {
   }
 
   public to(value) {
+    if (typeof value === 'object' && process.env.DB_TYPE === 'sqlite') {
+      return JSON.stringify(value);
+    }
+
     return value;
   }
 }
