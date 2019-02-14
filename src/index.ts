@@ -32,7 +32,10 @@ export { FixtureAbstract } from './tests/fixture.abstract';
 export { TestCase } from './tests/test.case';
 export { BaseRepository } from './typeorm/base.repository';
 export { DefaultMetadata } from './typeorm/default.metadata';
-export { getCustomRepository } from './typeorm/get.custom.repository';
+export {
+  getCustomRepositories,
+  getCustomRepository,
+} from './typeorm/get.custom.repository';
 export { QueryManager } from './typeorm/query.manager';
 export { Validator } from './validator/validator';
 export { Vm } from './vm/vm';
