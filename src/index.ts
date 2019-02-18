@@ -2,6 +2,7 @@ export { loadEnv } from './env/load.env';
 export { jsonRequestMiddleware } from './express/json.request.middleware';
 export { loadRoutes } from './express/load.routes';
 export { ResponseInterface } from './express/response.interface';
+export { RouteInterface } from './express/route.interface';
 export { JwtHelper } from './helpers/jwt.helpers';
 export { ObjectConverter } from './helpers/object.converter';
 export { RemoveAccents } from './helpers/remove.accents';
