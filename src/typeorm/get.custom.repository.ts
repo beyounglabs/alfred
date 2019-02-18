@@ -23,6 +23,8 @@ type RepositoryType = new (...args: any[]) => any;
 
 type RepositoryListType<T extends RepositoryType[]> = {
   [P in keyof T]: T[P] extends RepositoryType ? InstanceType<T[P]> : never
+} & {
+  [Symbol.iterator]: any;
 };
 
 interface GetCustomRepositoriesOptions {
@@ -34,17 +36,13 @@ export function getCustomRepositories<T extends RepositoryType[]>(
   options: GetCustomRepositoriesOptions,
   ...customRepositories: T
 ): RepositoryListType<T> {
-  const repositories: T[] = [];
-
-  for (let customRepository of customRepositories) {
-    const repository: any = getCustomRepository(
+  const repositories: T[] = customRepositories.map(customRepository =>
+    getCustomRepository(
       customRepository,
       options.queryRunner,
       options.connectionName,
-    );
-
-    repositories.push(repository);
-  }
+    ),
+  );
 
   return repositories as any;
 }
