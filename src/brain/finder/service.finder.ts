@@ -20,7 +20,7 @@ export class ServiceFinder {
     return orderBy(
       ObjectConverter.underscoreToCamelCase(items),
       ['name', 'code'],
-      ['ASC', 'ASC'],
+      ['asc', 'asc'],
     );
   }
 
