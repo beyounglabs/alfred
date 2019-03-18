@@ -6,18 +6,24 @@ import { ElasticsearchWarnInterface } from './contracts/elasticsearch.warn.inter
 import { LoggerInterface } from './contracts/logger.interface';
 import { transformer } from './transformers/kibana.transformer';
 
-let logger: winston.LoggerInstance;
+let loggers: { [index: string]: winston.LoggerInstance } = {};
+
+const EXPIRATION_TIME = 3600000;
 
 export class WarnLogger implements LoggerInterface {
   protected elasticsearch: ElasticsearchWarnInterface;
 
   constructor(elasticsearch: ElasticsearchWarnInterface) {
     this.elasticsearch = elasticsearch;
+
+    setTimeout(() => {
+      loggers[this.elasticsearch.errorIndex] = null;
+    }, EXPIRATION_TIME);
   }
 
   public getLogger(): winston.LoggerInstance {
-    if (logger) {
-      return logger;
+    if (loggers[this.elasticsearch.errorIndex]) {
+      return loggers[this.elasticsearch.errorIndex];
     }
 
     const transports: any[] = [];
@@ -42,10 +48,12 @@ export class WarnLogger implements LoggerInterface {
       );
     }
 
-    logger = new winston.Logger({
+    const logger = new winston.Logger({
       transports,
       exitOnError: false,
     });
+
+    loggers[this.elasticsearch.errorIndex] = logger;
 
     return logger;
   }

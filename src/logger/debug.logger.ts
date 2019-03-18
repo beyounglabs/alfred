@@ -4,7 +4,15 @@ import { LoggingWinston } from '@google-cloud/logging-winston';
 
 let logger: winston.LoggerInstance;
 
+const EXPIRATION_TIME = 3600000;
+
 export class DebugLogger implements LoggerInterface {
+  constructor() {
+    setTimeout(() => {
+      logger = null;
+    }, EXPIRATION_TIME);
+  }
+
   public getLogger(): winston.LoggerInstance {
     if (logger) {
       return logger;
