@@ -62,7 +62,15 @@ export class InfoLogger implements LoggerInterface {
 
     const message = data['message'] ? data['message'] : 'log_default';
 
+    if (this.isStatic()) {
+      data.content = JSON.stringify(data.content, null, 2);
+    }
+
     logger.info(message, data);
+  }
+
+  public isStatic() {
+    return this.elasticsearch.infoIndex.startsWith('static-');
   }
 
   public close() {
