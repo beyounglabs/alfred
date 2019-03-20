@@ -1,8 +1,9 @@
 export interface LogDataInterface {
   timestamp?: string;
-  uniqId?: string | number;
+  uniqId: string | number;
   message: string;
   content: any;
+  [key: string]: any;
 }
 
 interface LogDataTransformerInterface extends LogDataInterface {
@@ -17,10 +18,6 @@ export function transformer(logData: LogDataTransformerInterface) {
     channel: process.env.NODE_ENV,
     message: logData.message,
     severity: logData.level,
-    context: {
-      content: logData.content,
-      message: logData.message,
-      uniqId: logData.uniqId,
-    },
+    context: logData,
   };
 }
