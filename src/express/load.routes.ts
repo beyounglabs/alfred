@@ -3,12 +3,20 @@ import * as trimRequest from 'trim-request';
 import { QueryManager } from '../typeorm/query.manager';
 import { ResponseInterface } from './response.interface';
 import { JwtHelper } from '../helpers/jwt.helpers';
+import { RouteInterface } from './route.interface';
 
-export async function loadRoutes(app: Express, routes: any[]) {
+export async function loadRoutes(app: Express, routes: RouteInterface[]) {
+  const defaultMiddlewares: any[] = [trimRequest.all];
   for (const route of routes) {
+    let middlewares = defaultMiddlewares.slice(0);
+
+    if (route.middlewares) {
+      middlewares = middlewares.concat(route.middlewares);
+    }
+
     app[route.method](
       route.path,
-      trimRequest.all,
+      middlewares,
       async (
         request: Request,
         response: ResponseInterface,

@@ -1,4 +1,12 @@
-export function transformer(logData) {
+export interface LogDataInterface {
+  timestamp?: string;
+  uniqId?: string | number;
+  message: string;
+  level: 'info' | 'warn' | 'error';
+  content: any;
+}
+
+export function transformer(logData: LogDataInterface) {
   return {
     '@timestamp': logData.timestamp
       ? logData.timestamp
@@ -7,8 +15,9 @@ export function transformer(logData) {
     message: logData.message,
     severity: logData.level,
     context: {
-      ...logData.meta,
-      content: JSON.stringify(logData.meta.content, null, 2),
+      content: logData.content,
+      message: logData.message,
+      uniqId: logData.uniqId,
     },
   };
 }

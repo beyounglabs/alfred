@@ -4,7 +4,15 @@ import { LoggerInterface } from './contracts/logger.interface';
 
 let logger: winston.LoggerInstance;
 
+const EXPIRATION_TIME = 3600000;
+
 export class ErrorLogger implements LoggerInterface {
+  constructor() {
+    setTimeout(() => {
+      logger = null;
+    }, EXPIRATION_TIME);
+  }
+
   public getLogger(): winston.LoggerInstance {
     if (logger) {
       return logger;
