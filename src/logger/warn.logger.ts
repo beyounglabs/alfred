@@ -89,7 +89,7 @@ export class WarnLogger implements LoggerInterface {
   }
 
   public isStatic() {
-    return this.elasticsearch.errorIndex.startsWith('static-');
+    return this.elasticsearch.errorIndex.endsWith('-static');
   }
 
   public async close(): Promise<any> {
