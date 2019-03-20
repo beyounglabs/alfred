@@ -8,5 +8,5 @@ export interface LogDataInterface {
 
 export interface LoggerInterface {
   log(data: LogDataInterface): Promise<any>;
-  close(): Promise<void>;
+  close(): Promise<any>;
 }

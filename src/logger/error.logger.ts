@@ -58,8 +58,9 @@ export class ErrorLogger implements LoggerInterface {
     logger.error(message, data);
   }
 
-  public close() {
+  public async close(): Promise<any> {
     const logger: winston.LoggerInstance = this.getLogger();
-    logger.close();
+
+    return Promise.resolve(logger.close());
   }
 }
