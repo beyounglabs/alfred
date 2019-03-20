@@ -8,8 +8,14 @@ const EXPIRATION_TIME = 3600000;
 
 export class DebugLogger implements LoggerInterface {
   constructor() {
+    this.expireCache();
+  }
+
+  protected expireCache() {
     setTimeout(() => {
       logger = null;
+
+      this.expireCache();
     }, EXPIRATION_TIME);
   }
 
@@ -49,8 +55,9 @@ export class DebugLogger implements LoggerInterface {
     logger.info(message, data);
   }
 
-  public close() {
+  public async close(): Promise<any> {
     const logger: winston.LoggerInstance = this.getLogger();
-    logger.close();
+
+    return Promise.resolve(logger.close());
   }
 }
