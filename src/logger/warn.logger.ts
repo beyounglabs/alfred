@@ -92,7 +92,7 @@ export class WarnLogger implements LoggerInterface {
     return this.elasticsearch.errorIndex.startsWith('static-');
   }
 
-  public async close(): Promise<void> {
+  public async close(): Promise<any> {
     const logger = this.getLogger();
 
     if (logger === null) {

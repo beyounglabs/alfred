@@ -88,7 +88,7 @@ export class InfoLogger implements LoggerInterface {
     return this.elasticsearch.infoIndex.startsWith('static-');
   }
 
-  public async close(): Promise<void> {
+  public async close(): Promise<any> {
     const logger = this.getLogger();
 
     if (logger === null) {
