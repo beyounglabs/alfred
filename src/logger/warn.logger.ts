@@ -3,7 +3,10 @@ import * as winston from 'winston';
 import * as WinstonElasticsearch from 'winston-elasticsearch';
 
 import { ElasticsearchWarnInterface } from './contracts/elasticsearch.warn.interface';
-import { LoggerInterface } from './contracts/logger.interface';
+import {
+  LoggerInterface,
+  LogDataInterface,
+} from './contracts/logger.interface';
 import { transformer } from './transformers/kibana.transformer';
 
 let loggers: { [index: string]: winston.LoggerInstance } = {};
@@ -58,7 +61,7 @@ export class WarnLogger implements LoggerInterface {
     return logger;
   }
 
-  public async log(data: any) {
+  public async log(data: LogDataInterface) {
     const logger: winston.LoggerInstance = this.getLogger();
 
     const message = data['message'] ? data['message'] : 'log_default';

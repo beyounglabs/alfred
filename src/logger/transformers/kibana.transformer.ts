@@ -1,10 +1,4 @@
-export interface LogDataInterface {
-  timestamp?: string;
-  uniqId: string | number;
-  message: string;
-  content: any;
-  [key: string]: any;
-}
+import { LogDataInterface } from '../contracts/logger.interface';
 
 interface LogDataTransformerInterface extends LogDataInterface {
   level: 'info' | 'warn' | 'error';
