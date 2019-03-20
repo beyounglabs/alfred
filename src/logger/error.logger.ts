@@ -2,14 +2,20 @@ import { Slack as WinstonSlack } from 'slack-winston';
 import * as winston from 'winston';
 import { LoggerInterface } from './contracts/logger.interface';
 
-let logger: winston.LoggerInstance;
+let logger: winston.LoggerInterface | null = null;
 
 const EXPIRATION_TIME = 3600000;
 
 export class ErrorLogger implements LoggerInterface {
   constructor() {
+    this.expireCache();
+  }
+
+  protected expireCache() {
     setTimeout(() => {
       logger = null;
+
+      this.expireCache();
     }, EXPIRATION_TIME);
   }
 
