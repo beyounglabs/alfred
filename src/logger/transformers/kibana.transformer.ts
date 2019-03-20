@@ -2,11 +2,14 @@ export interface LogDataInterface {
   timestamp?: string;
   uniqId?: string | number;
   message: string;
-  level: 'info' | 'warn' | 'error';
   content: any;
 }
 
-export function transformer(logData: LogDataInterface) {
+interface LogDataTransformerInterface extends LogDataInterface {
+  level: 'info' | 'warn' | 'error';
+}
+
+export function transformer(logData: LogDataTransformerInterface) {
   return {
     '@timestamp': logData.timestamp
       ? logData.timestamp
