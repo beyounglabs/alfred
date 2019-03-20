@@ -1,6 +1,6 @@
 import { Client, CreateDocumentResponse } from 'elasticsearch';
 import * as moment from 'moment';
-import uniqidGenerator from 'uniqid';
+import * as uniqidGenerator from 'uniqid';
 
 import { ElasticsearchInfoInterface } from './contracts/elasticsearch.info.interface';
 import { LoggerInterface } from './contracts/logger.interface';
