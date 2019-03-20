@@ -5,18 +5,24 @@ import { ElasticsearchInfoInterface } from './contracts/elasticsearch.info.inter
 import { LoggerInterface } from './contracts/logger.interface';
 import { transformer } from './transformers/kibana.transformer';
 
-let logger: winston.LoggerInstance;
+let loggers: { [index: string]: winston.LoggerInstance } = {};
+
+const EXPIRATION_TIME = 3600000;
 
 export class InfoLogger implements LoggerInterface {
   protected elasticsearch: ElasticsearchInfoInterface;
 
   constructor(elasticsearch: ElasticsearchInfoInterface) {
     this.elasticsearch = elasticsearch;
+
+    setTimeout(() => {
+      loggers[this.elasticsearch.infoIndex] = null;
+    }, EXPIRATION_TIME);
   }
 
   public getLogger(): winston.LoggerInstance {
-    if (logger) {
-      return logger;
+    if (loggers[this.elasticsearch.infoIndex]) {
+      return loggers[this.elasticsearch.infoIndex];
     }
 
     const transports: any[] = [];
@@ -41,10 +47,12 @@ export class InfoLogger implements LoggerInterface {
       );
     }
 
-    logger = new winston.Logger({
+    const logger = new winston.Logger({
       transports,
       exitOnError: false,
     });
+
+    loggers[this.elasticsearch.infoIndex] = logger;
 
     return logger;
   }
@@ -54,7 +62,15 @@ export class InfoLogger implements LoggerInterface {
 
     const message = data['message'] ? data['message'] : 'log_default';
 
+    if (this.isStatic()) {
+      data.content = JSON.stringify(data.content, null, 2);
+    }
+
     logger.info(message, data);
+  }
+
+  public isStatic() {
+    return this.elasticsearch.infoIndex.startsWith('static-');
   }
 
   public close() {
