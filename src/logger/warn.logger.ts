@@ -3,11 +3,11 @@ import * as moment from 'moment';
 import uniqidGenerator from 'uniqid';
 
 import { ElasticsearchWarnInterface } from './contracts/elasticsearch.warn.interface';
-import { LoggerInterface } from './contracts/logger.interface';
 import {
-  transformer,
+  LoggerInterface,
   LogDataInterface,
-} from './transformers/kibana.transformer';
+} from './contracts/logger.interface';
+import { transformer } from './transformers/kibana.transformer';
 
 let loggers: { [index: string]: Client } = {};
 

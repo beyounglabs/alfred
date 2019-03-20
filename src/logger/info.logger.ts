@@ -3,11 +3,11 @@ import * as moment from 'moment';
 import * as uniqidGenerator from 'uniqid';
 
 import { ElasticsearchInfoInterface } from './contracts/elasticsearch.info.interface';
-import { LoggerInterface } from './contracts/logger.interface';
 import {
-  transformer,
+  LoggerInterface,
   LogDataInterface,
-} from './transformers/kibana.transformer';
+} from './contracts/logger.interface';
+import { transformer } from './transformers/kibana.transformer';
 
 let loggers: { [index: string]: Client } = {};
 
@@ -95,6 +95,6 @@ export class InfoLogger implements LoggerInterface {
       return;
     }
 
-    return logger.close();
+    return Promise.resolve(logger.close());
   }
 }
