@@ -73,7 +73,7 @@ export class InfoLogger implements LoggerInterface {
   }
 
   public isStatic() {
-    return this.elasticsearch.infoIndex.startsWith('static-');
+    return this.elasticsearch.infoIndex.endsWith('-static');
   }
 
   public async close(): Promise<any> {
