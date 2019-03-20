@@ -1,6 +1,6 @@
 export interface RouteInterface {
   method: string;
-  path: string;
+  path: string | RegExp;
   action: any;
   timeout?: number;
   protected?: boolean;
