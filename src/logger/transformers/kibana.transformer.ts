@@ -1,11 +1,26 @@
-export function transformer(logData) {
-  const transformed: any = {};
-  transformed['@timestamp'] = logData.timestamp
-    ? logData.timestamp
-    : new Date().toISOString();
-  transformed.channel = process.env.NODE_ENV;
-  transformed.message = logData.message;
-  transformed.severity = logData.level;
-  transformed.context = logData.meta;
-  return transformed;
+export interface LogDataInterface {
+  timestamp?: string;
+  uniqId?: string | number;
+  message: string;
+  content: any;
+}
+
+interface LogDataTransformerInterface extends LogDataInterface {
+  level: 'info' | 'warn' | 'error';
+}
+
+export function transformer(logData: LogDataTransformerInterface) {
+  return {
+    '@timestamp': logData.timestamp
+      ? logData.timestamp
+      : new Date().toISOString(),
+    channel: process.env.NODE_ENV,
+    message: logData.message,
+    severity: logData.level,
+    context: {
+      content: logData.content,
+      message: logData.message,
+      uniqId: logData.uniqId,
+    },
+  };
 }
