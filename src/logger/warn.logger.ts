@@ -39,13 +39,21 @@ export class WarnLogger implements LoggerInterface {
         host: `${esHost}:${esPort}`,
       });
 
+      const index = [
+        this.elasticsearch.errorIndex,
+        String(process.env.BUILD).toLowerCase(),
+        // `toISOString` returns date and time separated by 'T',
+        // so we remove everything after the 'T'.
+        new Date().toISOString().replace(/T.+$/, ''),
+      ].join('-');
+
       transports.push(
         new WinstonElasticsearch({
           name: 'ELASTIC_SEARCH_ERROR',
           level: 'warn',
           client,
           flushInterval: 2000,
-          index: this.elasticsearch.errorIndex,
+          index,
           transformer,
         }),
       );

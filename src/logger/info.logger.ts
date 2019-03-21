@@ -38,13 +38,21 @@ export class InfoLogger implements LoggerInterface {
         host: `${esHost}:${esPort}`,
       });
 
+      const index = [
+        this.elasticsearch.infoIndex,
+        String(process.env.BUILD).toLowerCase(),
+        // `toISOString` returns date and time separated by 'T',
+        // so we remove everything after the 'T'.
+        new Date().toISOString().replace(/T.+$/, ''),
+      ].join('-');
+
       transports.push(
         new WinstonElasticsearch({
           name: 'ELASTIC_SEARCH_INFO',
           level: 'info',
           client,
           flushInterval: 2000,
-          index: this.elasticsearch.infoIndex,
+          index,
           transformer,
         }),
       );
