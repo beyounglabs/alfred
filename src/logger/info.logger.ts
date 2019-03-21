@@ -66,7 +66,7 @@ export class InfoLogger implements LoggerInterface {
     const message = data['message'] ? data['message'] : 'log_default';
 
     if (this.isStatic()) {
-      data.content = JSON.stringify(data.content, null, 2);
+      data.meta = JSON.stringify(data.meta, null, 2);
     }
 
     logger.info(message, data);

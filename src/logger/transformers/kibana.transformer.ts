@@ -12,6 +12,6 @@ export function transformer(logData: LogDataTransformerInterface) {
     channel: process.env.NODE_ENV,
     message: logData.message,
     severity: logData.level,
-    context: logData,
+    context: logData.meta,
   };
 }
