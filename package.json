@@ -58,7 +58,7 @@
     "ts-node": "^3.3.0",
     "tsc-watch": "^1.0.17",
     "typedi": "^0.7.2",
-    "typeorm": "0.2.9",
+    "typeorm": "0.2.7",
     "typeorm-typedi-extensions": "^0.2.1",
     "typescript": "3.0.*",
     "uniqid": "^4.1.1",
