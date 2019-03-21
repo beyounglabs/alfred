@@ -41,7 +41,7 @@ export class WarnLogger implements LoggerInterface {
 
       const index = [
         this.elasticsearch.errorIndex,
-        String(process.env.BUILD).toLowerCase() || '000',
+        String(process.env.BUILD || '000').toLowerCase(),
         // `toISOString` returns date and time separated by 'T',
         // so we remove everything after the 'T'.
         new Date().toISOString().replace(/T.+$/, ''),
@@ -75,7 +75,7 @@ export class WarnLogger implements LoggerInterface {
     const message = data['message'] ? data['message'] : 'log_default';
 
     if (this.isStatic()) {
-      data.meta = JSON.stringify(data.meta, null, 2);
+      data.content = JSON.stringify(data.content, null, 2);
     }
 
     logger.warn(message, data);
