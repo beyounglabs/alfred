@@ -95,6 +95,8 @@ export class InfoLogger implements LoggerInterface {
       return;
     }
 
+    delete loggers[this.elasticsearch.infoIndex];
+
     return Promise.resolve(logger.close());
   }
 }

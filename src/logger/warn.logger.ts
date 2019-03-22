@@ -99,6 +99,8 @@ export class WarnLogger implements LoggerInterface {
       return;
     }
 
+    delete loggers[this.elasticsearch.errorIndex];
+
     return Promise.resolve(logger.close());
   }
 }
