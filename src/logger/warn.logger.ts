@@ -87,6 +87,9 @@ export class WarnLogger implements LoggerInterface {
 
   public async close(): Promise<any> {
     const logger: winston.LoggerInstance = this.getLogger();
+
+    loggers[this.elasticsearch.errorIndex] = null;
+
     return Promise.resolve(logger.close());
   }
 }

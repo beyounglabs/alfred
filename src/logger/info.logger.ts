@@ -87,6 +87,8 @@ export class InfoLogger implements LoggerInterface {
   public async close(): Promise<any> {
     const logger: winston.LoggerInstance = this.getLogger();
 
+    loggers[this.elasticsearch.infoIndex] = null;
+
     return Promise.resolve(logger.close());
   }
 }
