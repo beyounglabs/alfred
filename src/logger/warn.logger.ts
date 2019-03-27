@@ -70,15 +70,19 @@ export class WarnLogger implements LoggerInterface {
   }
 
   public async log(data: LogDataInterface) {
-    const logger: winston.LoggerInstance = this.getLogger();
+    try {
+      const logger: winston.LoggerInstance = this.getLogger();
 
-    const message = data['message'] ? data['message'] : 'log_default';
+      const message = data['message'] ? data['message'] : 'log_default';
 
-    if (this.isStatic()) {
-      data.content = JSON.stringify(data.content, null, 2);
+      if (this.isStatic()) {
+        data.content = JSON.stringify(data.content, null, 2);
+      }
+
+      logger.warn(message, data);
+    } catch (e) {
+      console.error('[LOGGING_ERROR]:', e.message);
     }
-
-    logger.warn(message, data);
   }
 
   public isStatic() {

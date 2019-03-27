@@ -57,11 +57,15 @@ export class ErrorLogger implements LoggerInterface {
   }
 
   public async log(data: any) {
-    const logger: winston.LoggerInstance = this.getLogger();
+    try {
+      const logger: winston.LoggerInstance = this.getLogger();
 
-    const message = data['message'] ? data['message'] : 'log_default';
+      const message = data['message'] ? data['message'] : 'log_default';
 
-    logger.error(message, data);
+      logger.error(message, data);
+    } catch (e) {
+      console.error('[LOGGING_ERROR]:', e.message);
+    }
   }
 
   public async close(): Promise<any> {
