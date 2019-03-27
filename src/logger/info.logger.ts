@@ -53,35 +53,39 @@ export class InfoLogger implements LoggerInterface {
   public async log(
     data: LogDataInterface,
   ): Promise<CreateDocumentResponse | void> {
-    const logger = this.getLogger();
+    try {
+      const logger = this.getLogger();
 
-    if (logger === null) {
-      return;
+      if (logger === null) {
+        return;
+      }
+
+      const index = [
+        this.elasticsearch.infoIndex,
+        String(process.env.BUILD).toLowerCase(),
+        moment().format('YYYY-MM-DD'),
+      ].join('-');
+
+      let content = data.content;
+
+      if (this.isStatic()) {
+        content = JSON.stringify(content, null, 2);
+      }
+
+      return logger.create({
+        index,
+        type: 'info',
+        id: uniqidGenerator(),
+        body: transformer({
+          ...data,
+          message: data.message || 'log_default',
+          level: 'info',
+          content,
+        }),
+      });
+    } catch (e) {
+      console.error('[LOGGING_ERROR]:', e.message);
     }
-
-    const index = [
-      this.elasticsearch.infoIndex,
-      String(process.env.BUILD).toLowerCase(),
-      moment().format('YYYY-MM-DD'),
-    ].join('-');
-
-    let content = data.content;
-
-    if (this.isStatic()) {
-      content = JSON.stringify(content, null, 2);
-    }
-
-    return logger.create({
-      index,
-      type: 'info',
-      id: uniqidGenerator(),
-      body: transformer({
-        ...data,
-        message: data.message || 'log_default',
-        level: 'info',
-        content,
-      }),
-    });
   }
 
   public isStatic() {
