@@ -1,3 +1,5 @@
+console.log('==== DEPRECATED - import with alfred/XXXXX');
+
 export { loadEnv } from './env/load.env';
 export { jsonRequestMiddleware } from './express/json.request.middleware';
 export { loadRoutes } from './express/load.routes';

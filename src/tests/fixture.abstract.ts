@@ -1,4 +1,4 @@
-import { QueryRunner } from 'typeorm';
+import { QueryRunner } from 'typeorm/query-runner/QueryRunner';
 
 export abstract class FixtureAbstract {
   protected queryRunner: QueryRunner;

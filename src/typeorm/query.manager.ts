@@ -1,4 +1,6 @@
-import { getConnection, QueryRunner } from 'typeorm';
+import { getFromContainer } from 'typeorm/container';
+import { ConnectionManager } from 'typeorm/connection/ConnectionManager';
+import { QueryRunner } from 'typeorm/query-runner/QueryRunner';
 
 export class QueryManager {
   protected queryRunner: QueryRunner | undefined;
@@ -8,7 +10,10 @@ export class QueryManager {
       return this.queryRunner;
     }
 
-    this.queryRunner = getConnection().createQueryRunner();
+    this.queryRunner = getFromContainer(ConnectionManager)
+      .get('default')
+      .createQueryRunner();
+
     return this.queryRunner;
   }
 

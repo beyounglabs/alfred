@@ -20,7 +20,7 @@ export class StoreFinder {
     return orderBy(
       ObjectConverter.underscoreToCamelCase(items),
       ['name', 'code'],
-      ['ASC', 'ASC'],
+      ['asc', 'asc'],
     );
   }
 

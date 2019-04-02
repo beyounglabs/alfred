@@ -4,8 +4,8 @@ import * as fsImport from 'fs';
 import { kebabCase } from 'lodash';
 import * as Mocha from 'mocha';
 import 'reflect-metadata';
-import { Container } from 'typedi';
-import { Connection } from 'typeorm';
+import { Container } from 'typedi/Container';
+import { Connection } from 'typeorm/connection/Connection';
 import { DatabaseProvider } from '../providers/database.provider';
 import { FixtureAbstract } from './fixture.abstract';
 
