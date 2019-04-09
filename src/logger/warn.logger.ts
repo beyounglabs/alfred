@@ -1,13 +1,10 @@
-import { Client } from 'elasticsearch';
+import { LoggingWinston } from '@google-cloud/logging-winston';
 import * as winston from 'winston';
-import * as WinstonElasticsearch from 'winston-elasticsearch';
-
 import { ElasticsearchWarnInterface } from './contracts/elasticsearch.warn.interface';
 import {
-  LoggerInterface,
   LogDataInterface,
+  LoggerInterface,
 } from './contracts/logger.interface';
-import { transformer } from './transformers/kibana.transformer';
 
 let loggers: { [index: string]: winston.LoggerInstance } = {};
 
@@ -29,35 +26,29 @@ export class WarnLogger implements LoggerInterface {
       return loggers[this.elasticsearch.errorIndex];
     }
 
+    if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+      process.env.GOOGLE_APPLICATION_CREDENTIALS =
+        '/var/www/html/gcp-credentials.json';
+    }
+
     const transports: any[] = [];
 
-    const esHost = process.env.ELASTICSEARCH_LOG_HOST;
-    const esPort = process.env.ELASTICSEARCH_LOG_PORT;
+    const index = [
+      this.elasticsearch.errorIndex,
+      String(process.env.BUILD || '000').toLowerCase(),
+      // `toISOString` returns date and time separated by 'T',
+      // so we remove everything after the 'T'.
+      new Date().toISOString().replace(/T.+$/, ''),
+    ].join('-');
 
-    if (esHost && esPort) {
-      const client = new Client({
-        host: `${esHost}:${esPort}`,
-      });
-
-      const index = [
-        this.elasticsearch.errorIndex,
-        String(process.env.BUILD || '000').toLowerCase(),
-        // `toISOString` returns date and time separated by 'T',
-        // so we remove everything after the 'T'.
-        new Date().toISOString().replace(/T.+$/, ''),
-      ].join('-');
-
-      transports.push(
-        new WinstonElasticsearch({
-          name: 'ELASTIC_SEARCH_ERROR',
-          level: 'warn',
-          client,
-          flushInterval: 2000,
-          index,
-          transformer,
-        }),
-      );
-    }
+    transports.push(
+      new LoggingWinston({
+        labels: {
+          name: index,
+          version: '0.1.0',
+        },
+      }),
+    );
 
     const logger = new winston.Logger({
       transports,
