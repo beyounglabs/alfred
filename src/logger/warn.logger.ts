@@ -1,29 +1,30 @@
 import { LoggingWinston } from '@google-cloud/logging-winston';
 import * as winston from 'winston';
-import { ElasticsearchWarnInterface } from './contracts/elasticsearch.warn.interface';
+import { WarnInterface } from './contracts/warn.interface';
 import {
   LogDataInterface,
   LoggerInterface,
 } from './contracts/logger.interface';
+import { hostname } from 'os';
 
 let loggers: { [index: string]: winston.LoggerInstance } = {};
 
 const EXPIRATION_TIME = 3600000;
 
 export class WarnLogger implements LoggerInterface {
-  protected elasticsearch: ElasticsearchWarnInterface;
+  protected data: WarnInterface;
 
-  constructor(elasticsearch: ElasticsearchWarnInterface) {
-    this.elasticsearch = elasticsearch;
+  constructor(data: WarnInterface) {
+    this.data = data;
 
     setTimeout(() => {
-      loggers[this.elasticsearch.errorIndex] = null;
+      loggers[this.data.errorIndex] = null;
     }, EXPIRATION_TIME);
   }
 
   public getLogger(): winston.LoggerInstance {
-    if (loggers[this.elasticsearch.errorIndex]) {
-      return loggers[this.elasticsearch.errorIndex];
+    if (loggers[this.data.errorIndex]) {
+      return loggers[this.data.errorIndex];
     }
 
     if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
@@ -34,7 +35,7 @@ export class WarnLogger implements LoggerInterface {
     const transports: any[] = [];
 
     const index = [
-      this.elasticsearch.errorIndex,
+      this.data.errorIndex,
       String(process.env.BUILD || '000').toLowerCase(),
       // `toISOString` returns date and time separated by 'T',
       // so we remove everything after the 'T'.
@@ -43,9 +44,15 @@ export class WarnLogger implements LoggerInterface {
 
     transports.push(
       new LoggingWinston({
+        level: 'warn',
         labels: {
-          name: index,
-          version: '0.1.0',
+          index,
+          build: process.env.BUILD || '',
+          env: process.env.NODE_ENV || '',
+          service: process.env.BRAIN_SERVICE || '',
+          profile: process.env.BRAIN_PROFILE || '',
+          hostname: hostname(),
+          pid: process.pid.toString(),
         },
       }),
     );
@@ -55,7 +62,7 @@ export class WarnLogger implements LoggerInterface {
       exitOnError: false,
     });
 
-    loggers[this.elasticsearch.errorIndex] = logger;
+    loggers[this.data.errorIndex] = logger;
 
     return logger;
   }
@@ -77,13 +84,13 @@ export class WarnLogger implements LoggerInterface {
   }
 
   public isStatic() {
-    return this.elasticsearch.errorIndex.endsWith('-static');
+    return this.data.errorIndex.endsWith('-static');
   }
 
   public async close(): Promise<any> {
     const logger: winston.LoggerInstance = this.getLogger();
 
-    loggers[this.elasticsearch.errorIndex] = null;
+    loggers[this.data.errorIndex] = null;
 
     return Promise.resolve(logger.close());
   }

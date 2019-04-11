@@ -1,69 +1,68 @@
-import { Client } from 'elasticsearch';
+import { LoggingWinston } from '@google-cloud/logging-winston';
+import { hostname } from 'os';
 import * as winston from 'winston';
-import * as WinstonElasticsearch from 'winston-elasticsearch';
-import { ElasticsearchInfoInterface } from './contracts/elasticsearch.info.interface';
+import { InfoInterface } from './contracts/info.interface';
 import {
-  LoggerInterface,
   LogDataInterface,
+  LoggerInterface,
 } from './contracts/logger.interface';
-import { transformer } from './transformers/kibana.transformer';
 
 let loggers: { [index: string]: winston.LoggerInstance } = {};
 
 const EXPIRATION_TIME = 3600000;
 
 export class InfoLogger implements LoggerInterface {
-  protected elasticsearch: ElasticsearchInfoInterface;
+  protected data: InfoInterface;
 
-  constructor(elasticsearch: ElasticsearchInfoInterface) {
-    this.elasticsearch = elasticsearch;
+  constructor(data: InfoInterface) {
+    this.data = data;
 
     setTimeout(() => {
-      loggers[this.elasticsearch.infoIndex] = null;
+      loggers[this.data.infoIndex] = null;
     }, EXPIRATION_TIME);
   }
 
   public getLogger(): winston.LoggerInstance {
-    if (loggers[this.elasticsearch.infoIndex]) {
-      return loggers[this.elasticsearch.infoIndex];
+    if (loggers[this.data.infoIndex]) {
+      return loggers[this.data.infoIndex];
+    }
+
+    if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+      process.env.GOOGLE_APPLICATION_CREDENTIALS =
+        '/var/www/html/gcp-credentials.json';
     }
 
     const transports: any[] = [];
 
-    const esHost = process.env.ELASTICSEARCH_LOG_HOST;
-    const esPort = process.env.ELASTICSEARCH_LOG_PORT;
+    const index = [
+      this.data.infoIndex,
+      String(process.env.BUILD || '000').toLowerCase(),
+      // `toISOString` returns date and time separated by 'T',
+      // so we remove everything after the 'T'.
+      new Date().toISOString().replace(/T.+$/, ''),
+    ].join('-');
 
-    if (esHost && esPort) {
-      const client = new Client({
-        host: `${esHost}:${esPort}`,
-      });
-
-      const index = [
-        this.elasticsearch.infoIndex,
-        String(process.env.BUILD || '000').toLowerCase(),
-        // `toISOString` returns date and time separated by 'T',
-        // so we remove everything after the 'T'.
-        new Date().toISOString().replace(/T.+$/, ''),
-      ].join('-');
-
-      transports.push(
-        new WinstonElasticsearch({
-          name: 'ELASTIC_SEARCH_INFO',
-          level: 'info',
-          client,
-          flushInterval: 2000,
+    transports.push(
+      new LoggingWinston({
+        level: 'info',
+        labels: {
           index,
-          transformer,
-        }),
-      );
-    }
+          build: process.env.BUILD || '',
+          env: process.env.NODE_ENV || '',
+          service: process.env.BRAIN_SERVICE || '',
+          profile: process.env.BRAIN_PROFILE || '',
+          hostname: hostname(),
+          pid: process.pid.toString(),
+        },
+      }),
+    );
 
     const logger = new winston.Logger({
       transports,
       exitOnError: false,
     });
 
-    loggers[this.elasticsearch.infoIndex] = logger;
+    loggers[this.data.infoIndex] = logger;
 
     return logger;
   }
@@ -85,13 +84,13 @@ export class InfoLogger implements LoggerInterface {
   }
 
   public isStatic() {
-    return this.elasticsearch.infoIndex.endsWith('-static');
+    return this.data.infoIndex.endsWith('-static');
   }
 
   public async close(): Promise<any> {
     const logger: winston.LoggerInstance = this.getLogger();
 
-    loggers[this.elasticsearch.infoIndex] = null;
+    loggers[this.data.infoIndex] = null;
 
     return Promise.resolve(logger.close());
   }
