@@ -1,8 +1,8 @@
 export interface LogDataInterface {
   timestamp?: string;
-  uniqId: string | number;
-  message: string;
-  content: any;
+  uniqId?: string | number;
+  message?: string;
+  content?: any;
   [key: string]: any;
 }
 
