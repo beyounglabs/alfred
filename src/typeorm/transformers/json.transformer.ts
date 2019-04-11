@@ -8,12 +8,4 @@ export class JsonTransformer implements ValueTransformer {
 
     return value;
   }
-
-  public to(value) {
-    if (typeof value === 'object') {
-      return JSON.stringify(value);
-    }
-
-    return value;
-  }
 }
