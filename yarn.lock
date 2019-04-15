@@ -2897,9 +2897,9 @@ neo-async@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.0.tgz#b9d15e4d71c6762908654b5183ed38b753340835"
 
-newrelic@5:
-  version "5.6.1"
-  resolved "https://registry.yarnpkg.com/newrelic/-/newrelic-5.6.1.tgz#2aa21a731b378064f8b51e0b6ea8be0ed66cd8b4"
+newrelic@5.5:
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/newrelic/-/newrelic-5.5.0.tgz#a11a78c60b37e144d3f6ff350d1f4afb1ad6a2c5"
   dependencies:
     "@newrelic/koa" "^1.0.8"
     "@newrelic/superagent" "^1.0.2"
