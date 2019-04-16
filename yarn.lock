@@ -34,25 +34,26 @@
     retry-request "^4.0.0"
 
 "@google-cloud/logging-winston@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@google-cloud/logging-winston/-/logging-winston-0.11.0.tgz#77786eb152b69f11c90325ba05bc898e823f76b7"
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/@google-cloud/logging-winston/-/logging-winston-0.11.1.tgz#9e6a4259c08e9bd504064e34b7118e3d5ebedbb3"
   dependencies:
     "@google-cloud/logging" "^4.4.0"
+    google-auth-library "^3.1.0"
     lodash.mapvalues "^4.6.0"
     logform "^2.0.0"
-    semver "^5.5.1"
+    semver "^6.0.0"
     winston-transport "^4.2.0"
 
 "@google-cloud/logging@^4.4.0":
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/@google-cloud/logging/-/logging-4.5.1.tgz#449f8dad4c63503ee705d9ef050ede6646f73147"
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/@google-cloud/logging/-/logging-4.5.2.tgz#1248d7ff3f8cd2c879527aed457ee7ddce92d815"
   dependencies:
     "@google-cloud/common-grpc" "^0.10.0"
     "@google-cloud/paginator" "^0.2.0"
     "@google-cloud/projectify" "^0.3.0"
     "@google-cloud/promisify" "^0.4.0"
-    "@opencensus/propagation-stackdriver" "0.0.9"
-    arrify "^1.0.1"
+    "@opencensus/propagation-stackdriver" "0.0.11"
+    arrify "^2.0.0"
     eventid "^0.1.2"
     extend "^3.0.2"
     gcp-metadata "^1.0.0"
@@ -67,6 +68,7 @@
     snakecase-keys "^2.0.0"
     stream-events "^1.0.4"
     through2 "^3.0.0"
+    type-fest "^0.3.1"
 
 "@google-cloud/paginator@^0.2.0":
   version "0.2.0"
@@ -117,10 +119,21 @@
   dependencies:
     methods "^1.1.2"
 
-"@opencensus/propagation-stackdriver@0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@opencensus/propagation-stackdriver/-/propagation-stackdriver-0.0.9.tgz#e37ac649ebe81790b111ed3716c581feb964452b"
+"@opencensus/core@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@opencensus/core/-/core-0.0.11.tgz#484f1486a4babb91428531e4e852ff50b5a68673"
   dependencies:
+    continuation-local-storage "^3.2.1"
+    log-driver "^1.2.7"
+    semver "^6.0.0"
+    shimmer "^1.2.0"
+    uuid "^3.2.1"
+
+"@opencensus/propagation-stackdriver@0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@opencensus/propagation-stackdriver/-/propagation-stackdriver-0.0.11.tgz#302f595926f0082406a40ea51f27580c5c2bd645"
+  dependencies:
+    "@opencensus/core" "^0.0.11"
     hex2dec "^1.0.1"
     uuid "^3.2.1"
 
@@ -465,6 +478,10 @@ arrify@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
 
+arrify@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/arrify/-/arrify-2.0.1.tgz#c9655e9331e0abcd588d2a7cad7e9956f66701fa"
+
 asap@~2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
@@ -501,6 +518,13 @@ assign-symbols@^1.0.0:
 async-each@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.2.tgz#8b8a7ca2a658f927e9f307d6d1a42f4199f0f735"
+
+async-listener@^0.6.0:
+  version "0.6.10"
+  resolved "https://registry.yarnpkg.com/async-listener/-/async-listener-0.6.10.tgz#a7c97abe570ba602d782273c0de60a51e3e17cbc"
+  dependencies:
+    semver "^5.3.0"
+    shimmer "^1.1.0"
 
 async@^2.1.4, async@^2.4.1, async@^2.6.1:
   version "2.6.2"
@@ -1004,6 +1028,13 @@ content-type@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/content-type/-/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
 
+continuation-local-storage@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/continuation-local-storage/-/continuation-local-storage-3.2.1.tgz#11f613f74e914fe9b34c92ad2d28fe6ae1db7ffb"
+  dependencies:
+    async-listener "^0.6.0"
+    emitter-listener "^1.1.1"
+
 convert-source-map@^1.5.1:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.6.0.tgz#51b537a8c43e0f04dec1993bffcdd504e758ac20"
@@ -1268,6 +1299,12 @@ elasticsearch@^14.0.0:
     lodash.get "^4.4.2"
     lodash.isempty "^4.4.0"
     lodash.trimend "^4.5.1"
+
+emitter-listener@^1.1.1:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/emitter-listener/-/emitter-listener-1.1.2.tgz#56b140e8f6992375b3d7cb2cab1cc7432d9632e8"
+  dependencies:
+    shimmer "^1.2.0"
 
 enabled@1.0.x:
   version "1.0.2"
@@ -1765,7 +1802,7 @@ globals@^9.18.0:
   version "9.18.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.18.0.tgz#aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
 
-google-auth-library@^3.0.0:
+google-auth-library@^3.0.0, google-auth-library@^3.1.0:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/google-auth-library/-/google-auth-library-3.1.2.tgz#ff2f88cd5cd2118a57bd3d5ad3c093c8837fc350"
   dependencies:
@@ -2590,6 +2627,10 @@ lodash@~4.16.6:
   version "4.16.6"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.16.6.tgz#d22c9ac660288f3843e16ba7d2b5d06cca27d777"
 
+log-driver@^1.2.7:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/log-driver/-/log-driver-1.2.7.tgz#63b95021f0702fedfa2c9bb0a24e7797d71871d8"
+
 logform@^2.0.0, logform@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/logform/-/logform-2.1.2.tgz#957155ebeb67a13164069825ce67ddb5bb2dd360"
@@ -2897,9 +2938,9 @@ neo-async@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.0.tgz#b9d15e4d71c6762908654b5183ed38b753340835"
 
-newrelic@5.5:
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/newrelic/-/newrelic-5.5.0.tgz#a11a78c60b37e144d3f6ff350d1f4afb1ad6a2c5"
+newrelic@5:
+  version "5.6.3"
+  resolved "https://registry.yarnpkg.com/newrelic/-/newrelic-5.6.3.tgz#6f0a0ba913e0a70aedb75200933f55002c2bb8a5"
   dependencies:
     "@newrelic/koa" "^1.0.8"
     "@newrelic/superagent" "^1.0.2"
@@ -3773,6 +3814,10 @@ shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
 
+shimmer@^1.1.0, shimmer@^1.2.0:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/shimmer/-/shimmer-1.2.1.tgz#610859f7de327b587efebf501fb43117f9aff337"
+
 signal-exit@^3.0.0, signal-exit@^3.0.1, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
@@ -4242,6 +4287,10 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
 type-detect@^4.0.0, type-detect@^4.0.5:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/type-detect/-/type-detect-4.0.8.tgz#7646fb5f18871cfbb7749e69bd39a6388eb7450c"
+
+type-fest@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.3.1.tgz#63d00d204e059474fe5e1b7c011112bbd1dc29e1"
 
 type-is@~1.6.16:
   version "1.6.16"
