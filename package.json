@@ -14,7 +14,7 @@
     "npm:publish": "yarn build && cp package.json dist/ && cd dist/ && npm publish"
   },
   "dependencies": {
-    "@google-cloud/logging-winston": "^0.9.0",
+    "@google-cloud/logging-winston": "^0.11.0",
     "@types/bluebird": "^3.5.18",
     "@types/chai": "^4.0.4",
     "@types/cookie-parser": "^1.4.1",
@@ -55,7 +55,7 @@
     "slack-winston": "0.0.9",
     "sqlite3": "^4.0.3",
     "trim-request": "^1.0.6",
-    "ts-node": "^3.3.0",
+    "ts-node": "^8.0.3",
     "tsc-watch": "^1.0.17",
     "typedi": "^0.7.2",
     "typeorm": "0.2.7",

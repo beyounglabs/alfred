@@ -1,6 +1,6 @@
+import { LoggingWinston } from '@google-cloud/logging-winston';
 import * as winston from 'winston';
 import { LoggerInterface } from './contracts/logger.interface';
-import { LoggingWinston } from '@google-cloud/logging-winston';
 
 let logger: winston.LoggerInstance;
 
