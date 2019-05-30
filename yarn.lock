@@ -33,6 +33,41 @@
     pify "^4.0.0"
     retry-request "^4.0.0"
 
+"@google-cloud/common@^0.32.0":
+  version "0.32.1"
+  resolved "https://registry.yarnpkg.com/@google-cloud/common/-/common-0.32.1.tgz#6a32c340172cea3db6674d0e0e34e78740a0073f"
+  dependencies:
+    "@google-cloud/projectify" "^0.3.3"
+    "@google-cloud/promisify" "^0.4.0"
+    "@types/request" "^2.48.1"
+    arrify "^2.0.0"
+    duplexify "^3.6.0"
+    ent "^2.2.0"
+    extend "^3.0.2"
+    google-auth-library "^3.1.1"
+    pify "^4.0.1"
+    retry-request "^4.0.0"
+    teeny-request "^3.11.3"
+
+"@google-cloud/debug-agent@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@google-cloud/debug-agent/-/debug-agent-3.2.0.tgz#daa7635a1698a56637d5dc57ce1103e77eae29d3"
+  dependencies:
+    "@google-cloud/common" "^0.32.0"
+    "@sindresorhus/is" "^0.15.0"
+    acorn "^6.0.0"
+    coffeescript "^2.0.0"
+    console-log-level "^1.4.0"
+    extend "^3.0.1"
+    findit2 "^2.2.3"
+    gcp-metadata "^1.0.0"
+    lodash.pickby "^4.6.0"
+    p-limit "^2.2.0"
+    pify "^4.0.1"
+    semver "^6.0.0"
+    source-map "^0.6.1"
+    split "^1.0.0"
+
 "@google-cloud/logging-winston@^0.11.0":
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/@google-cloud/logging-winston/-/logging-winston-0.11.1.tgz#9e6a4259c08e9bd504064e34b7118e3d5ebedbb3"
@@ -79,7 +114,7 @@
     split-array-stream "^2.0.0"
     stream-events "^1.0.4"
 
-"@google-cloud/projectify@^0.3.0", "@google-cloud/projectify@^0.3.2":
+"@google-cloud/projectify@^0.3.0", "@google-cloud/projectify@^0.3.2", "@google-cloud/projectify@^0.3.3":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@google-cloud/projectify/-/projectify-0.3.3.tgz#bde9103d50b20a3ea3337df8c6783a766e70d41d"
 
@@ -179,6 +214,10 @@
 "@protobufjs/utf8@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
+
+"@sindresorhus/is@^0.15.0":
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.15.0.tgz#96915baa05e6a6a1d137badf4984d3fc05820bb6"
 
 "@types/bluebird@^3.5.18":
   version "3.5.26"
@@ -292,7 +331,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/request@^2.47.0":
+"@types/request@^2.47.0", "@types/request@^2.48.1":
   version "2.48.1"
   resolved "https://registry.yarnpkg.com/@types/request/-/request-2.48.1.tgz#e402d691aa6670fbbff1957b15f1270230ab42fa"
   dependencies:
@@ -352,6 +391,10 @@ accepts@~1.3.5:
   dependencies:
     mime-types "~2.1.18"
     negotiator "0.6.1"
+
+acorn@^6.0.0:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.1.1.tgz#7d25ae05bb8ad1f9b699108e1094ecd7884adc1f"
 
 agent-base@^4.1.0:
   version "4.2.1"
@@ -912,6 +955,10 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
+coffeescript@^2.0.0:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/coffeescript/-/coffeescript-2.4.1.tgz#815fd337df0a34d49e74a98a6ebea9c3e7930f70"
+
 collection-visit@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/collection-visit/-/collection-visit-1.0.0.tgz#4bc0373c164bc3291b4d368c829cf1a80a59dca0"
@@ -1019,6 +1066,10 @@ configstore@^3.0.0:
 console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
+
+console-log-level@^1.4.0:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/console-log-level/-/console-log-level-1.4.1.tgz#9c5a6bb9ef1ef65b05aba83028b0ff894cdf630a"
 
 content-disposition@0.5.2:
   version "0.5.2"
@@ -1588,6 +1639,10 @@ find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
+findit2@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/findit2/-/findit2-2.2.3.tgz#58a466697df8a6205cdfdbf395536b8bd777a5f6"
+
 follow-redirects@^1.2.5:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.7.0.tgz#489ebc198dc0e7f64167bd23b03c4c19b5784c76"
@@ -1802,7 +1857,7 @@ globals@^9.18.0:
   version "9.18.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.18.0.tgz#aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
 
-google-auth-library@^3.0.0, google-auth-library@^3.1.0:
+google-auth-library@^3.0.0, google-auth-library@^3.1.0, google-auth-library@^3.1.1:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/google-auth-library/-/google-auth-library-3.1.2.tgz#ff2f88cd5cd2118a57bd3d5ad3c093c8837fc350"
   dependencies:
@@ -2611,6 +2666,10 @@ lodash.once@^4.0.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
 
+lodash.pickby@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.pickby/-/lodash.pickby-4.6.0.tgz#7dea21d8c18d7703a27c704c15d3b84a67e33aff"
+
 lodash.trimend@^4.5.1:
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/lodash.trimend/-/lodash.trimend-4.5.1.tgz#12804437286b98cad8996b79414e11300114082f"
@@ -2958,6 +3017,10 @@ node-cleanup@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/node-cleanup/-/node-cleanup-2.1.2.tgz#7ac19abd297e09a7f72a71545d951b517e4dde2c"
 
+node-fetch@^2.2.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
+
 node-fetch@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.3.0.tgz#1a1d940bbfb916a1d3e0219f037e89e71f8c5fa5"
@@ -3229,6 +3292,12 @@ p-limit@^1.1.0:
   dependencies:
     p-try "^1.0.0"
 
+p-limit@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-2.2.0.tgz#417c9941e6027a9abcba5092dd2904e255b5fbc2"
+  dependencies:
+    p-try "^2.0.0"
+
 p-locate@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/p-locate/-/p-locate-2.0.0.tgz#20a0103b222a70c8fd39cc2e580680f3dde5ec43"
@@ -3238,6 +3307,10 @@ p-locate@^2.0.0:
 p-try@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-1.0.0.tgz#cbc79cdbaf8fd4228e13f621f2b1a237c1b207b3"
+
+p-try@^2.0.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
 
 package-json@^4.0.0:
   version "4.0.1"
@@ -3960,6 +4033,12 @@ split@0.3:
   dependencies:
     through "2"
 
+split@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/split/-/split-1.0.1.tgz#605bd9be303aa59fb35f9229fbea0ddec9ea07d9"
+  dependencies:
+    through "2"
+
 sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
@@ -4123,6 +4202,14 @@ tar@^4:
     mkdirp "^0.5.0"
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
+
+teeny-request@^3.11.3:
+  version "3.11.3"
+  resolved "https://registry.yarnpkg.com/teeny-request/-/teeny-request-3.11.3.tgz#335c629f7645e5d6599362df2f3230c4cbc23a55"
+  dependencies:
+    https-proxy-agent "^2.2.1"
+    node-fetch "^2.2.0"
+    uuid "^3.3.2"
 
 term-size@^1.2.0:
   version "1.2.0"
