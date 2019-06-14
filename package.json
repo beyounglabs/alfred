@@ -56,7 +56,7 @@
     "sqlite3": "^4.0.7",
     "trim-request": "^1.0.6",
     "ts-node": "^8.0.3",
-    "tsc-watch": "^1.0.17",
+    "tsc-watch": "^2.2.1",
     "typedi": "^0.7.2",
     "typeorm": "0.2.7",
     "typeorm-typedi-extensions": "^0.2.1",

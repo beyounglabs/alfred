@@ -4439,9 +4439,9 @@ ts-node@^8.0.3:
     source-map-support "^0.5.6"
     yn "^3.0.0"
 
-tsc-watch@^1.0.17:
-  version "1.1.39"
-  resolved "https://registry.yarnpkg.com/tsc-watch/-/tsc-watch-1.1.39.tgz#2575401009e6ddfe53e553e0152ec8d7e7a7c77a"
+tsc-watch@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/tsc-watch/-/tsc-watch-2.2.1.tgz#6e41a091e07d26dbcf5c815bfb514435ded33286"
   dependencies:
     cross-spawn "^5.1.0"
     node-cleanup "^2.1.2"
