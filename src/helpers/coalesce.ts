@@ -1,7 +1,8 @@
 export function coalesce(getter, fallback) {
   try {
     const value = getter();
-    if (value === null || value === undefined) {
+
+    if (value === null || value === undefined || Number.isNaN(value)) {
       return fallback;
     }
 
