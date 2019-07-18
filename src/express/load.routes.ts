@@ -61,7 +61,6 @@ export async function loadRoutes(app: Express, routes: RouteInterface[]) {
 
         try {
           await route.action(request, response);
-          next();
         } catch (e) {
           next(e);
         } finally {
