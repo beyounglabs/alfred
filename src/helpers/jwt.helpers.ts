@@ -15,7 +15,7 @@ export class JwtHelper {
     return await jwt.verify(value, JwtHelper.getJwtKey());
   }
 
-  public static async isExpired(token: string): boolean {
+  public static isExpired(token: string): boolean {
     if (!token) {
       return true;
     }
