@@ -20,7 +20,15 @@ export class JwtHelper {
       return true;
     }
 
-    const tokens = token.split(' ')[1].split('.');
+    const tokenSplit = token.split(' ');
+
+    let tokens: string[] = [];
+    if (tokenSplit.length > 1) {
+      tokens = tokenSplit[1].split('.');
+    } else {
+      tokens = tokenSplit[0].split('.');
+    }
+
     const tokenData = JSON.parse(
       Buffer.from(tokens[1], 'base64').toString('ascii'),
     );
