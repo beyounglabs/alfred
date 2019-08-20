@@ -14,4 +14,22 @@ export class JwtHelper {
   public static async verify(value: any): Promise<object | string> {
     return await jwt.verify(value, JwtHelper.getJwtKey());
   }
+
+  public static async isExpired(token: string): boolean {
+    if (!token) {
+      return true;
+    }
+
+    const tokens = token.split(' ')[1].split('.');
+    const tokenData = JSON.parse(
+      Buffer.from(tokens[1], 'base64').toString('ascii'),
+    );
+
+    const todayTimestamp = Math.floor(Date.now() / 1000);
+    if (tokenData.exp > todayTimestamp) {
+      return false;
+    }
+
+    return true;
+  }
 }
