@@ -7,8 +7,13 @@ export class JwtHelper {
     return process.env.JWT_KEY || DEFAULT_JWT_KEY;
   }
 
-  public static async sign(value: any): Promise<string> {
-    return await jwt.sign(value, JwtHelper.getJwtKey());
+  public static async sign(
+    value: any,
+    options?: {
+      expiresIn?: string;
+    },
+  ): Promise<string> {
+    return await jwt.sign(value, JwtHelper.getJwtKey(), options);
   }
 
   public static async verify(value: any): Promise<object | string> {
@@ -32,6 +37,10 @@ export class JwtHelper {
     const tokenData = JSON.parse(
       Buffer.from(tokens[1], 'base64').toString('ascii'),
     );
+
+    if (!tokenData.exp) {
+      return false;
+    }
 
     const todayTimestamp = Math.floor(Date.now() / 1000);
     if (tokenData.exp > todayTimestamp) {
