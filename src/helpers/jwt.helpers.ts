@@ -42,7 +42,8 @@ export class JwtHelper {
       return false;
     }
 
-    const todayTimestamp = Math.floor(Date.now() / 1000);
+    // 1 minute to expire, already expired
+    const todayTimestamp = Math.floor(Date.now() / 1000) + 60;
     if (tokenData.exp > todayTimestamp) {
       return false;
     }
