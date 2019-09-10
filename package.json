@@ -36,7 +36,7 @@
     "child-process-async": "^1.0.1",
     "cookie-parser": "^1.4.4",
     "date-fns": "^1.30.1",
-    "dd-trace": "^0.11.2",
+    "dd-trace": "^0.15.0",
     "dotenv": "^4.0.0",
     "elasticsearch": "^14.0.0",
     "express": "^4.16.2",
