@@ -6,9 +6,6 @@ import { JwtHelper } from '../helpers/jwt.helpers';
 import { RouteInterface } from './route.interface';
 
 export async function loadRoutes(app: Express, routes: RouteInterface[]) {
-  // Load Full ICU to format PT-BR support
-  await import('full-icu');
-
   const defaultMiddlewares: any[] = [trimRequest.all];
   for (const route of routes) {
     let middlewares = defaultMiddlewares.slice(0);
