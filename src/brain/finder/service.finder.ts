@@ -24,6 +24,10 @@ export class ServiceFinder {
     );
   }
 
+  public async findActives(): Promise<any> {
+    return (await this.findAll()).filter(item => item.active);
+  }
+
   public async findOneByCode(code: string): Promise<any> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getClient();
