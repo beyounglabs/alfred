@@ -135,6 +135,11 @@
     lodash.camelcase "^4.3.0"
     protobufjs "^6.8.6"
 
+"@moebius/http-graceful-shutdown@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@moebius/http-graceful-shutdown/-/http-graceful-shutdown-1.1.0.tgz#b9d33e63358aa77b2103a577ea7ccdeae3e3c6d5"
+  integrity sha512-cjODgYTIGuCwgsuVMZNDh8RBK697ULAoQAmLqMVpqnqF3nOlPaJHqtGrdLooyn81l83wzHYwG6kPvEIv+Fo+sQ==
+
 "@newrelic/aws-sdk@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@newrelic/aws-sdk/-/aws-sdk-1.0.0.tgz#9e109ba5f1d2fc96ce0547c18ee67216a13a633c"

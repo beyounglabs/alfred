@@ -9,6 +9,10 @@ export class Apm implements ApmInterface {
       return;
     }
 
+    if (!['production', 'staging'].includes(String(process.env.NODE_ENV))) {
+      return;
+    }
+
     try {
       const apmPath = `./${apm}/${apm}`;
       const apmClassName = (await import(apmPath))[`${capitalize(apm)}`];
