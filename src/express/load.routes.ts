@@ -1,11 +1,16 @@
 import { Express, NextFunction, Request } from 'express';
 import * as trimRequest from 'trim-request';
+import { Apm } from '../apm/apm';
+import { JwtHelper } from '../helpers/jwt.helpers';
 import { QueryManager } from '../typeorm/query.manager';
 import { ResponseInterface } from './response.interface';
-import { JwtHelper } from '../helpers/jwt.helpers';
 import { RouteInterface } from './route.interface';
 
-export async function loadRoutes(app: Express, routes: RouteInterface[]) {
+export async function loadRoutes(
+  app: Express,
+  routes: RouteInterface[],
+  apm: Apm,
+) {
   const defaultMiddlewares: any[] = [trimRequest.all];
   for (const route of routes) {
     let middlewares = defaultMiddlewares.slice(0);
@@ -32,7 +37,7 @@ export async function loadRoutes(app: Express, routes: RouteInterface[]) {
         });
 
         response.locals.queryManager = new QueryManager();
-
+        response.locals.apm = apm;
         if (route.protected) {
           try {
             let authorization: any = request.headers['authorization'];
