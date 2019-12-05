@@ -19,12 +19,14 @@ export class Newrelic implements ApmInterface {
     newrelicInstance.setTransactionName(name);
   }
 
-  async startSpan(span: string): Promise<void> {
+  async startSpan(span: string, func: Function): Promise<void> {
     if (!newrelicInstance) {
       return;
     }
 
-    newrelicInstance.startSegment(span);
+    await new Promise((resolve, reject) => {
+      newrelicInstance.startSegment(span, true, func, resolve);
+    });
   }
 
   async addCustomAttributes(attributes): Promise<void> {
