@@ -38,6 +38,8 @@ export async function loadRoutes(
 
         response.locals.queryManager = new QueryManager();
         response.locals.apm = apm;
+        apm.setTransactionName(`${route.method.toLowerCase()} ${route.path}`);
+
         if (route.protected) {
           try {
             let authorization: any = request.headers['authorization'];
