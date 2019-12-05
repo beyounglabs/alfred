@@ -3,7 +3,7 @@ import { ApmInterface } from '../contracts/apm.interface';
 let datadogInstance;
 
 export class Datadog implements ApmInterface {
-  async start(apm?: string): Promise<void> {
+  start(apm?: string): void {
     datadogInstance = require('dd-trace').init({
       debug: false,
       analytics: true,

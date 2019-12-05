@@ -2,7 +2,7 @@ import { ApmInterface } from '../contracts/apm.interface';
 let newrelicInstance;
 
 export class Newrelic implements ApmInterface {
-  async start(apm?: string): Promise<void> {
+  start(apm?: string): void {
     // eslint-disable-next-line global-require
     newrelicInstance = require('newrelic');
   }
