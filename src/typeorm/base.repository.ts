@@ -108,9 +108,9 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
     const build = process.env.BUILD || '';
 
-    return `${Cache.getPrefix()}${methodName}/${propList.join(
-      '|',
-    )}:BUILD-${build}`;
+    const propsImploded = propList.join('|').replace(/['"]/g, '');
+
+    return `${Cache.getPrefix()}${methodName}/${propsImploded}:BUILD-${build}`;
   }
 
   public searchQueryBuilder(search: any): SelectQueryBuilder<Entity> {
