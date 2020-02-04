@@ -6,6 +6,10 @@ export class ObjectConverter {
       return object;
     }
 
+    if (object === null || object === undefined) {
+      return object;
+    }
+
     if (Array.isArray(object)) {
       const newObjects: any[] = [];
       for (const obj of object) {
@@ -32,6 +36,10 @@ export class ObjectConverter {
 
   static camelCaseToUnderscore(object: any): any {
     if (typeof object === 'string') {
+      return object;
+    }
+
+    if (object === null || object === undefined) {
       return object;
     }
 
