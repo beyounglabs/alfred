@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { ObjectConverter } from '../../../src/helpers/object.converter';
 
 describe('ObjectConverter', () => {
-  it('underscoreToCamelCase', async () => {
+  it('underscoreToCamelCase non-recursive', async () => {
     const original = {
       my_name: 'AAA',
       extra_info: {
@@ -23,14 +23,14 @@ describe('ObjectConverter', () => {
     const expected = {
       myName: 'AAA',
       extraInfo: {
-        birthDate: '2019-01-01',
+        birth_date: '2019-01-01',
       },
       items: [
         {
           myProduct: [
             {
               extra: {
-                expirationDate: '2020-12-06',
+                expiration_date: '2020-12-06',
               },
             },
           ],
@@ -45,7 +45,95 @@ describe('ObjectConverter', () => {
     );
   });
 
-  it('camelCaseToUnderscore', async () => {
+  it('underscoreToCamelCase recursive', async () => {
+    const original = {
+      my_name: 'AAA',
+      extra_info: {
+        birth_date: '2019-01-01',
+      },
+      items: [
+        {
+          my_product: [
+            {
+              extra: {
+                expiration_date: '2020-12-06',
+              },
+            },
+          ],
+        },
+      ],
+    };
+    const expected = {
+      myName: 'AAA',
+      extraInfo: {
+        birthDate: '2019-01-01',
+      },
+      items: [
+        {
+          myProduct: [
+            {
+              extra: {
+                expirationDate: '2020-12-06',
+              },
+            },
+          ],
+        },
+      ],
+    };
+
+    const converted = ObjectConverter.underscoreToCamelCase(original, {
+      recursive: true,
+    });
+
+    expect(JSON.stringify(expected, null, 2)).to.be.equals(
+      JSON.stringify(converted, null, 2),
+    );
+  });
+
+  it('camelCaseToUnderscore non-recursive', async () => {
+    const original = {
+      myName: 'AAA',
+      extraInfo: {
+        birthDate: '2019-01-01',
+      },
+      items: [
+        {
+          myProduct: [
+            {
+              extra: {
+                expirationDate: '2020-12-06',
+              },
+            },
+          ],
+        },
+      ],
+    };
+    const expected = {
+      my_name: 'AAA',
+      extra_info: {
+        birthDate: '2019-01-01',
+      },
+      items: [
+        {
+          my_product: [
+            {
+              extra: {
+                expirationDate: '2020-12-06',
+              },
+            },
+          ],
+        },
+      ],
+    };
+
+    const converted = ObjectConverter.camelCaseToUnderscore(original);
+
+    expect(JSON.stringify(expected, null, 2)).to.be.equals(
+      JSON.stringify(converted, null, 2),
+    );
+  });
+
+  it('camelCaseToUnderscore recursive', async () => {
     const original = {
       myName: 'AAA',
       extraInfo: {
@@ -81,7 +169,9 @@ describe('ObjectConverter', () => {
       ],
     };
 
-    const converted = ObjectConverter.camelCaseToUnderscore(original);
+    const converted = ObjectConverter.camelCaseToUnderscore(original, {
+      recursive: true,
+    });
 
     expect(JSON.stringify(expected, null, 2)).to.be.equals(
       JSON.stringify(converted, null, 2),
