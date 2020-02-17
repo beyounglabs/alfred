@@ -22,6 +22,7 @@ export async function request(
     url: (baseUrl || '') + url,
     params: method === 'get' ? params : {},
     data: ['put', 'delete', 'post'].indexOf(method) !== -1 ? params : {},
+    withCredentials: true,
     ...config,
   };
 
