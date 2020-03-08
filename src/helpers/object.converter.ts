@@ -26,9 +26,12 @@ export class ObjectConverter {
     const newObject: any = {};
     for (const key of Object.keys(object)) {
       const newKey = camelCase(key);
+
+      const isDate = object[key] instanceof Date;
+
       if (Array.isArray(object[key])) {
         newObject[newKey] = ObjectConverter.underscoreToCamelCase(object[key], config);
-      } else if (typeof object[key] === 'object'  && config?.recursive) {
+      } else if (typeof object[key] === 'object' && config?.recursive && isDate === false) {
         newObject[newKey] = ObjectConverter.underscoreToCamelCase(object[key], config);
       } else {
         newObject[newKey] = object[key];
@@ -59,9 +62,12 @@ export class ObjectConverter {
     const newObject: any = {};
     for (const key of Object.keys(object)) {
       const newKey = snakeCase(key);
+
+      const isDate = object[key] instanceof Date;
+
       if (Array.isArray(object[key])) {
         newObject[newKey] = ObjectConverter.camelCaseToUnderscore(object[key], config);
-      } else if (typeof object[key] === 'object' && config?.recursive) {
+      } else if (typeof object[key] === 'object' && config?.recursive && isDate === false) {
         newObject[newKey] = ObjectConverter.camelCaseToUnderscore(object[key], config);
       } else {
         newObject[newKey] = object[key];
