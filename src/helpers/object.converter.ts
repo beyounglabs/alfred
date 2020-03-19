@@ -2,10 +2,19 @@ import { camelCase, snakeCase } from 'lodash';
 
 interface ConfigInterface {
   recursive?: boolean;
+  ignore?: string[];
 }
 
+const defaultConfig: ConfigInterface = {
+  recursive: false,
+  ignore: ['metadata'],
+};
+
 export class ObjectConverter {
-  static underscoreToCamelCase(object: any, config?: ConfigInterface): any {
+  static underscoreToCamelCase(
+    object: any,
+    config: ConfigInterface = defaultConfig,
+  ): any {
     if (typeof object === 'string') {
       return object;
     }
@@ -30,9 +39,20 @@ export class ObjectConverter {
       const isDate = object[key] instanceof Date;
 
       if (Array.isArray(object[key])) {
-        newObject[newKey] = ObjectConverter.underscoreToCamelCase(object[key], config);
-      } else if (typeof object[key] === 'object' && config?.recursive && isDate === false) {
-        newObject[newKey] = ObjectConverter.underscoreToCamelCase(object[key], config);
+        newObject[newKey] = ObjectConverter.underscoreToCamelCase(
+          object[key],
+          config,
+        );
+      } else if (
+        typeof object[key] === 'object' &&
+        config?.recursive &&
+        config?.ignore?.includes(key) === false &&
+        isDate === false
+      ) {
+        newObject[newKey] = ObjectConverter.underscoreToCamelCase(
+          object[key],
+          config,
+        );
       } else {
         newObject[newKey] = object[key];
       }
@@ -41,7 +61,10 @@ export class ObjectConverter {
     return newObject;
   }
 
-  static camelCaseToUnderscore(object: any, config?: ConfigInterface): any {
+  static camelCaseToUnderscore(
+    object: any,
+    config?: ConfigInterface = defaultConfig,
+  ): any {
     if (typeof object === 'string') {
       return object;
     }
@@ -66,9 +89,20 @@ export class ObjectConverter {
       const isDate = object[key] instanceof Date;
 
       if (Array.isArray(object[key])) {
-        newObject[newKey] = ObjectConverter.camelCaseToUnderscore(object[key], config);
-      } else if (typeof object[key] === 'object' && config?.recursive && isDate === false) {
-        newObject[newKey] = ObjectConverter.camelCaseToUnderscore(object[key], config);
+        newObject[newKey] = ObjectConverter.camelCaseToUnderscore(
+          object[key],
+          config,
+        );
+      } else if (
+        typeof object[key] === 'object' &&
+        config?.recursive &&
+        config?.ignore?.includes(key) === false &&
+        isDate === false
+      ) {
+        newObject[newKey] = ObjectConverter.camelCaseToUnderscore(
+          object[key],
+          config,
+        );
       } else {
         newObject[newKey] = object[key];
       }
