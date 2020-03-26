@@ -20,7 +20,9 @@ export class ObjectConverter {
       ...config,
     };
 
-    if (typeof object === 'string') {
+    const primitives = ['string', 'number'];
+
+    if (promitives.includes(typeof object)) {
       return object;
     }
 
@@ -75,7 +77,9 @@ export class ObjectConverter {
       ...config,
     };
 
-    if (typeof object === 'string') {
+    const primitives = ['string', 'number'];
+
+    if (promitives.includes(typeof object)) {
       return object;
     }
 
