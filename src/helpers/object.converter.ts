@@ -22,7 +22,7 @@ export class ObjectConverter {
 
     const primitives = ['string', 'number'];
 
-    if (promitives.includes(typeof object)) {
+    if (primitives.includes(typeof object)) {
       return object;
     }
 
@@ -79,7 +79,7 @@ export class ObjectConverter {
 
     const primitives = ['string', 'number'];
 
-    if (promitives.includes(typeof object)) {
+    if (primitives.includes(typeof object)) {
       return object;
     }
 
