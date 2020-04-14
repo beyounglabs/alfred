@@ -7,8 +7,9 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "test": "NODE_ENV=testing nyc mocha -A --opts ./mocha.opts --require ts-node/register -r tsconfig-paths/register",
+    "test": "NODE_ENV=testing nyc mocha -A --opts ./mocha.opts --require ts-node/register",
     "test:watch": "nodemon -e js,ts  --exec yarn test:clear",
+    "test:clear": "clear &&  yarn test",
     "install": "./scripts/install.sh",
     "ts-node": "ts-node",
     "npm:publish": "yarn build && cp package.json dist/ && cd dist/ && npm publish"
@@ -29,8 +30,8 @@
     "@types/redis": "^2.8.1",
     "@types/validator": "^6.3.0",
     "@types/winston": "^2.3.7",
-    "@types/yargs": "^12.0.9",
-    "axios": "^0.17.1",
+    "@types/yargs": "^10.0.0",
+    "axios": "^0.19.1",
     "bluebird": "^3.5.1",
     "chai": "^4.1.2",
     "chalk": "^2.3.0",

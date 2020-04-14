@@ -7,6 +7,7 @@ if [ -d "$DIR" ]; then
 else
     cp -r /home/docker/.ssh/ /root/
     chown -R root:root /root/.ssh 
+    chmod -R 700 /root/.ssh 
     yarn install
     chown -R docker:docker $DIR
     yarn start

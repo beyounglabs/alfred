@@ -193,6 +193,7 @@ export abstract class AbstractUpserter<
           label: 'Salvar',
           props: {
             id: entity.id,
+            redirect: true,
           },
         },
       },
