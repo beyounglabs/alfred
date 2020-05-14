@@ -59,9 +59,10 @@ export class Cache {
   public generateHash(
     cacheName: string,
     request: any,
-    useBuild?: true,
+    useBuild: boolean = true,
   ): string {
     const build = process.env.BUILD || '';
+
     return `${this.getHashPrefix()}${useBuild ? build : ''}_${cacheName}-${md5(
       JSON.stringify(request),
     )}`;
