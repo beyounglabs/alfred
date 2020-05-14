@@ -7,9 +7,10 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
-import { Cache } from './cache';
+import { Cache } from '../cache/cache';
 
 let useCache: boolean = false;
+const cache = new Cache();
 
 export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
   Entity
@@ -110,7 +111,7 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
     const propsImploded = propList.join('|').replace(/['"]/g, '');
 
-    return `${Cache.getPrefix()}${methodName}/${propsImploded}:BUILD-${build}`;
+    return `${cache.getHashPrefix()}${methodName}/${propsImploded}:BUILD-${build}`;
   }
 
   public searchQueryBuilder(search: any): SelectQueryBuilder<Entity> {
@@ -167,7 +168,23 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     id: any,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity | undefined> {
-    return await super.findOne(id || 0, options);
+    if (options?.cache?.id) {
+      const cachedResult = await cache.get(options.cache.id);
+      if (cachedResult) {
+        return cachedResult;
+      }
+    }
+
+    const result = await super.findOne(id || 0, options);
+    if (options?.cache?.id) {
+      const cachedResult = await cache.set(
+        options.cache.id,
+        result,
+        options?.cache?.milliseconds / 1000,
+      );
+    }
+
+    return result;
   }
 
   public async findOneByIdOrFail(
