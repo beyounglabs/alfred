@@ -1,10 +1,16 @@
 import { CacheInterface } from '../cache.interface';
+import * as LRUCache from 'lru-cache';
 
-let cache = {};
+const options = {
+  max: 5000,
+  maxAge: 1000 * 60 * 60, // 1 hour
+};
+
+let cache = new LRUCache(options);
 
 export class LocalCache implements CacheInterface {
   public async get(cacheHash: string): Promise<any> {
-    return cache[cacheHash];
+    return cache.get(cacheHash);
   }
 
   public async set(
@@ -12,10 +18,14 @@ export class LocalCache implements CacheInterface {
     data: any,
     expireInSeconds?: number,
   ): Promise<void> {
-    cache[cacheHash] = data;
+    cache.set(
+      cacheHash,
+      data,
+      expireInSeconds ? expireInSeconds * 1000 : undefined,
+    );
   }
 
   public async clearAll(cachePrefix: string): Promise<void> {
-    cache = {};
+    cache.reset();
   }
 }

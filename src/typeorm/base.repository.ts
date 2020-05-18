@@ -30,6 +30,9 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     useCache = uCache;
   }
 
+  /**
+   * @deprecated
+   */
   protected setCacheOptions(
     options: FindOneOptions<Entity> | FindManyOptions<Entity>,
     cacheKey: string,
@@ -38,6 +41,8 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     if (!cacheSeconds) {
       cacheSeconds = 3600;
     }
+
+    console.info('The setCacheOptions method is deprecated');
 
     if (this.getUseCache()) {
       options.cache = {
@@ -49,6 +54,9 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return options;
   }
 
+  /**
+   * @deprecated
+   */
   protected setCacheQb(
     qb: SelectQueryBuilder<Entity>,
     cacheKey: string,
@@ -57,6 +65,8 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     if (!cacheSeconds) {
       cacheSeconds = 3600;
     }
+
+    console.info('The setCacheQb method is deprecated');
 
     if (this.getUseCache()) {
       qb.cache(cacheKey, cacheSeconds * 1000);
@@ -144,6 +154,22 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     qb.orderBy('e.id', 'DESC');
 
     return qb;
+  }
+
+  public async cached(cacheKey: string, callback: CallableFunction) {
+    if (this.getUseCache()) {
+      const cachedResult = await cache.get(cacheKey);
+      if (cachedResult) {
+        return cachedResult;
+      }
+    }
+
+    const result = await callback();
+    if (this.getUseCache()) {
+      await cache.set(cacheKey, result);
+    }
+
+    return result;
   }
 
   public async searchCount(search: any): Promise<number> {
