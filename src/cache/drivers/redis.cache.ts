@@ -22,11 +22,11 @@ export class RedisCache implements CacheInterface {
 
     await new Promise((resolve, reject) => {
       redisClientNew.on('error', err => {
-        redisClient = null;
-
         if (runningAsFallback) {
           return;
         }
+
+        redisClient = null;
 
         if (process.env.REDIS_CACHE_FALLBACK_HOST) {
           const redisClientFallback = new IORedis({
