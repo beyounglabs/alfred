@@ -9,7 +9,7 @@ import {
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
 import { Cache } from '../cache/cache';
 
-let useCache: boolean = false;
+let useCache: boolean = true;
 const cache = new Cache();
 
 export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
