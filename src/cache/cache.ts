@@ -74,8 +74,8 @@ export class Cache {
   ): string {
     const build = process.env.BUILD || '';
 
-    return `${this.getHashPrefix()}${
+    return `${this.getHashPrefix()}${cacheName}_${
       useBuild ? `BUILD${build}_` : ''
-    }${cacheName}-${md5(JSON.stringify(request))}`;
+    }${md5(JSON.stringify(request))}`;
   }
 }
