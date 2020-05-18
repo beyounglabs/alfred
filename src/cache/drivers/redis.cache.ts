@@ -18,6 +18,7 @@ export class RedisCache implements CacheInterface {
         ? Number(process.env.REDIS_CACHE_PORT)
         : 6379,
       db: process.env.REDIS_CACHE_DB ? Number(process.env.REDIS_CACHE_DB) : 0,
+      maxRetriesPerRequest: 5,
     });
 
     await new Promise((resolve, reject) => {
@@ -35,6 +36,7 @@ export class RedisCache implements CacheInterface {
             db: process.env.REDIS_CACHE_FALLBACK_DB
               ? Number(process.env.REDIS_CACHE_FALLBACK_DB)
               : 0,
+            maxRetriesPerRequest: 5,
           });
 
           redisClientFallback.on('error', errFallback => {
@@ -45,7 +47,7 @@ export class RedisCache implements CacheInterface {
             redisClient = redisClientFallback;
             resolve();
             runningAsFallback = true;
-            console.log('redis is running with fallback');
+            console.log(`Redis is running with fallback: ${err}`);
           });
         } else {
           reject(`Error on connecting to redis: ${err}`);
@@ -56,7 +58,7 @@ export class RedisCache implements CacheInterface {
         redisClient = redisClientNew;
         resolve();
         runningAsFallback = false;
-        console.log('redis is running');
+        console.log('Redis is running with the primary');
       });
     });
 
