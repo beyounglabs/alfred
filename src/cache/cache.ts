@@ -4,16 +4,27 @@ import { CacheInterface } from './cache.interface';
 import { LocalCache } from './drivers/local.cache';
 
 let driver: CacheInterface = CacheFactory.get();
-
+let isVerifyngOriginalCache: boolean = false;
 export class Cache {
-  public async verifyOriginalDriverOnError(cacheHash: string) {
+  public async verifyOriginalDriverOnError(
+    cacheHash: string,
+    force: boolean = false,
+  ): Promise<void> {
     try {
+      if (isVerifyngOriginalCache && !force) {
+        return;
+      }
+
+      isVerifyngOriginalCache = true;
+
       const originalDriver = CacheFactory.get();
       await originalDriver.get(cacheHash);
       driver = originalDriver;
+
+      isVerifyngOriginalCache = false;
     } catch (e) {
       setTimeout(() => {
-        this.verifyOriginalDriverOnError(cacheHash);
+        this.verifyOriginalDriverOnError(cacheHash, true);
       }, 10000);
     }
   }
