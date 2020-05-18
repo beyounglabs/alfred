@@ -2,6 +2,7 @@ import * as moment from 'moment';
 import * as IORedis from 'ioredis';
 import { CacheInterface } from '../cache.interface';
 let redisClient: IORedis.Redis | null;
+let runningAsFallback: boolean = false;
 
 export class RedisCache implements CacheInterface {
   protected async getClient(): Promise<IORedis.Redis> {
@@ -21,6 +22,10 @@ export class RedisCache implements CacheInterface {
       redisClientNew.on('error', err => {
         redisClient = null;
 
+        if (runningAsFallback) {
+          return;
+        }
+
         if (process.env.REDIS_CACHE_FALLBACK_HOST) {
           const redisClientFallback = new IORedis({
             host: process.env.REDIS_CACHE_FALLBACK_HOST || 'redis',
@@ -39,6 +44,7 @@ export class RedisCache implements CacheInterface {
           redisClientFallback.on('ready', () => {
             redisClient = redisClientFallback;
             resolve();
+            runningAsFallback = true;
             console.log('redis is running with fallback');
           });
         } else {
@@ -49,6 +55,7 @@ export class RedisCache implements CacheInterface {
       redisClientNew.on('ready', () => {
         redisClient = redisClientNew;
         resolve();
+        runningAsFallback = false;
         console.log('redis is running');
       });
     });
