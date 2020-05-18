@@ -1,41 +1,36 @@
-import { promisifyAll } from 'bluebird';
 import * as moment from 'moment';
-import * as redis from 'redis';
+import * as IORedis from 'ioredis';
 import { CacheInterface } from '../cache.interface';
-let redisClient;
+let redisClient: IORedis.Redis | null;
 
 export class RedisCache implements CacheInterface {
-  protected async getClient() {
-    if (redisClient && redisClient.connected) {
+  protected async getClient(): Promise<IORedis.Redis> {
+    if (redisClient) {
       return redisClient;
     }
 
-    const redisClientNew = promisifyAll(
-      redis.createClient({
-        host: process.env.REDIS_CACHE_HOST || 'redis',
-        port: process.env.REDIS_CACHE_PORT
-          ? Number(process.env.REDIS_CACHE_PORT)
-          : 6379,
-        db: process.env.REDIS_CACHE_DB || '0',
-        connect_timeout: 1500,
-      }),
-    );
+    const redisClientNew = new IORedis({
+      host: process.env.REDIS_CACHE_HOST || 'redis',
+      port: process.env.REDIS_CACHE_PORT
+        ? Number(process.env.REDIS_CACHE_PORT)
+        : 6379,
+      db: process.env.REDIS_CACHE_DB ? Number(process.env.REDIS_CACHE_DB) : 0,
+    });
 
     await new Promise((resolve, reject) => {
       redisClientNew.on('error', err => {
         redisClient = null;
 
         if (process.env.REDIS_CACHE_FALLBACK_HOST) {
-          const redisClientFallback = promisifyAll(
-            redis.createClient({
-              host: process.env.REDIS_CACHE_FALLBACK_HOST || 'redis',
-              port: process.env.REDIS_CACHE_FALLBACK_PORT
-                ? Number(process.env.REDIS_CACHE_FALLBACK_PORT)
-                : 6379,
-              db: process.env.REDIS_CACHE_FALLBACK_DB || '0',
-              connect_timeout: 1500,
-            }),
-          );
+          const redisClientFallback = new IORedis({
+            host: process.env.REDIS_CACHE_FALLBACK_HOST || 'redis',
+            port: process.env.REDIS_CACHE_FALLBACK_PORT
+              ? Number(process.env.REDIS_CACHE_FALLBACK_PORT)
+              : 6379,
+            db: process.env.REDIS_CACHE_FALLBACK_DB
+              ? Number(process.env.REDIS_CACHE_FALLBACK_DB)
+              : 0,
+          });
 
           redisClientFallback.on('error', errFallback => {
             reject(`Error on connecting to fallback redis: ${errFallback}`);
@@ -58,11 +53,15 @@ export class RedisCache implements CacheInterface {
       });
     });
 
+    if (!redisClient) {
+      throw new Error('No Redis CLient Found');
+    }
+
     return redisClient;
   }
   public async get(cacheHash: string): Promise<any> {
     const client = await this.getClient();
-    const response = await client.getAsync(cacheHash);
+    const response = await client.get(cacheHash);
     if (!response) {
       return;
     }
@@ -83,14 +82,14 @@ export class RedisCache implements CacheInterface {
         .add(24, 'hours')
         .diff(moment(), 'seconds');
     }
-    await client.setexAsync(cacheHash, expire, JSON.stringify(data));
+    await client.setex(cacheHash, expire, JSON.stringify(data));
   }
 
   public async clearAll(cachePrefix: string): Promise<void> {
     const client = await this.getClient();
-    const keys = await client.keysAsync(cachePrefix + '*');
+    const keys = await client.keys(cachePrefix + '*');
     for (const key of keys) {
-      await client.delAsync(key);
+      await client.del(key);
     }
   }
 }
