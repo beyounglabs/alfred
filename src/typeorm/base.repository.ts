@@ -170,11 +170,33 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return await super.findOne(id || 0, options);
   }
 
+  public async findOneWithCache(
+    id: any,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity | undefined> {
+    const cacheKey = this.getCacheKey(arguments);
+
+    return this.cached(cacheKey, async () => {
+      return await super.findOne(id || 0, options);
+    });
+  }
+
   public async findOneByIdOrFail(
     id: any,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity> {
     return await this.findOneOrFail(id || 0, options);
+  }
+
+  public async findOneByIdOrFailWithCache(
+    id: any,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity> {
+    const cacheKey = this.getCacheKey(arguments);
+
+    return this.cached(cacheKey, async () => {
+      return await this.findOneOrFail(id || 0, options);
+    });
   }
 
   public paginate(
