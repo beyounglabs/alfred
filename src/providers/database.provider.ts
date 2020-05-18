@@ -64,16 +64,16 @@ export class DatabaseProvider {
         },
       };
 
-      if (process.env.REDIS_CACHE_HOST) {
-        connectionOptions.cache = {
-          type: 'redis',
-          options: {
-            host: process.env.REDIS_CACHE_HOST,
-            port: process.env.REDIS_CACHE_PORT,
-            db: process.env.REDIS_CACHE_DB ? process.env.REDIS_CACHE_DB : 0,
-          },
-        };
-      }
+      // if (process.env.REDIS_CACHE_HOST) {
+      //   connectionOptions.cache = {
+      //     type: 'redis',
+      //     options: {
+      //       host: process.env.REDIS_CACHE_HOST,
+      //       port: process.env.REDIS_CACHE_PORT,
+      //       db: process.env.REDIS_CACHE_DB ? process.env.REDIS_CACHE_DB : 0,
+      //     },
+      //   };
+      // }
 
       this.connection = await createConnection(connectionOptions);
     }
