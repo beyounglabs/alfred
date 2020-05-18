@@ -26,8 +26,6 @@ export class RedisCache implements CacheInterface {
           return;
         }
 
-        redisClient = null;
-
         if (process.env.REDIS_CACHE_FALLBACK_HOST) {
           const redisClientFallback = new IORedis({
             host: process.env.REDIS_CACHE_FALLBACK_HOST || 'redis',
