@@ -12,6 +12,14 @@ export class RedisCache implements CacheInterface {
 
     console.log('Creating Redis Client');
 
+    const preferredSlaves: IORedis.PreferredSlaves = [];
+    if (process.env.REDIS_CACHE_SLAVE_HOST) {
+      preferredSlaves.push({
+        ip: process.env.REDIS_CACHE_SLAVE_HOST,
+        port: process.env.REDIS_CACHE_SLAVE_PORT || '6379',
+      });
+    }
+
     const redisClientNew = new IORedis({
       host: process.env.REDIS_CACHE_HOST || 'redis',
       port: process.env.REDIS_CACHE_PORT
@@ -19,6 +27,7 @@ export class RedisCache implements CacheInterface {
         : 6379,
       db: process.env.REDIS_CACHE_DB ? Number(process.env.REDIS_CACHE_DB) : 0,
       maxRetriesPerRequest: 5,
+      preferredSlaves,
     });
 
     await new Promise((resolve, reject) => {
