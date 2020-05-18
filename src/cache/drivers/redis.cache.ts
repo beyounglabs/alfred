@@ -10,6 +10,8 @@ export class RedisCache implements CacheInterface {
       return redisClient;
     }
 
+    console.log('Creating Redis Client');
+
     const redisClientNew = new IORedis({
       host: process.env.REDIS_CACHE_HOST || 'redis',
       port: process.env.REDIS_CACHE_PORT
