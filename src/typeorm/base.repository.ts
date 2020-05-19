@@ -122,7 +122,7 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
     const propsMd5 = md5(JSON.stringify(propList));
 
-    return `${cache.getHashPrefix()}${methodName}/${propsMd5}:BUILD-${build}`;
+    return `${cache.getHashPrefix()}ORM_${methodName}/${propsMd5}:BUILD-${build}`;
   }
 
   public searchQueryBuilder(search: any): SelectQueryBuilder<Entity> {
