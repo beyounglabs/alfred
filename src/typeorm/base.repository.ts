@@ -1,4 +1,5 @@
 import { camelCase } from 'lodash';
+import * as md5 from 'md5';
 import {
   FindManyOptions,
   FindOneOptions,
@@ -7,9 +8,10 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
-import { Cache } from './cache';
+import { Cache } from '../cache/cache';
 
-let useCache: boolean = false;
+let useCache: boolean = true;
+const cache = new Cache();
 
 export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
   Entity
@@ -29,6 +31,9 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     useCache = uCache;
   }
 
+  /**
+   * @deprecated
+   */
   protected setCacheOptions(
     options: FindOneOptions<Entity> | FindManyOptions<Entity>,
     cacheKey: string,
@@ -37,6 +42,8 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     if (!cacheSeconds) {
       cacheSeconds = 3600;
     }
+
+    console.info('The setCacheOptions method is deprecated');
 
     if (this.getUseCache()) {
       options.cache = {
@@ -48,6 +55,9 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return options;
   }
 
+  /**
+   * @deprecated
+   */
   protected setCacheQb(
     qb: SelectQueryBuilder<Entity>,
     cacheKey: string,
@@ -56,6 +66,8 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     if (!cacheSeconds) {
       cacheSeconds = 3600;
     }
+
+    console.info('The setCacheQb method is deprecated');
 
     if (this.getUseCache()) {
       qb.cache(cacheKey, cacheSeconds * 1000);
@@ -108,9 +120,9 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
     const build = process.env.BUILD || '';
 
-    const propsImploded = propList.join('|').replace(/['"]/g, '');
+    const propsMd5 = md5(JSON.stringify(propList));
 
-    return `${Cache.getPrefix()}${methodName}/${propsImploded}:BUILD-${build}`;
+    return `${cache.getHashPrefix()}ORM_${methodName}/${propsMd5}:BUILD-${build}`;
   }
 
   public searchQueryBuilder(search: any): SelectQueryBuilder<Entity> {
@@ -145,6 +157,22 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return qb;
   }
 
+  public async cached(cacheKey: string, callback: CallableFunction) {
+    if (this.getUseCache()) {
+      const cachedResult = await cache.get(cacheKey);
+      if (cachedResult) {
+        return cachedResult;
+      }
+    }
+
+    const result = await callback();
+    if (this.getUseCache()) {
+      await cache.set(cacheKey, result);
+    }
+
+    return result;
+  }
+
   public async searchCount(search: any): Promise<number> {
     const qb = this.searchQueryBuilder(search);
     return await qb.getCount();
@@ -167,7 +195,34 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     id: any,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity | undefined> {
-    return await super.findOne(id || 0, options);
+    if (options?.cache?.id) {
+      const cachedResult = await cache.get(options.cache.id);
+      if (cachedResult) {
+        return cachedResult;
+      }
+    }
+
+    const result = await super.findOne(id || 0, options);
+    if (options?.cache?.id) {
+      const cachedResult = await cache.set(
+        options.cache.id,
+        result,
+        options?.cache?.milliseconds / 1000,
+      );
+    }
+
+    return result;
+  }
+
+  public async findOneWithCache(
+    id: any,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity | undefined> {
+    const cacheKey = this.getCacheKey(arguments);
+
+    return this.cached(cacheKey, async () => {
+      return await super.findOne(id || 0, options);
+    });
   }
 
   public async findOneByIdOrFail(
@@ -175,6 +230,17 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     options?: FindOneOptions<Entity>,
   ): Promise<Entity> {
     return await this.findOneOrFail(id || 0, options);
+  }
+
+  public async findOneByIdOrFailWithCache(
+    id: any,
+    options?: FindOneOptions<Entity>,
+  ): Promise<Entity> {
+    const cacheKey = this.getCacheKey(arguments);
+
+    return this.cached(cacheKey, async () => {
+      return await this.findOneOrFail(id || 0, options);
+    });
   }
 
   public paginate(
