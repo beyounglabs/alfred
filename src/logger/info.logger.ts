@@ -67,7 +67,7 @@ export class InfoLogger implements LoggerInterface {
     return logger;
   }
 
-  public async log(data: LogDataInterface) {
+  public async log(data: LogDataInterface): Promise<void> {
     try {
       const logger: winston.LoggerInstance = this.getLogger();
 

@@ -39,11 +39,7 @@ export class ErrorLogger implements LoggerInterface {
           level: 'error',
           icon_emoji: ':shit:',
           username: 'Logger',
-          message: `*${process.env.BRAIN_SERVICE} - ${
-            process.env.BRAIN_PROFILE
-          } - ${
-            process.env.NODE_ENV
-          }*\n*Message*: {{ message }}. \n\n {{ meta }}`,
+          message: `*${process.env.BRAIN_SERVICE} - ${process.env.BRAIN_PROFILE} - ${process.env.NODE_ENV}*\n*Message*: {{ message }}. \n\n {{ meta }}`,
         }),
       );
     }
@@ -56,11 +52,15 @@ export class ErrorLogger implements LoggerInterface {
     return logger;
   }
 
-  public async log(data: any) {
+  public async log(data: any): Promise<void> {
     try {
-      const logger: winston.LoggerInstance = this.getLogger();
-
       const message = data['message'] ? data['message'] : 'log_default';
+      if (process.env.NODE_ENV === 'development') {
+        console.error(message, data);
+        return;
+      }
+
+      const logger: winston.LoggerInstance = this.getLogger();
 
       logger.error(message, data);
     } catch (e) {
