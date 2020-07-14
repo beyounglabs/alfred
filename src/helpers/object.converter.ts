@@ -13,7 +13,7 @@ const defaultConfig: ConfigInterface = {
 export class ObjectConverter {
   static underscoreToCamelCase(
     object: any,
-    config?: ConfigInterface = defaultConfig,
+    config: ConfigInterface | undefined = defaultConfig,
   ): any {
     config = {
       ...defaultConfig,
@@ -70,7 +70,7 @@ export class ObjectConverter {
 
   static camelCaseToUnderscore(
     object: any,
-    config?: ConfigInterface = defaultConfig,
+    config: ConfigInterface | undefined = defaultConfig,
   ): any {
     config = {
       ...defaultConfig,

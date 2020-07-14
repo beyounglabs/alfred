@@ -8,10 +8,7 @@ import { MystiqueActionsType } from './contracts/mystique.actions.type';
 import { MystiqueFieldInterface } from './contracts/mystique.field.interface';
 import { MystiqueSearchConfigInterface } from './contracts/mystique.search.config.interface';
 
-export abstract class AbstractUpserter<
-  E extends any,
-  R extends BaseRepository<E>
-> {
+export abstract class AbstractUpserter<E, R extends BaseRepository<E>> {
   protected queryRunner: QueryRunner;
   protected repository: R;
 
@@ -42,6 +39,8 @@ export abstract class AbstractUpserter<
     const service = this.getService();
     const resource = this.getResource();
 
+    const entityAny = entity as any;
+
     return {
       EDIT: {
         icon: 'edit',
@@ -50,7 +49,7 @@ export abstract class AbstractUpserter<
           path: './pages/Services/Upsert',
           props: {
             params: {
-              id: entity.id,
+              id: entityAny.id,
               service,
               resource,
             },
@@ -65,7 +64,7 @@ export abstract class AbstractUpserter<
           path: './pages/Services/Delete',
           props: {
             params: {
-              id: entity.id,
+              id: entityAny.id,
               service,
               resource,
             },
@@ -176,7 +175,7 @@ export abstract class AbstractUpserter<
     const resource = this.getResource();
     const connection = getConnection();
 
-    const entity = await this.findOneToUpsertForm(query.id);
+    const entity = (await this.findOneToUpsertForm(query.id)) as any;
 
     const entityMetadata = connection.getMetadata(entity.constructor);
 

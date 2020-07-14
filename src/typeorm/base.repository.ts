@@ -186,6 +186,7 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
   public async upsert(entity: Entity, data: any): Promise<Entity> {
     for (const key of Object.keys(data)) {
+      // @ts-ignore
       entity[camelCase(key)] = data[key];
     }
     return await this.save(entity);
@@ -195,19 +196,20 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     id: any,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity | undefined> {
-    if (options?.cache?.id) {
-      const cachedResult = await cache.get(options.cache.id);
+    const optionsCache = options?.cache as any;
+    if (optionsCache?.id) {
+      const cachedResult = await cache.get(optionsCache.id);
       if (cachedResult) {
         return cachedResult;
       }
     }
 
-    const result = await super.findOne(id || 0, options);
-    if (options?.cache?.id) {
+    const result = await super.findOne((id as number) || 0, options);
+    if (optionsCache?.id) {
       const cachedResult = await cache.set(
-        options.cache.id,
+        optionsCache.id,
         result,
-        options?.cache?.milliseconds / 1000,
+        optionsCache?.milliseconds / 1000,
       );
     }
 
@@ -221,7 +223,8 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     const cacheKey = this.getCacheKey(arguments);
 
     return this.cached(cacheKey, async () => {
-      return await super.findOne(id || 0, options);
+      const numberId = Number(id);
+      return await super.findOne(numberId || 0, options);
     });
   }
 
@@ -229,7 +232,8 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     id: any,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity> {
-    return await this.findOneOrFail(id || 0, options);
+    const numberId = Number(id);
+    return await this.findOneOrFail(numberId || 0, options);
   }
 
   public async findOneByIdOrFailWithCache(
@@ -239,7 +243,8 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     const cacheKey = this.getCacheKey(arguments);
 
     return this.cached(cacheKey, async () => {
-      return await this.findOneOrFail(id || 0, options);
+      const numberId = Number(id);
+      return await this.findOneOrFail(numberId || 0, options);
     });
   }
 
