@@ -28,12 +28,6 @@ export class DatabaseProvider {
       return this.connection;
     }
 
-    let prefix = 'dist/';
-
-    if (['testing'].indexOf(String(process.env.NODE_ENV)) !== -1) {
-      prefix = '';
-    }
-
     let database = process.env.DB_DATABASE;
     if (databaseName) {
       database = databaseName;
@@ -53,12 +47,8 @@ export class DatabaseProvider {
         logging: process.env.DB_LOGGING === 'true',
         logger: 'file',
         cache: false,
-        entities: [
-          `${__dirname}/../../../${prefix}src/entities/*.entity{.ts,.js}`,
-        ],
-        migrations: [
-          `${__dirname}/../../../${prefix}database/migrations/*.{.ts,.js}`,
-        ],
+        entities: [`${__dirname}/../../../src/entities/*.entity{.ts,.js}`],
+        migrations: [`${__dirname}/../../../database/migrations/*.{.ts,.js}`],
         extra: {
           connectionLimit: process.env.DB_POOL_CONNECTION_LIMIT || 10,
         },
@@ -84,12 +74,8 @@ export class DatabaseProvider {
         database,
         logging: process.env.DB_LOGGING === 'true',
         logger: 'file',
-        entities: [
-          `${__dirname}/../../../${prefix}src/entities/*.entity{.ts,.js}`,
-        ],
-        migrations: [
-          `${__dirname}/../../../${prefix}database/migrations/*.{.ts,.js}`,
-        ],
+        entities: [`${__dirname}/../../../src/entities/*.entity{.ts,.js}`],
+        migrations: [`${__dirname}/../../../database/migrations/*.{.ts,.js}`],
       };
 
       this.connection = await createConnection(connectionOptions);
