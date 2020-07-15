@@ -3,7 +3,7 @@ ORIGINAL_PATH=`pwd`;
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
 
-cd "${SCRIPT_DIR}/../../";
+cd "${SCRIPT_DIR}/../../../";
 
 NODEMODULES_PATH=`pwd`;
 
@@ -20,7 +20,7 @@ then
       while IFS= read -r FILE
       do
         echo "$FILE"
-        node ${NODEMODULES_PATH}/alfred/scripts/cp.js "${NODEMODULES_PATH}/alfred/${FILE}"
+        node ${NODEMODULES_PATH}/@beyounglabs/alfred/scripts/cp.js "${NODEMODULES_PATH}/@beyounglabs/alfred/${FILE}"
       done < <(printf '%s\n' "$FILES")
     fi
 fi
