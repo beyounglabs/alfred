@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Alfred JS Framework",
   "main": "index.js",
   "repository": "git@bitbucket.com:beautybrands/alfred.git",

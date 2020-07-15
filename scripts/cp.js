@@ -19,7 +19,12 @@ let filesIgnore = [];
 
   try {
     const copyPath =
-      originalPath.split('/alfred/defaults/')[0] + '/../' + relativePath;
+      originalPath.split('/@beyounglabs/alfred/defaults/')[0] +
+      '/../' +
+      relativePath;
+
+    console.log(originalPath);
+    console.log(copyPath);
     await copy(originalPath, copyPath);
   } catch (e) {}
 })();
