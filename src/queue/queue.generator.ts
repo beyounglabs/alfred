@@ -3,7 +3,9 @@ import { trimEnd } from 'lodash';
 import { QueueRequestInterface } from './contracts/queue.request.interface';
 
 export class QueueGenerator {
-  public async generate(queueRequest: QueueRequestInterface): Promise<any> {
+  public async generate(
+    queueRequest: QueueRequestInterface | QueueRequestInterface[],
+  ): Promise<any> {
     try {
       let furyUrl = process.env.FURY_URL;
 
@@ -11,14 +13,19 @@ export class QueueGenerator {
         throw new Error('Fury URL Not Configured');
       }
 
-      queueRequest.name = queueRequest.name.toUpperCase();
-      queueRequest.service = queueRequest.service.toUpperCase();
+      if (!Array.isArray(queueRequest)) {
+        queueRequest = [queueRequest];
+      }
 
-      if (
-        queueRequest.name.substr(0, queueRequest.service.length) !==
-        queueRequest.service
-      ) {
-        queueRequest.name = `${queueRequest.service}_${queueRequest.name}`;
+      for (const queueRequestItem of queueRequest) {
+        queueRequestItem.name = queueRequestItem.name.toUpperCase();
+        queueRequestItem.service = queueRequestItem.service.toUpperCase();
+        if (
+          queueRequestItem.name.substr(0, queueRequestItem.service.length) !==
+          queueRequestItem.service
+        ) {
+          queueRequestItem.name = `${queueRequestItem.service}_${queueRequestItem.name}`;
+        }
       }
 
       if (furyUrl.split('://').length === 1) {

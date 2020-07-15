@@ -47,7 +47,7 @@ export class DebugLogger implements LoggerInterface {
     return logger;
   }
 
-  public async log(data: any) {
+  public async log(data: any): Promise<void> {
     try {
       const logger: winston.LoggerInstance = this.getLogger();
 
