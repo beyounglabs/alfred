@@ -23,8 +23,6 @@ let filesIgnore = [];
       '/../' +
       relativePath;
 
-    console.log(originalPath);
-    console.log(copyPath);
     await copy(originalPath, copyPath);
   } catch (e) {}
 })();
