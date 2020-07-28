@@ -113,7 +113,7 @@ export class BrainParameter {
       content += `${code}=${process.env[code]}\n`;
     }
 
-    const file = `${__dirname}/../../../.env.dump`;
+    const file = `${__dirname}/../../../../.env.dump`;
 
     await writeFile(file, content);
   }
