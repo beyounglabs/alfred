@@ -220,6 +220,7 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     id: any,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity | undefined> {
+    // @ts-ignore
     const cacheKey = this.getCacheKey(arguments);
 
     return this.cached(cacheKey, async () => {
@@ -240,6 +241,7 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     id: any,
     options?: FindOneOptions<Entity>,
   ): Promise<Entity> {
+    // @ts-ignore
     const cacheKey = this.getCacheKey(arguments);
 
     return this.cached(cacheKey, async () => {
