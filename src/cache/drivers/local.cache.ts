@@ -13,6 +13,10 @@ export class LocalCache implements CacheInterface {
     return cache.get(cacheHash);
   }
 
+  public async delete(cacheHash: string): Promise<any> {
+    return cache.del(cacheHash);
+  }
+
   public async set(
     cacheHash: string,
     data: any,
