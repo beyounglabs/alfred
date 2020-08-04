@@ -87,6 +87,11 @@ export class RedisCache implements CacheInterface {
     return JSON.parse(response);
   }
 
+  public async delete(cacheHash: string): Promise<any> {
+    const client = await this.getClient();
+    await client.del(cacheHash);
+  }
+
   public async set(
     cacheHash: string,
     data: any,
