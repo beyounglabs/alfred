@@ -2,7 +2,7 @@ const { copy, stat } = require('fs-extra');
 
 const originalPath = process.argv[2];
 const relativePath = originalPath.split('/alfred/defaults/')[1];
-const alfredConfigFile = __dirname + '/../../../alfred.config.js';
+const alfredConfigFile = __dirname + '/../../../../alfred.config.js';
 let filesIgnore = [];
 (async function bootstrap() {
   try {
