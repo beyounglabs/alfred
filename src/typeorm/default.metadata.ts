@@ -1,5 +1,4 @@
 import { ColumnOptions } from 'typeorm/decorator/options/ColumnOptions';
-import { BigIntTransformer } from './transformers/big.int.transformer';
 import { BooleanTransformer } from './transformers/boolean.transformer';
 import { JsonTransformer } from './transformers/json.transformer';
 import { NumberTransformer } from './transformers/number.transformer';
@@ -37,7 +36,7 @@ export class DefaultMetadata {
 
     if (params.type === 'bigint') {
       delete params.length;
-      params.transformer = new BigIntTransformer();
+      params.transformer = new NumberTransformer();
     }
 
     if (params.type === 'boolean') {
