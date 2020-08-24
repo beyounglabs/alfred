@@ -3,6 +3,7 @@ import { BooleanTransformer } from './transformers/boolean.transformer';
 import { JsonTransformer } from './transformers/json.transformer';
 import { NumberTransformer } from './transformers/number.transformer';
 
+
 export class DefaultMetadata {
   public static getDefaultEngine(): string {
     return String(process.env.DB_DEFAULT_ENGINE);
@@ -30,6 +31,11 @@ export class DefaultMetadata {
     if (params.type === 'integer') {
       delete params.length;
 
+      params.transformer = new NumberTransformer();
+    }
+
+    if (params.type === 'bigint') {
+      delete params.length;
       params.transformer = new NumberTransformer();
     }
 
