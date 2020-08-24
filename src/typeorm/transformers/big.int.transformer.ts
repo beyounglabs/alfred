@@ -1,11 +1,11 @@
 import { ValueTransformer } from 'typeorm/decorator/options/ValueTransformer';
 
-export class NumberTransformer implements ValueTransformer {
+export class BigIntTransformer implements ValueTransformer {
   public from(value) {
-    return Number(value);
+    return BigInt(value);
   }
 
   public to(value) {
-    return Number(value);
+    return BigInt(value);
   }
 }
