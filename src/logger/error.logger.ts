@@ -43,7 +43,11 @@ export class ErrorLogger implements LoggerInterface {
           const { level, message, ...meta } = info;
 
           return {
-            text: `*${process.env.BRAIN_SERVICE} - ${process.env.BRAIN_PROFILE} - ${process.env.NODE_ENV}*\n*Message*: ${message}. \n\n ${meta}`,
+            text: `*${process.env.BRAIN_SERVICE} - ${
+              process.env.BRAIN_PROFILE
+            } - ${
+              process.env.NODE_ENV
+            }*\n*Message*: ${message}. \n\n ${JSON.stringify(meta, null, 2)}`,
           };
         },
       });
