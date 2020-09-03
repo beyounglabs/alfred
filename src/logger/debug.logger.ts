@@ -2,7 +2,7 @@ import { LoggingWinston } from '@google-cloud/logging-winston';
 import * as winston from 'winston';
 import { LoggerInterface } from './contracts/logger.interface';
 
-let logger: winston.LoggerInstance;
+let logger: winston.Logger | null;
 
 const EXPIRATION_TIME = 3600000;
 
@@ -19,7 +19,7 @@ export class DebugLogger implements LoggerInterface {
     }, EXPIRATION_TIME);
   }
 
-  public getLogger(): winston.LoggerInstance {
+  public getLogger(): winston.Logger {
     if (logger) {
       return logger;
     }
@@ -39,7 +39,7 @@ export class DebugLogger implements LoggerInterface {
       transports.push(new winston.transports.Console());
     }
 
-    logger = new winston.Logger({
+    logger = winston.createLogger({
       transports,
       exitOnError: false,
     });
@@ -49,7 +49,7 @@ export class DebugLogger implements LoggerInterface {
 
   public async log(data: any): Promise<void> {
     try {
-      const logger: winston.LoggerInstance = this.getLogger();
+      const logger: winston.Logger = this.getLogger();
 
       const message = data['message'] ? data['message'] : 'log_default';
 
@@ -60,8 +60,7 @@ export class DebugLogger implements LoggerInterface {
   }
 
   public async close(): Promise<any> {
-    const logger: winston.LoggerInstance = this.getLogger();
-
+    const logger: winston.Logger = this.getLogger();
     return Promise.resolve(logger.close());
   }
 }
