@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Alfred JS Framework",
   "main": "index.js",
   "repository": "git@bitbucket.com:beautybrands/alfred.git",
@@ -59,7 +59,6 @@
     "prettier": "^2.0",
     "redis": "^2.8.0",
     "reflect-metadata": "^0.1.10",
-    "slack-winston": "0.0.9",
     "sqlite3": "^5.0.0",
     "trim-request": "^1.0.6",
     "ts-node": "^8.0.3",
@@ -71,8 +70,8 @@
     "uniqid": "^4.1.1",
     "validator": "^9.2.0",
     "validatorjs": "^3.14.2",
-    "winston": "2.4.0",
-    "winston-elasticsearch": "0.5.6",
+    "winston": "3.0.0",
+    "winston-slack-webhook-transport": "1.2.5",
     "yargs": "^13.2.1"
   }
 }

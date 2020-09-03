@@ -1,8 +1,9 @@
-import { Slack as WinstonSlack } from 'slack-winston';
 import * as winston from 'winston';
+import * as SlackHook from 'winston-slack-webhook-transport';
 import { LoggerInterface } from './contracts/logger.interface';
+import * as Transports from 'winston-transport';
 
-let logger: winston.LoggerInterface | null = null;
+let logger: winston.Logger | null = null;
 
 const EXPIRATION_TIME = 3600000;
 
@@ -19,32 +20,38 @@ export class ErrorLogger implements LoggerInterface {
     }, EXPIRATION_TIME);
   }
 
-  public getLogger(): winston.LoggerInstance {
+  public getLogger(): winston.Logger {
     if (logger) {
       return logger;
     }
 
-    const transports: any[] = [];
+    const transports: Transports[] = [];
 
     const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
 
-    const defaultChannel =
+    const defaultChannel: string =
       process.env.NODE_ENV === 'production' ? 'logger' : 'logger-staging';
 
     if (slackWebhookUrl) {
-      transports.push(
-        new WinstonSlack({
-          webhook_url: slackWebhookUrl,
-          channel: process.env.SLACK_CHANNEL || defaultChannel,
-          level: 'error',
-          icon_emoji: ':shit:',
-          username: 'Logger',
-          message: `*${process.env.BRAIN_SERVICE} - ${process.env.BRAIN_PROFILE} - ${process.env.NODE_ENV}*\n*Message*: {{ message }}. \n\n {{ meta }}`,
-        }),
-      );
+      const slackTransport = new SlackHook({
+        level: 'error',
+        webhookUrl: slackWebhookUrl,
+        channel: process.env.SLACK_CHANNEL || defaultChannel,
+        iconEmoji: ':shit:',
+        username: 'Logger',
+        formatter: (info) => {
+          const { level, message, ...meta } = info;
+
+          return {
+            text: `*${process.env.BRAIN_SERVICE} - ${process.env.BRAIN_PROFILE} - ${process.env.NODE_ENV}*\n*Message*: ${message}. \n\n ${meta}`,
+          };
+        },
+      });
+
+      transports.push(slackTransport);
     }
 
-    logger = new winston.Logger({
+    logger = winston.createLogger({
       transports,
       exitOnError: false,
     });
@@ -60,7 +67,7 @@ export class ErrorLogger implements LoggerInterface {
         return;
       }
 
-      const logger: winston.LoggerInstance = this.getLogger();
+      const logger: winston.Logger = this.getLogger();
 
       logger.error(message, data);
     } catch (e) {
@@ -69,7 +76,7 @@ export class ErrorLogger implements LoggerInterface {
   }
 
   public async close(): Promise<any> {
-    const currentLogger: winston.LoggerInstance = this.getLogger();
+    const currentLogger: winston.Logger = this.getLogger();
 
     logger = null;
 
