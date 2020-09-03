@@ -14,7 +14,7 @@ export class BranchFinder {
     const keys = await keysAsync(`Branch:*`);
     const items: any[] = [];
     for (const key of keys) {
-      items.push(JSON.parse(await getAsync(key)));
+      items.push(JSON.parse(await getAsync(key) as string));
     }
 
     return orderBy(

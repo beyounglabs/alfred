@@ -14,7 +14,7 @@ export class ServiceFinder {
     const keys = await keysAsync(`Service:*`);
     const items: any[] = [];
     for (const key of keys) {
-      items.push(JSON.parse(await getAsync(key)));
+      items.push(JSON.parse((await getAsync(key)) as string));
     }
 
     return orderBy(
@@ -25,7 +25,7 @@ export class ServiceFinder {
   }
 
   public async findActives(): Promise<any> {
-    return (await this.findAll()).filter(item => item.active);
+    return (await this.findAll()).filter((item) => item.active);
   }
 
   public async findOneByCode(code: string): Promise<any> {
