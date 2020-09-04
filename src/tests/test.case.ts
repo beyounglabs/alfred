@@ -26,7 +26,7 @@ export class TestCase {
   }
 
   public async setup(resetDatabase?: boolean) {
-    // test.timeout(1000 * 60); // 60 seconds
+    jest.setTimeout(1000 * 60); // 60 seconds
 
     this.loadDotEnv();
 
