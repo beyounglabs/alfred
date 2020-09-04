@@ -6,8 +6,8 @@ import { expect } from 'chai';
 const testCase = Container.get(TestCase);
 
 describe('BooleanTransformer', () => {
-  before(async function() {
-    await testCase.setup(this);
+  beforeAll(async function () {
+    await testCase.setup();
   });
 
   const transformer = new BooleanTransformer();
