@@ -1,10 +1,10 @@
 import { Express, NextFunction, Request } from 'express';
 import * as trimRequest from 'trim-request';
 import { Apm } from '../apm/apm';
-import { JwtHelper } from '../helpers/jwt.helpers';
 import { QueryManager } from '../typeorm/query.manager';
 import { ResponseInterface } from './response.interface';
 import { RouteInterface } from './route.interface';
+import { auth } from './auth';
 
 export async function loadRoutes(
   app: Express,
@@ -42,24 +42,7 @@ export async function loadRoutes(
 
         if (route.protected) {
           try {
-            let authorization: any = request.headers['authorization'];
-            if (!authorization) {
-              throw new Error('Token Bearer not found');
-            }
-
-            authorization = authorization.split('Bearer ');
-
-            if (authorization.length === 1) {
-              throw new Error('Token Bearer not found');
-            }
-
-            const auth = await JwtHelper.verify(authorization[1]);
-
-            if (!auth) {
-              throw new Error('Token Bearer invalid');
-            }
-
-            response.locals.auth = auth;
+            response.locals.auth = await auth(request);
           } catch (e) {
             response.status(403).send({ message: e.message });
             return next();
