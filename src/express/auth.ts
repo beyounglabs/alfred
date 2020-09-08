@@ -64,6 +64,10 @@ export async function auth(request: Request): Promise<any> {
       })
     ).data;
 
+    if (!response.token) {
+      throw new Error('Invalid credentials - Basic Auth');
+    }
+
     basicAuthCache[token] = {
       id: response.user.id,
       username: username,
