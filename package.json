@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "description": "Alfred JS Framework",
   "main": "index.js",
   "repository": "git@bitbucket.com:beautybrands/alfred.git",
@@ -10,7 +10,7 @@
     "test": "NODE_ENV=testing jest",
     "test:watch": "jest --watch",
     "install": "./scripts/install.sh",
-    "npm:publish": "yarn build && cp package.json dist/ && cp -R scripts dist/ && cp -R defaults dist/  && cd dist/ && /usr/local/bin/npm publish --access public"
+    "npm:publish": "rm -Rf dist && yarn build && cp package.json dist/ && cp -R scripts dist/ && cp -R defaults dist/  && cd dist/ && /usr/local/bin/npm publish --access public"
   },
   "dependencies": {
     "@google-cloud/debug-agent": "^5.1.0",
