@@ -40,4 +40,8 @@ export class Newrelic implements ApmInterface {
 
     newrelicInstance.addCustomAttributes(attributes);
   }
+
+  getBrowserTimingHeader(): string {
+    return newrelicInstance.getBrowserTimingHeader();
+  }
 }

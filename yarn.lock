@@ -391,6 +391,11 @@
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-2.2.48.tgz#3523b126a0b049482e1c3c11877460f76622ffab"
   integrity sha512-nlK/iyETgafGli8Zh9zJVCTicvU3iajSkRwOh3Hhiva598CMqNJ4NcVCGMTGKpGpTYj/9R8RLzS9NAykSSCqGw==
 
+"@types/newrelic@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@types/newrelic/-/newrelic-6.4.0.tgz#f0e2eb6cf49e4300958e25c7b9211dfe57b22a59"
+  integrity sha512-uuYFNEmBtq9Humj1sQ26oOqMAPx2clrWMZMtP8ugilg6trtWdS1rWW1+sX3WC7+dUBAZMDh83v3t9V9mbbQwVA==
+
 "@types/node@*":
   version "14.0.1"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.1.tgz#5d93e0a099cd0acd5ef3d5bde3c086e1f49ff68c"

@@ -36,4 +36,8 @@ export class Datadog implements ApmInterface {
       span.setTag(key, attributes[key]);
     }
   }
+
+  getBrowserTimingHeader(): string {
+    return '';
+  }
 }
