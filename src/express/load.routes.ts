@@ -44,6 +44,7 @@ export async function loadRoutes(
           try {
             response.locals.auth = await auth(request);
           } catch (e) {
+            console.error(e);
             response.status(403).send({ message: e.message });
             return next();
           }

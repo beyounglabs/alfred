@@ -910,10 +910,15 @@
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.3.tgz#c893b73721db73699943bfc3653b1deb7faa4a3a"
   integrity sha512-Jus9s4CDbqwocc5pOAnh8ShfrnMcPHuJYzVcSUU7lrh8Ni5HuIqX3oilL86p3dlTrk0LzHRCgA/GQ7uNCw6l2Q==
 
-"@types/node@*", "@types/node@^14":
-  version "14.6.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.6.4.tgz#a145cc0bb14ef9c4777361b7bbafa5cf8e3acb5a"
-  integrity sha512-Wk7nG1JSaMfMpoMJDKUsWYugliB2Vy55pdjLpmLixeyMi7HizW2I/9QoxsPCkXl3dO+ZOVqPumKaDUv5zJu2uQ==
+"@types/newrelic@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@types/newrelic/-/newrelic-6.4.0.tgz#f0e2eb6cf49e4300958e25c7b9211dfe57b22a59"
+  integrity sha512-uuYFNEmBtq9Humj1sQ26oOqMAPx2clrWMZMtP8ugilg6trtWdS1rWW1+sX3WC7+dUBAZMDh83v3t9V9mbbQwVA==
+
+"@types/node@*":
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.1.tgz#5d93e0a099cd0acd5ef3d5bde3c086e1f49ff68c"
+  integrity sha512-FAYBGwC+W6F9+huFIDtn43cpy7+SzG+atzRiTfdp3inUKL2hXnd4rG8hylJLIh4+hqrQy1P17kvJByE/z825hA==
 
 "@types/node@^12.12.47":
   version "12.12.55"
@@ -924,6 +929,11 @@
   version "13.13.16"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.16.tgz#66f2177047b61131eaac18c47eb25d6f1317070a"
   integrity sha512-dJ9vXxJ8MEwzNn4GkoAGauejhXoKuJyYKegsA6Af25ZpEDXomeVXt5HUWUNVHk5UN7+U0f6ghC6otwt+7PdSDg==
+
+"@types/node@^14":
+  version "14.6.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.6.4.tgz#a145cc0bb14ef9c4777361b7bbafa5cf8e3acb5a"
+  integrity sha512-Wk7nG1JSaMfMpoMJDKUsWYugliB2Vy55pdjLpmLixeyMi7HizW2I/9QoxsPCkXl3dO+ZOVqPumKaDUv5zJu2uQ==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -4317,10 +4327,10 @@ negotiator@0.6.2:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
   integrity sha512-hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==
 
-newrelic@^6.2.0:
-  version "6.13.0"
-  resolved "https://registry.yarnpkg.com/newrelic/-/newrelic-6.13.0.tgz#7ac61b476d0e76387892459849a2e462f904f6fe"
-  integrity sha512-M5ampGReUZ0LAFW7cdSFyQzO/9p2sGgy1EG9dC4AceanqqR2l48JT+4gcS0gNuTHuNZBwSQsEjYT6jIHuOYqcA==
+newrelic@^6.4.0:
+  version "6.13.1"
+  resolved "https://registry.yarnpkg.com/newrelic/-/newrelic-6.13.1.tgz#4d7a57ac6e0ac9e8f930f7a79289ce58a5d2085c"
+  integrity sha512-/RclFEZuBD0uaoaH1p+oHE5PZ95T3rMbEITq5JVFjtWCJIQZZs4+NJ0s7nLy7qIijNdglgeMU/gHSmEQAF5Wdg==
   dependencies:
     "@grpc/grpc-js" "1.0.5"
     "@grpc/proto-loader" "^0.5.4"
