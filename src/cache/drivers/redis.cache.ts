@@ -1,54 +1,69 @@
 import * as moment from 'moment';
 import * as IORedis from 'ioredis';
 import { CacheInterface } from '../cache.interface';
-let redisClient: IORedis.Redis | null;
+let redisClient: IORedis.Cluster | null;
 let runningAsFallback: boolean = false;
 
 export class RedisCache implements CacheInterface {
-  protected async getClient(): Promise<IORedis.Redis> {
+  protected async getClient(): Promise<IORedis.Cluster> {
     if (redisClient) {
       return redisClient;
     }
 
     console.log('Creating Redis Client');
 
-    const preferredSlaves: IORedis.PreferredSlaves = [];
-    if (process.env.REDIS_CACHE_SLAVE_HOST) {
-      preferredSlaves.push({
-        ip: process.env.REDIS_CACHE_SLAVE_HOST,
-        port: process.env.REDIS_CACHE_SLAVE_PORT || '6379',
-      });
-    }
-
-    const redisClientNew = new IORedis({
+    const nodes: IORedis.ClusterNode[] = [];
+    nodes.push({
       host: process.env.REDIS_CACHE_HOST || 'redis',
       port: process.env.REDIS_CACHE_PORT
         ? Number(process.env.REDIS_CACHE_PORT)
         : 6379,
-      db: process.env.REDIS_CACHE_DB ? Number(process.env.REDIS_CACHE_DB) : 0,
-      maxRetriesPerRequest: 5,
-      preferredSlaves,
+    });
+
+    if (process.env.REDIS_CACHE_SLAVE_HOST) {
+      nodes.push({
+        host: process.env.REDIS_CACHE_SLAVE_HOST,
+        port: process.env.REDIS_CACHE_SLAVE_PORT
+          ? Number(process.env.REDIS_CACHE_SLAVE_PORT)
+          : 6379,
+      });
+    }
+
+    const redisClientNew = new IORedis.Cluster(nodes, {
+      scaleReads: 'slave',
+      redisOptions: {
+        db: process.env.REDIS_CACHE_DB ? Number(process.env.REDIS_CACHE_DB) : 0,
+        maxRetriesPerRequest: 5,
+      },
     });
 
     await new Promise((resolve, reject) => {
-      redisClientNew.on('error', err => {
+      redisClientNew.on('error', (err) => {
         if (runningAsFallback) {
           return;
         }
 
         if (process.env.REDIS_CACHE_FALLBACK_HOST) {
-          const redisClientFallback = new IORedis({
-            host: process.env.REDIS_CACHE_FALLBACK_HOST || 'redis',
-            port: process.env.REDIS_CACHE_FALLBACK_PORT
-              ? Number(process.env.REDIS_CACHE_FALLBACK_PORT)
-              : 6379,
-            db: process.env.REDIS_CACHE_FALLBACK_DB
-              ? Number(process.env.REDIS_CACHE_FALLBACK_DB)
-              : 0,
-            maxRetriesPerRequest: 5,
-          });
+          const redisClientFallback = new IORedis.Cluster(
+            [
+              {
+                host: process.env.REDIS_CACHE_FALLBACK_HOST || 'redis',
+                port: process.env.REDIS_CACHE_FALLBACK_PORT
+                  ? Number(process.env.REDIS_CACHE_FALLBACK_PORT)
+                  : 6379,
+              },
+            ],
+            {
+              redisOptions: {
+                db: process.env.REDIS_CACHE_FALLBACK_DB
+                  ? Number(process.env.REDIS_CACHE_FALLBACK_DB)
+                  : 0,
+                maxRetriesPerRequest: 5,
+              },
+            },
+          );
 
-          redisClientFallback.on('error', errFallback => {
+          redisClientFallback.on('error', (errFallback) => {
             reject(`Error on connecting to fallback redis: ${errFallback}`);
           });
 
@@ -101,9 +116,7 @@ export class RedisCache implements CacheInterface {
     let expire = expireInSeconds;
 
     if (!expire) {
-      expire = moment()
-        .add(24, 'hours')
-        .diff(moment(), 'seconds');
+      expire = moment().add(24, 'hours').diff(moment(), 'seconds');
     }
     await client.setex(cacheHash, expire, JSON.stringify(data));
   }
