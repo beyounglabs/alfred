@@ -39,7 +39,7 @@ export class ErrorLogger implements LoggerInterface {
           level: 'error',
           icon_emoji: ':shit:',
           username: 'Logger',
-          message: `*${process.env.BRAIN_SERVICE} - ${process.env.BRAIN_PROFILE} - ${process.env.NODE_ENV}*\n*Message*: {{ message }}. \n\n {{ meta }}`,
+          message: `*${process.env.BRAIN_SERVICE} - ${process.env.BRAIN_PROFILE} - ${process.env.NODE_ENV}*\n*Message*: {{ message }}. \n\n \`\`\`{{ meta }}\`\`\``,
         }),
       );
     }
