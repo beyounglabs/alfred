@@ -28,8 +28,10 @@ export class DefaultMetadata {
     }
 
     if (params.type === 'integer') {
-      delete params.length;
+      params.transformer = new NumberTransformer();
+    }
 
+    if (params.type === 'bigint') {
       params.transformer = new NumberTransformer();
     }
 

@@ -6,6 +6,6 @@ export class NumberTransformer implements ValueTransformer {
   }
 
   public to(value) {
-    return value;
+    return Number(value);
   }
 }

@@ -17,8 +17,8 @@ export async function request(
 
   method = method.toLowerCase();
 
-  const requestConfig = {
-    method: method,
+  const requestConfig: AxiosRequestConfig = {
+    method: method as any,
     url: (baseUrl || '') + url,
     params: method === 'get' ? params : {},
     data: ['put', 'delete', 'post'].indexOf(method) !== -1 ? params : {},

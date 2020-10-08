@@ -2,7 +2,7 @@ const { copy, stat } = require('fs-extra');
 
 const originalPath = process.argv[2];
 const relativePath = originalPath.split('/alfred/defaults/')[1];
-const alfredConfigFile = __dirname + '/../../../alfred.config.js';
+const alfredConfigFile = __dirname + '/../../../../alfred.config.js';
 let filesIgnore = [];
 (async function bootstrap() {
   try {
@@ -19,7 +19,10 @@ let filesIgnore = [];
 
   try {
     const copyPath =
-      originalPath.split('/alfred/defaults/')[0] + '/../' + relativePath;
+      originalPath.split('/@beyounglabs/alfred/defaults/')[0] +
+      '/../' +
+      relativePath;
+
     await copy(originalPath, copyPath);
   } catch (e) {}
 })();

@@ -1,17 +1,23 @@
 import axios from 'axios';
-import { trimEnd } from 'lodash';
+import { trimEnd, chunk } from 'lodash';
 import { QueueRequestInterface } from './contracts/queue.request.interface';
 
 export class QueueGenerator {
   public async generate(
     queueRequest: QueueRequestInterface | QueueRequestInterface[],
-  ): Promise<any> {
+  ): Promise<void> {
     try {
       let furyUrl = process.env.FURY_URL;
 
       if (!furyUrl) {
         throw new Error('Fury URL Not Configured');
       }
+
+      if (furyUrl.split('://').length === 1) {
+        furyUrl = `http://${furyUrl}`;
+      }
+
+      furyUrl = trimEnd(furyUrl, '/');
 
       if (!Array.isArray(queueRequest)) {
         queueRequest = [queueRequest];
@@ -28,18 +34,14 @@ export class QueueGenerator {
         }
       }
 
-      if (furyUrl.split('://').length === 1) {
-        furyUrl = `http://${furyUrl}`;
+      const chunkTotal = 100;
+      const queueRequestChunks = chunk(queueRequest, chunkTotal);
+      for (const queueRequestChunk of queueRequestChunks) {
+        const response = await axios.post(
+          `${furyUrl}/api/v1/queue/generate`,
+          queueRequestChunk,
+        );
       }
-
-      furyUrl = trimEnd(furyUrl, '/');
-
-      const response = await axios.post(
-        `${furyUrl}/api/v1/queue/generate`,
-        queueRequest,
-      );
-
-      return response.data;
     } catch (e) {
       let message = e.message;
 

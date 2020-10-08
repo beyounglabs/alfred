@@ -42,6 +42,19 @@ export class Cache {
     }
   }
 
+  public async delete(cacheHash: string): Promise<any> {
+    try {
+      return await driver.delete(cacheHash);
+    } catch (e) {
+      console.error(
+        `Error on get cache, switching to local cache: ${e.message} `,
+      );
+      this.verifyOriginalDriverOnError(cacheHash);
+      driver = new LocalCache();
+      return await driver.delete(cacheHash);
+    }
+  }
+
   public async set(
     cacheHash: string,
     data: any,
