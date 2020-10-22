@@ -5817,6 +5817,11 @@ typedi@^0.7.2:
   resolved "https://registry.yarnpkg.com/typedi/-/typedi-0.7.3.tgz#872fb8d608ed6076e95c1f8cbd2bb33b7d089f0f"
   integrity sha512-i8fZGW1IPK+59YTZCC/zIMkOb1BMavOratipbLKIHRYGjJFyC+WDdaiiJq0dMWjXRZ7Jwo/YDHsQKFnY4TkVvw==
 
+typeorm-naming-strategies@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/typeorm-naming-strategies/-/typeorm-naming-strategies-2.0.0.tgz#c7c10bc768ddce2592ef9ad4d2dca55fd5fa6ad6"
+  integrity sha512-nsJ5jDjhBBEG6olFmxojkO4yrW7hEv38sH7ZXWWx9wnDoo9uaoH/mo2mBYAh/VKgwoFHBLu+CYxGmzXz2GUMcA==
+
 typeorm-typedi-extensions@^0.2.1:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/typeorm-typedi-extensions/-/typeorm-typedi-extensions-0.2.3.tgz#94fca2656206d771bf6d2242f5aab570511188e8"
