@@ -47,7 +47,7 @@ export class ErrorLogger implements LoggerInterface {
               process.env.BRAIN_PROFILE
             } - ${
               process.env.NODE_ENV
-            }*\n*Message*: ${message}. \n\n ${JSON.stringify(meta, null, 2)}`,
+            }*\n*Message*: ${message}. \n\n \`\`\`${JSON.stringify(meta, null, 2)}\`\`\``,
           };
         },
       });
