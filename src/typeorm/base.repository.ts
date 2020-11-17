@@ -101,20 +101,21 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
     const propList: any[] = [];
     const propsKeys = Object.keys(props);
-    propsKeys.forEach(propKey => {
+
+    for (const propKey of propsKeys) {
       const value = props[propKey];
       if (!value) {
         propList.push('');
-        return;
+        continue;
       }
 
       if (typeof value === 'object' && value.id) {
         propList.push(value.id);
-        return;
+        continue;
       }
 
       propList.push(value);
-    });
+    }
 
     const methodName = this.getCalledMethodName().replace('.', '/');
 
