@@ -26,8 +26,12 @@ export class Newrelic implements ApmInterface {
 
     await new Promise((resolve, reject) => {
       newrelicInstance.startSegment(span, true, async () => {
-        await func();
-        resolve();
+        try {
+          await func();
+          resolve();
+        } catch (e) {
+          reject(e);
+        }
       });
     });
   }
