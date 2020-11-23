@@ -18,7 +18,7 @@ export class Datadog implements ApmInterface {
     }
 
     datadogInstance.startSpan(span);
-    await func();
+    return await func();
   }
 
   async addCustomAttributes(attributes: any): Promise<void> {

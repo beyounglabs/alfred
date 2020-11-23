@@ -39,10 +39,9 @@ export class Apm implements ApmInterface {
     await apmInstance.setTransactionName(name);
   }
 
-  async startSpan(span: string, func: Function): Promise<void> {
+  async startSpan(span: string, func: Function): Promise<any> {
     if (!apmInstance) {
-      await func();
-      return;
+      return await func();
     }
 
     await apmInstance.startSpan(span, func);
