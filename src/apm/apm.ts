@@ -41,6 +41,7 @@ export class Apm implements ApmInterface {
 
   async startSpan(span: string, func: Function): Promise<void> {
     if (!apmInstance) {
+      await func();
       return;
     }
 
