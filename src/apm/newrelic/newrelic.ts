@@ -19,9 +19,9 @@ export class Newrelic implements ApmInterface {
     newrelicInstance.setTransactionName(name);
   }
 
-  async startSpan(span: string, func: Function): Promise<void> {
+  async startSpan(span: string, func: Function): Promise<any> {
     if (!newrelicInstance) {
-      return;
+      return await func();
     }
 
     return await new Promise((resolve, reject) => {

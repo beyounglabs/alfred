@@ -44,7 +44,7 @@ export class Apm implements ApmInterface {
       return await func();
     }
 
-    await apmInstance.startSpan(span, func);
+    return await apmInstance.startSpan(span, func);
   }
 
   getBrowserTimingHeader(): string {

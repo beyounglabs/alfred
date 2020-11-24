@@ -12,7 +12,7 @@ export class Datadog implements ApmInterface {
 
   async setTransactionName(name: string): Promise<void> {}
 
-  async startSpan(span: string, func: Function): Promise<void> {
+  async startSpan(span: string, func: Function): Promise<any> {
     if (!datadogInstance) {
       return;
     }
