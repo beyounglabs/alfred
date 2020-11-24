@@ -3,7 +3,7 @@ import { CacheFactory } from './cache.factory';
 import { CacheInterface } from './cache.interface';
 import { LocalCache } from './drivers/local.cache';
 
-let drivers: { [code: string]: CacheInterface };
+let drivers: { [code: string]: CacheInterface } = {};
 let isVerifyngOriginalCache: boolean = false;
 export class Cache {
   protected instance: string;

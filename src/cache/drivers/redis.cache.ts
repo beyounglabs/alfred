@@ -31,8 +31,8 @@ export class RedisCache implements CacheInterface {
 
     if (process.env[`REDIS_CACHE_${instancePrefix}_HOST`]) {
       host = process.env[`REDIS_CACHE_${instancePrefix}_HOST`]!;
-      port = `REDIS_CACHE_${instancePrefix}_PORT`
-        ? Number(`REDIS_CACHE_${instancePrefix}_PORT`)
+      port = process.env[`REDIS_CACHE_${instancePrefix}_PORT`]
+        ? Number(process.env[`REDIS_CACHE_${instancePrefix}_PORT`])
         : 6379;
       db = process.env[`REDIS_CACHE_${instancePrefix}_DB`]
         ? Number(process.env[`REDIS_CACHE_${instancePrefix}_DB`])
@@ -121,8 +121,8 @@ export class RedisCache implements CacheInterface {
 
     if (process.env[`REDIS_CACHE_${instancePrefix}_SLAVE_HOST`]) {
       host = process.env[`REDIS_CACHE_${instancePrefix}_SLAVE_HOST`]!;
-      port = `REDIS_CACHE_${instancePrefix}_SLAVE_PORT`
-        ? Number(`REDIS_CACHE_${instancePrefix}_SLAVE_PORT`)
+      port = process.env[`REDIS_CACHE_${instancePrefix}_SLAVE_PORT`]
+        ? Number(process.env[`REDIS_CACHE_${instancePrefix}_SLAVE_PORT`])
         : 6379;
       db = process.env[`REDIS_CACHE_${instancePrefix}_DB`]
         ? Number(process.env[`REDIS_CACHE_${instancePrefix}_DB`])
