@@ -101,7 +101,7 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
     const propList: any[] = [];
     const propsKeys = Object.keys(props);
-    propsKeys.forEach(propKey => {
+    propsKeys.forEach((propKey) => {
       const value = props[propKey];
       if (!value) {
         propList.push('');

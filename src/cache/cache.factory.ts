@@ -3,10 +3,14 @@ import { CacheInterface } from './cache.interface';
 import { RedisCache } from './drivers/redis.cache';
 
 export class CacheFactory {
-  public static get(): CacheInterface {
+  public static get(instance?: string): CacheInterface {
     let cache: CacheInterface = new LocalCache();
-    if (process.env.REDIS_CACHE_HOST) {
-      cache = new RedisCache();
+    const instancePrefix = instance?.toUpperCase() || 'default';
+    if (
+      process.env.REDIS_CACHE_HOST ||
+      process.env[`REDIS_CACHE_${instancePrefix}_HOST`]
+    ) {
+      cache = new RedisCache(instance);
     }
 
     return cache;

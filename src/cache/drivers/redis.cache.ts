@@ -1,30 +1,51 @@
 import * as moment from 'moment';
 import * as IORedis from 'ioredis';
 import { CacheInterface } from '../cache.interface';
-let redisWriteClient: IORedis.Redis | null;
-let redisReadClient: IORedis.Redis | null;
-let runningAsFallback: boolean = false;
 
 export class RedisCache implements CacheInterface {
+  protected instance: string;
+  protected redisWriteClient: IORedis.Redis | null = null;
+  protected redisReadClient: IORedis.Redis | null = null;
+  protected runningAsFallback: boolean = false;
+  constructor(instance?: string) {
+    this.instance = instance || 'default';
+  }
+
   protected async getWriteClient(): Promise<IORedis.Redis> {
-    if (redisWriteClient) {
-      return redisWriteClient;
+    if (this.redisWriteClient) {
+      return this.redisWriteClient;
     }
 
-    console.log('Creating Redis Write Client');
+    const instancePrefix = this.instance.toUpperCase();
+
+    let host: string = process.env.REDIS_CACHE_HOST || 'redis';
+    let port: number = process.env.REDIS_CACHE_PORT
+      ? Number(process.env.REDIS_CACHE_PORT)
+      : 6379;
+    let db: number = process.env.REDIS_CACHE_DB
+      ? Number(process.env.REDIS_CACHE_DB)
+      : 0;
+
+    if (process.env[`REDIS_CACHE_${instancePrefix}_HOST`]) {
+      host = process.env[`REDIS_CACHE_${instancePrefix}_HOST`]!;
+      port = process.env[`REDIS_CACHE_${instancePrefix}_PORT`]
+        ? Number(process.env[`REDIS_CACHE_${instancePrefix}_PORT`])
+        : 6379;
+      db = process.env[`REDIS_CACHE_${instancePrefix}_DB`]
+        ? Number(process.env[`REDIS_CACHE_${instancePrefix}_DB`])
+        : 0;
+    }
 
     const redisClientNew = new IORedis({
-      host: process.env.REDIS_CACHE_HOST || 'redis',
-      port: process.env.REDIS_CACHE_PORT
-        ? Number(process.env.REDIS_CACHE_PORT)
-        : 6379,
-      db: process.env.REDIS_CACHE_DB ? Number(process.env.REDIS_CACHE_DB) : 0,
+      host,
+      port,
+      db,
       maxRetriesPerRequest: 5,
     });
 
     await new Promise((resolve, reject) => {
-      redisClientNew.on('error', err => {
-        if (runningAsFallback) {
+      redisClientNew.on('error', (err) => {
+        if (this.runningAsFallback) {
           return;
         }
 
@@ -40,14 +61,14 @@ export class RedisCache implements CacheInterface {
             maxRetriesPerRequest: 5,
           });
 
-          redisClientFallback.on('error', errFallback => {
+          redisClientFallback.on('error', (errFallback) => {
             reject(`Error on connecting to fallback redis: ${errFallback}`);
           });
 
           redisClientFallback.on('ready', () => {
-            redisWriteClient = redisClientFallback;
+            this.redisWriteClient = redisClientFallback;
             resolve();
-            runningAsFallback = true;
+            this.runningAsFallback = true;
             console.log(`Redis is running with fallback: ${err}`);
           });
         } else {
@@ -56,43 +77,63 @@ export class RedisCache implements CacheInterface {
       });
 
       redisClientNew.on('ready', () => {
-        redisWriteClient = redisClientNew;
+        this.redisWriteClient = redisClientNew;
         resolve();
-        runningAsFallback = false;
+        this.runningAsFallback = false;
         console.log('Redis is running with the primary');
       });
     });
 
-    if (!redisWriteClient) {
+    if (!this.redisWriteClient) {
       throw new Error('No Redis CLient Found');
     }
 
-    return redisWriteClient;
+    return this.redisWriteClient;
   }
 
   protected async getReadClient(): Promise<IORedis.Redis> {
-    if (redisReadClient) {
-      return redisReadClient;
+    if (this.redisReadClient) {
+      return this.redisReadClient;
     }
 
-    if (!process.env.REDIS_CACHE_SLAVE_HOST) {
-      redisReadClient = redisWriteClient;
+    const instancePrefix = this.instance.toUpperCase();
+
+    if (
+      !process.env.REDIS_CACHE_SLAVE_HOST &&
+      !process.env[`REDIS_CACHE_${instancePrefix}_SLAVE_HOST`]
+    ) {
+      this.redisReadClient = await this.getWriteClient();
+      return this.redisReadClient;
     }
 
-    console.log('Creating Redis Read Client');
+    let host: string = process.env.REDIS_CACHE_SLAVE_HOST || 'redis';
+    let port: number = process.env.REDIS_CACHE_SLAVE_PORT
+      ? Number(process.env.REDIS_CACHE_SLAVE_PORT)
+      : 6379;
+    let db: number = process.env.REDIS_CACHE_DB
+      ? Number(process.env.REDIS_CACHE_DB)
+      : 0;
+
+    if (process.env[`REDIS_CACHE_${instancePrefix}_SLAVE_HOST`]) {
+      host = process.env[`REDIS_CACHE_${instancePrefix}_SLAVE_HOST`]!;
+      port = process.env[`REDIS_CACHE_${instancePrefix}_SLAVE_PORT`]
+        ? Number(process.env[`REDIS_CACHE_${instancePrefix}_SLAVE_PORT`])
+        : 6379;
+      db = process.env[`REDIS_CACHE_${instancePrefix}_DB`]
+        ? Number(process.env[`REDIS_CACHE_${instancePrefix}_DB`])
+        : 0;
+    }
 
     const redisClientNew = new IORedis({
-      host: process.env.REDIS_CACHE_SLAVE_HOST || 'redis',
-      port: process.env.REDIS_CACHE_SLAVE_PORT
-        ? Number(process.env.REDIS_CACHE_SLAVE_PORT)
-        : 6379,
-      db: process.env.REDIS_CACHE_DB ? Number(process.env.REDIS_CACHE_DB) : 0,
+      host,
+      port,
+      db,
       maxRetriesPerRequest: 5,
     });
 
     await new Promise((resolve, reject) => {
-      redisClientNew.on('error', err => {
-        if (runningAsFallback) {
+      redisClientNew.on('error', (err) => {
+        if (this.runningAsFallback) {
           return;
         }
 
@@ -108,14 +149,14 @@ export class RedisCache implements CacheInterface {
             maxRetriesPerRequest: 5,
           });
 
-          redisClientFallback.on('error', errFallback => {
+          redisClientFallback.on('error', (errFallback) => {
             reject(`Error on connecting to fallback redis: ${errFallback}`);
           });
 
           redisClientFallback.on('ready', () => {
-            redisWriteClient = redisClientFallback;
+            this.redisWriteClient = redisClientFallback;
             resolve();
-            runningAsFallback = true;
+            this.runningAsFallback = true;
             console.log(`Redis is running with fallback: ${err}`);
           });
         } else {
@@ -124,18 +165,18 @@ export class RedisCache implements CacheInterface {
       });
 
       redisClientNew.on('ready', () => {
-        redisReadClient = redisClientNew;
+        this.redisReadClient = redisClientNew;
         resolve();
-        runningAsFallback = false;
+        this.runningAsFallback = false;
         console.log('Redis is running with the primary');
       });
     });
 
-    if (!redisReadClient) {
+    if (!this.redisReadClient) {
       throw new Error('No Redis CLient Found');
     }
 
-    return redisReadClient;
+    return this.redisReadClient;
   }
 
   public async get(cacheHash: string): Promise<any> {
@@ -162,9 +203,7 @@ export class RedisCache implements CacheInterface {
     let expire = expireInSeconds;
 
     if (!expire) {
-      expire = moment()
-        .add(24, 'hours')
-        .diff(moment(), 'seconds');
+      expire = moment().add(24, 'hours').diff(moment(), 'seconds');
     }
 
     await client.setex(cacheHash, expire, JSON.stringify(data));
@@ -175,6 +214,18 @@ export class RedisCache implements CacheInterface {
     const keys = await client.keys(cachePrefix + '*');
     for (const key of keys) {
       await client.del(key);
+    }
+  }
+
+  public async close(): Promise<void> {
+    if (this.redisReadClient) {
+      this.redisReadClient.disconnect();
+      this.redisReadClient = null;
+    }
+
+    if (this.redisWriteClient) {
+      this.redisWriteClient.disconnect();
+      this.redisWriteClient = null;
     }
   }
 }

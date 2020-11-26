@@ -3,25 +3,31 @@ import { CacheFactory } from './cache.factory';
 import { CacheInterface } from './cache.interface';
 import { LocalCache } from './drivers/local.cache';
 
-let driver: CacheInterface = CacheFactory.get();
-let isVerifyngOriginalCache: boolean = false;
 export class Cache {
+  protected drivers: { [code: string]: CacheInterface } = {};
+  protected isVerifyngOriginalCache: boolean = false;
+  protected instance: string;
+  constructor(instance?: string) {
+    this.instance = instance || 'default';
+    this.drivers[this.instance] = CacheFactory.get(this.instance);
+  }
+
   public async verifyOriginalDriverOnError(
     cacheHash: string,
     force: boolean = false,
   ): Promise<void> {
     try {
-      if (isVerifyngOriginalCache && !force) {
+      if (this.isVerifyngOriginalCache && !force) {
         return;
       }
 
-      isVerifyngOriginalCache = true;
+      this.isVerifyngOriginalCache = true;
 
-      const originalDriver = CacheFactory.get();
+      const originalDriver = CacheFactory.get(this.instance);
       await originalDriver.get(cacheHash);
-      driver = originalDriver;
+      this.drivers[this.instance] = originalDriver;
 
-      isVerifyngOriginalCache = false;
+      this.isVerifyngOriginalCache = false;
     } catch (e) {
       setTimeout(() => {
         this.verifyOriginalDriverOnError(cacheHash, true);
@@ -31,27 +37,27 @@ export class Cache {
 
   public async get(cacheHash: string): Promise<any> {
     try {
-      return await driver.get(cacheHash);
+      return await this.drivers[this.instance].get(cacheHash);
     } catch (e) {
       console.error(
         `Error on get cache, switching to local cache: ${e.message} `,
       );
       this.verifyOriginalDriverOnError(cacheHash);
-      driver = new LocalCache();
-      return await driver.get(cacheHash);
+      this.drivers[this.instance] = new LocalCache();
+      return await this.drivers[this.instance].get(cacheHash);
     }
   }
 
   public async delete(cacheHash: string): Promise<any> {
     try {
-      return await driver.delete(cacheHash);
+      return await this.drivers[this.instance].delete(cacheHash);
     } catch (e) {
       console.error(
         `Error on get cache, switching to local cache: ${e.message} `,
       );
       this.verifyOriginalDriverOnError(cacheHash);
-      driver = new LocalCache();
-      return await driver.delete(cacheHash);
+      this.drivers[this.instance] = new LocalCache();
+      return await this.drivers[this.instance].delete(cacheHash);
     }
   }
 
@@ -61,19 +67,23 @@ export class Cache {
     expireInSeconds?: number,
   ): Promise<void> {
     try {
-      await driver.set(cacheHash, data, expireInSeconds);
+      await this.drivers[this.instance].set(cacheHash, data, expireInSeconds);
     } catch (e) {
       console.error(
         `Error on set cache, switching to local cache: ${e.message} `,
       );
       this.verifyOriginalDriverOnError(cacheHash);
-      driver = new LocalCache();
-      await driver.set(cacheHash, data, expireInSeconds);
+      this.drivers[this.instance] = new LocalCache();
+      await this.drivers[this.instance].set(cacheHash, data, expireInSeconds);
     }
   }
 
   public async clearAll(): Promise<void> {
-    await driver.clearAll(this.getHashPrefix());
+    await this.drivers[this.instance].clearAll(this.getHashPrefix());
+  }
+
+  public async close(): Promise<void> {
+    await this.drivers[this.instance].close();
   }
 
   public getHashPrefix(): string {

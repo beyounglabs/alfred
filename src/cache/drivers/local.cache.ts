@@ -32,4 +32,6 @@ export class LocalCache implements CacheInterface {
   public async clearAll(cachePrefix: string): Promise<void> {
     cache.reset();
   }
+
+  public async close(): Promise<void> {}
 }
