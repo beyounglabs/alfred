@@ -35,7 +35,7 @@ export class JwtHelper {
     }
 
     const tokenData = JSON.parse(
-      Buffer.from(tokens[1], 'base64').toString('ascii'),
+      Buffer.from(tokens[1], 'base64').toString('utf8'),
     );
 
     if (!tokenData.exp) {
