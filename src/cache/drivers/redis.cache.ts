@@ -44,7 +44,7 @@ export class RedisCache implements CacheInterface {
     });
 
     await new Promise((resolve, reject) => {
-      redisClientNew.on('error', (err) => {
+      redisClientNew.on('error', err => {
         if (this.runningAsFallback) {
           return;
         }
@@ -61,13 +61,13 @@ export class RedisCache implements CacheInterface {
             maxRetriesPerRequest: 5,
           });
 
-          redisClientFallback.on('error', (errFallback) => {
+          redisClientFallback.on('error', errFallback => {
             reject(`Error on connecting to fallback redis: ${errFallback}`);
           });
 
           redisClientFallback.on('ready', () => {
             this.redisWriteClient = redisClientFallback;
-            resolve();
+            resolve(undefined);
             this.runningAsFallback = true;
             console.log(`Redis is running with fallback: ${err}`);
           });
@@ -78,7 +78,7 @@ export class RedisCache implements CacheInterface {
 
       redisClientNew.on('ready', () => {
         this.redisWriteClient = redisClientNew;
-        resolve();
+        resolve(undefined);
         this.runningAsFallback = false;
         console.log('Redis is running with the primary');
       });
@@ -131,8 +131,8 @@ export class RedisCache implements CacheInterface {
       maxRetriesPerRequest: 5,
     });
 
-    await new Promise((resolve, reject) => {
-      redisClientNew.on('error', (err) => {
+    await new Promise<any>((resolve, reject) => {
+      redisClientNew.on('error', err => {
         if (this.runningAsFallback) {
           return;
         }
@@ -149,13 +149,13 @@ export class RedisCache implements CacheInterface {
             maxRetriesPerRequest: 5,
           });
 
-          redisClientFallback.on('error', (errFallback) => {
+          redisClientFallback.on('error', errFallback => {
             reject(`Error on connecting to fallback redis: ${errFallback}`);
           });
 
           redisClientFallback.on('ready', () => {
             this.redisWriteClient = redisClientFallback;
-            resolve();
+            resolve(undefined);
             this.runningAsFallback = true;
             console.log(`Redis is running with fallback: ${err}`);
           });
@@ -166,7 +166,7 @@ export class RedisCache implements CacheInterface {
 
       redisClientNew.on('ready', () => {
         this.redisReadClient = redisClientNew;
-        resolve();
+        resolve(undefined);
         this.runningAsFallback = false;
         console.log('Redis is running with the primary');
       });
@@ -203,7 +203,9 @@ export class RedisCache implements CacheInterface {
     let expire = expireInSeconds;
 
     if (!expire) {
-      expire = moment().add(24, 'hours').diff(moment(), 'seconds');
+      expire = moment()
+        .add(24, 'hours')
+        .diff(moment(), 'seconds');
     }
 
     await client.setex(cacheHash, expire, JSON.stringify(data));
