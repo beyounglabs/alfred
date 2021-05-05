@@ -63,6 +63,7 @@ export class DatabaseProvider {
           connectionLimit: process.env.DB_POOL_CONNECTION_LIMIT || 10,
         },
         namingStrategy: new SnakeNamingStrategy(),
+        flags: ['+LOCAL_FILES'],
       };
 
       // if (process.env.REDIS_CACHE_HOST) {
