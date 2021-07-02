@@ -24,7 +24,7 @@ export abstract class AbstractUpserter<E, R extends BaseRepository<E>> {
   protected getResource(): string {
     const resource = snakeCase(
       this.constructor.name.replace('Upserter', ''),
-    ).replace(/_/, '-');
+    ).replace(/_/g, '-');
 
     return resource;
   }
