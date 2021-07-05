@@ -33,6 +33,7 @@ export class ErrorLogger implements LoggerInterface {
       process.env.NODE_ENV === 'production' ? 'logger' : 'logger-staging';
 
     if (slackWebhookUrl) {
+
       const slackTransport = new SlackHook({
         level: 'error',
         webhookUrl: slackWebhookUrl,
@@ -53,6 +54,7 @@ export class ErrorLogger implements LoggerInterface {
       });
 
       transports.push(slackTransport);
+
     }
 
     logger = winston.createLogger({

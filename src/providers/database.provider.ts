@@ -1,7 +1,10 @@
 import { Container, Service } from 'typedi';
 import { createConnection, useContainer } from 'typeorm';
-import { Connection } from 'typeorm/connection/Connection';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { Connection } from 'typeorm/connection/Connection';
+
+
+
 
 @Service('database.provider')
 export class DatabaseProvider {
@@ -63,7 +66,9 @@ export class DatabaseProvider {
           connectionLimit: process.env.DB_POOL_CONNECTION_LIMIT || 10,
         },
         namingStrategy: new SnakeNamingStrategy(),
+
         flags: ['+LOCAL_FILES'],
+
       };
 
       // if (process.env.REDIS_CACHE_HOST) {
