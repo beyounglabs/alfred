@@ -21,7 +21,7 @@ export class CompanyFinder {
         'MATCH',
         `Company:*`,
         'COUNT',
-        '50',
+        5000,
       ]);
 
       nextCursor = result[0];

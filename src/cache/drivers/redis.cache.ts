@@ -233,7 +233,9 @@ export class RedisCache implements CacheInterface {
       nextCursor = result[0];
       const keys = result[1];
 
-      await client.unlink(keys);
+      if (keys.length > 0) {
+        await client.unlink(keys);
+      }
 
       if (nextCursor === '0') {
         nextCursor = null;

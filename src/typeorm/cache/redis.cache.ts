@@ -36,8 +36,9 @@ export class RedisCache {
       nextCursor = result[0];
       const keys = result[1];
 
-      await this.getClient().unlinkAsync(keys);
-
+      if (keys.length > 0) {
+        await this.getClient().unlinkAsync(keys);
+      }
       if (nextCursor === '0') {
         nextCursor = null;
       }

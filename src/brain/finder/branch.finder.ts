@@ -21,7 +21,7 @@ export class BranchFinder {
         'MATCH',
         `Branch:*`,
         'COUNT',
-        '50',
+        5000,
       ]);
 
       nextCursor = result[0];

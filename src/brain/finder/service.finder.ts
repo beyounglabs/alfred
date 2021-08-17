@@ -21,7 +21,7 @@ export class ServiceFinder {
         'MATCH',
         `Service:*`,
         'COUNT',
-        '50',
+        5000,
       ]);
 
       nextCursor = result[0];

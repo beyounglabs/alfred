@@ -21,7 +21,7 @@ export class BrandFinder {
         'MATCH',
         `Brand:*`,
         'COUNT',
-        '50',
+        5000,
       ]);
 
       nextCursor = result[0];

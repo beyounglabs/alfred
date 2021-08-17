@@ -21,7 +21,7 @@ export class CarrierFinder {
         'MATCH',
         `Carrier:*`,
         'COUNT',
-        '50',
+        5000,
       ]);
 
       nextCursor = result[0];

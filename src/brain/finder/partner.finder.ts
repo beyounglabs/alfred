@@ -21,7 +21,7 @@ export class PartnerFinder {
         'MATCH',
         `Partner:*`,
         'COUNT',
-        '50',
+        5000,
       ]);
 
       nextCursor = result[0];
