@@ -22,9 +22,25 @@ export class RedisCache {
   }
 
   public async clear() {
-    const keys = await this.getClient().keysAsync(Cache.getPrefix() + '*');
-    for (const key of keys) {
-      await this.getClient().delAsync(key);
+    let nextCursor: string | null = '0';
+
+    while (nextCursor !== null) {
+      const result = await this.getClient().scanAsync([
+        nextCursor,
+        'MATCH',
+        Cache.getPrefix() + '*',
+        'COUNT',
+        '50',
+      ]);
+
+      nextCursor = result[0];
+      const keys = result[1];
+
+      await this.getClient().unlink(keys);
+
+      if (nextCursor === '0') {
+        nextCursor = null;
+      }
     }
   }
 }
