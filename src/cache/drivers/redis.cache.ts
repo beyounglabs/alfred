@@ -44,9 +44,7 @@ export class RedisCache implements CacheInterface {
     });
 
     await new Promise((resolve, reject) => {
-
       redisClientNew.on('error', err => {
-
         if (this.runningAsFallback) {
           return;
         }
@@ -63,7 +61,7 @@ export class RedisCache implements CacheInterface {
             maxRetriesPerRequest: 5,
           });
 
-          redisClientFallback.on('error', (errFallback) => {
+          redisClientFallback.on('error', errFallback => {
             reject(`Error on connecting to fallback redis: ${errFallback}`);
           });
 
@@ -137,10 +135,8 @@ export class RedisCache implements CacheInterface {
       maxRetriesPerRequest: 5,
     });
 
-
     await new Promise<any>((resolve, reject) => {
       redisClientNew.on('error', err => {
-
         if (this.runningAsFallback) {
           return;
         }
@@ -157,7 +153,7 @@ export class RedisCache implements CacheInterface {
             maxRetriesPerRequest: 5,
           });
 
-          redisClientFallback.on('error', (errFallback) => {
+          redisClientFallback.on('error', errFallback => {
             reject(`Error on connecting to fallback redis: ${errFallback}`);
           });
 
@@ -223,9 +219,25 @@ export class RedisCache implements CacheInterface {
 
   public async clearAll(cachePrefix: string): Promise<void> {
     const client = await this.getWriteClient();
-    const keys = await client.keys(cachePrefix + '*');
-    for (const key of keys) {
-      await client.del(key);
+    let nextCursor: string | null = '0';
+
+    while (nextCursor !== null) {
+      const result = await client.scan(
+        nextCursor!,
+        'MATCH',
+        cachePrefix + '*',
+        'COUNT',
+        50,
+      );
+
+      nextCursor = result[0];
+      const keys = result[1];
+
+      await client.unlink(keys);
+
+      if (nextCursor === '0') {
+        nextCursor = null;
+      }
     }
   }
 
