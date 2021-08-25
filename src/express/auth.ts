@@ -32,16 +32,18 @@ export async function auth(
     } else {
       let authenticated = false;
       for (const provider of route.jwtProviders) {
-        const authObject = await JwtHelper.verify(authorizationSplit[1], {
-          jwtKeyParam:
-            provider === 'DEFAULT' ? `JWT_KEY` : `${provider}_JWT_KEY`,
-        });
+        try {
+          const authObject = await JwtHelper.verify(authorizationSplit[1], {
+            jwtKeyParam:
+              provider === 'DEFAULT' ? `JWT_KEY` : `${provider}_JWT_KEY`,
+          });
 
-        if (!authObject) {
-          continue;
-        }
+          if (!authObject) {
+            continue;
+          }
 
-        return authObject;
+          return authObject;
+        } catch (e) {}
       }
 
       if (!authenticated) {

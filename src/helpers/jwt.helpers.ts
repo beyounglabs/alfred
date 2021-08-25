@@ -18,11 +18,9 @@ export class JwtHelper {
       jwtKeyParam?: string;
     },
   ): Promise<string> {
-    return await jwt.sign(
-      value,
-      JwtHelper.getJwtKey(options?.jwtKeyParam),
-      options,
-    );
+    return await jwt.sign(value, JwtHelper.getJwtKey(options?.jwtKeyParam), {
+      ...(options?.expiresIn ? { expiresIn: options?.expiresIn } : {}),
+    });
   }
 
   public static async verify(
