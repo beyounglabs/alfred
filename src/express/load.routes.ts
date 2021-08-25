@@ -42,9 +42,8 @@ export async function loadRoutes(
 
         if (route.protected) {
           try {
-            response.locals.auth = await auth(request);
+            response.locals.auth = await auth(request, route);
           } catch (e) {
-            console.error(e);
             response.status(403).send({ message: e.message });
             return next();
           }
