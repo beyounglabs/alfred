@@ -4,5 +4,6 @@ export interface RouteInterface {
   action: any;
   timeout?: number;
   protected?: boolean;
+  jwtProviders?: string[];
   middlewares?: any[];
 }

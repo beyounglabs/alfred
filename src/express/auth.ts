@@ -1,10 +1,14 @@
+import axios from 'axios';
 import { Request } from 'express';
 import { JwtHelper } from '../helpers/jwt.helpers';
-import axios from 'axios';
+import { RouteInterface } from './route.interface';
 
 let basicAuthCache = {};
 
-export async function auth(request: Request): Promise<any> {
+export async function auth(
+  request: Request,
+  route: RouteInterface,
+): Promise<any> {
   if (!request.headers['authorization']) {
     throw new Error('Token Bearer not found');
   }
@@ -16,13 +20,34 @@ export async function auth(request: Request): Promise<any> {
     if (authorizationSplit.length === 1) {
       throw new Error('Token Bearer not found');
     }
-    const authObject = await JwtHelper.verify(authorizationSplit[1]);
 
-    if (!authObject) {
-      throw new Error('Token Bearer invalid');
+    if (!route.jwtProviders) {
+      const authObject = await JwtHelper.verify(authorizationSplit[1]);
+
+      if (!authObject) {
+        throw new Error('Invalid Token Bearer');
+      }
+
+      return authObject;
+    } else {
+      let authenticated = false;
+      for (const provider of route.jwtProviders) {
+        const authObject = await JwtHelper.verify(authorizationSplit[1], {
+          jwtKeyParam:
+            provider === 'DEFAULT' ? `JWT_KEY` : `${provider}_JWT_KEY`,
+        });
+
+        if (!authObject) {
+          continue;
+        }
+
+        return authObject;
+      }
+
+      if (!authenticated) {
+        throw new Error('Invalid Token Bearer');
+      }
     }
-
-    return authObject;
   } else if (authorization.startsWith('Basic')) {
     const authorizationSplit = authorization.split('Basic ');
     if (authorizationSplit.length === 1) {

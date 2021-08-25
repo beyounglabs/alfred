@@ -3,7 +3,11 @@ import * as jwt from 'jsonwebtoken';
 const DEFAULT_JWT_KEY = '123456';
 
 export class JwtHelper {
-  protected static getJwtKey() {
+  protected static getJwtKey(param?: string) {
+    if (param) {
+      return process.env[param] || DEFAULT_JWT_KEY;
+    }
+
     return process.env.JWT_KEY || DEFAULT_JWT_KEY;
   }
 
@@ -11,13 +15,23 @@ export class JwtHelper {
     value: any,
     options?: {
       expiresIn?: string;
+      jwtKeyParam?: string;
     },
   ): Promise<string> {
-    return await jwt.sign(value, JwtHelper.getJwtKey(), options);
+    return await jwt.sign(
+      value,
+      JwtHelper.getJwtKey(options?.jwtKeyParam),
+      options,
+    );
   }
 
-  public static async verify(value: any): Promise<object | string> {
-    return await jwt.verify(value, JwtHelper.getJwtKey());
+  public static async verify(
+    value: any,
+    options?: {
+      jwtKeyParam?: string;
+    },
+  ): Promise<object | string> {
+    return await jwt.verify(value, JwtHelper.getJwtKey(options?.jwtKeyParam));
   }
 
   public static isExpired(token: string): boolean {
