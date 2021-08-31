@@ -40,13 +40,18 @@ export async function loadRoutes(
         response.locals.apm = apm;
         apm.setTransactionName(`${route.method.toLowerCase()} ${route.path}`);
 
-        if (route.protected) {
+        if (request.headers.authorization) {
           try {
             response.locals.auth = await auth(request, route);
           } catch (e) {
             response.status(403).send({ message: e.message });
             return next();
           }
+        }
+
+        if (route.protected && !response.locals.auth) {
+          response.status(403).send({});
+          return;
         }
 
         try {
