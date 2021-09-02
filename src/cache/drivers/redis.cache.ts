@@ -190,7 +190,7 @@ export class RedisCache implements CacheInterface {
 
   public async get(cacheHash: string): Promise<any> {
     const client = await this.getReadClient();
-    const response = await client.get(cacheHash);
+    const response = await client.getBuffer(cacheHash);
     if (!response) {
       return;
     }
