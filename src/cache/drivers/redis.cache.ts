@@ -1,5 +1,6 @@
-import * as moment from 'moment';
 import * as IORedis from 'ioredis';
+import * as moment from 'moment';
+import * as zlib from 'zlib';
 import { CacheInterface } from '../cache.interface';
 
 export class RedisCache implements CacheInterface {
@@ -194,7 +195,18 @@ export class RedisCache implements CacheInterface {
       return;
     }
 
-    return JSON.parse(response);
+    const uncompressedBuffer = await new Promise<Buffer>((resolve, reject) => {
+      //  @todo see inflate/deflate
+      zlib.gunzip(response, (err, buffer) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(buffer);
+      });
+    });
+
+    return JSON.parse(uncompressedBuffer.toString());
   }
 
   public async delete(cacheHash: string): Promise<any> {
@@ -214,7 +226,20 @@ export class RedisCache implements CacheInterface {
       expire = moment().add(24, 'hours').diff(moment(), 'seconds');
     }
 
-    await client.setex(cacheHash, expire, JSON.stringify(data));
+    const requestBufffer = Buffer.from(JSON.stringify(data), 'utf-8');
+
+    const compressedBuffer = await new Promise<Buffer>((resolve, reject) => {
+      //  @todo see inflate/deflate
+      zlib.gzip(requestBufffer, (err, buffer) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(buffer);
+      });
+    });
+
+    await client.setex(cacheHash, expire, compressedBuffer);
   }
 
   public async clearAll(cachePrefix: string): Promise<void> {
