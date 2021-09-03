@@ -3,14 +3,18 @@ import * as moment from 'moment';
 import * as zlib from 'zlib';
 import { CacheInterface } from '../cache.interface';
 import { serialize, deserialize } from 'v8';
+import { Apm } from '../../apm/apm';
 
 export class RedisCache implements CacheInterface {
   protected instance: string;
   protected redisWriteClient: IORedis.Redis | null = null;
   protected redisReadClient: IORedis.Redis | null = null;
   protected runningAsFallback: boolean = false;
-  constructor(instance?: string) {
+  protected apm?: Apm;
+
+  constructor(instance?: string, apm?: Apm) {
     this.instance = instance || 'default';
+    this.apm = apm;
   }
 
   protected async getWriteClient(): Promise<IORedis.Redis> {
@@ -191,22 +195,34 @@ export class RedisCache implements CacheInterface {
 
   public async get(cacheHash: string): Promise<any> {
     const client = await this.getReadClient();
-    const response = await client.getBuffer(cacheHash);
+
+    const response = await this.startSpan(
+      'CACHE_GET_BUFFER',
+      async () => await client.getBuffer(cacheHash),
+    );
+
     if (!response) {
       return;
     }
 
-    const uncompressedBuffer = await new Promise<Buffer>((resolve, reject) => {
-      zlib.brotliDecompress(response, (err, buffer) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(buffer);
-      });
-    });
+    const uncompressedBuffer = await this.startSpan(
+      'CACHE_DECOMPRESS',
+      async () => {
+        return await new Promise<Buffer>((resolve, reject) => {
+          zlib.brotliDecompress(response, (err, buffer) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+            resolve(buffer);
+          });
+        });
+      },
+    );
 
-    return deserialize(uncompressedBuffer);
+    return await this.startSpan('CACHE_DESERIALIZE', async () =>
+      deserialize(uncompressedBuffer),
+    );
   }
 
   public async delete(cacheHash: string): Promise<any> {
@@ -277,5 +293,13 @@ export class RedisCache implements CacheInterface {
       this.redisWriteClient.disconnect();
       this.redisWriteClient = null;
     }
+  }
+
+  protected async startSpan(span: string, func: Function): Promise<any> {
+    if (!this.apm) {
+      return await func();
+    }
+
+    return await this.apm.startSpan(span, func);
   }
 }

@@ -1,4 +1,5 @@
 import * as md5 from 'md5';
+import { Apm } from '../apm/apm';
 import { CacheFactory } from './cache.factory';
 import { CacheInterface } from './cache.interface';
 import { LocalCache } from './drivers/local.cache';
@@ -7,9 +8,12 @@ export class Cache {
   protected drivers: { [code: string]: CacheInterface } = {};
   protected isVerifyngOriginalCache: boolean = false;
   protected instance: string;
-  constructor(instance?: string) {
+  protected apm?: Apm;
+
+  constructor(instance?: string, apm?: Apm) {
     this.instance = instance || 'default';
     this.drivers[this.instance] = CacheFactory.get(this.instance);
+    this.apm = apm;
   }
 
   public async verifyOriginalDriverOnError(
