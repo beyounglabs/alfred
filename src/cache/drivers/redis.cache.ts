@@ -245,13 +245,21 @@ export class RedisCache implements CacheInterface {
     const requestBufffer = serialize(data);
 
     const compressedBuffer = await new Promise<Buffer>((resolve, reject) => {
-      zlib.brotliCompress(requestBufffer, (err, buffer) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(buffer);
-      });
+      zlib.brotliCompress(
+        requestBufffer,
+        {
+          params: {
+            [zlib.constants.BROTLI_PARAM_QUALITY]: 4,
+          },
+        },
+        (err, buffer) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve(buffer);
+        },
+      );
     });
 
     await client.setex(cacheHash, expire, compressedBuffer);
