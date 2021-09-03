@@ -42,14 +42,13 @@ export class RedisCache implements CacheInterface {
         : 0;
     }
 
-    const redisClientNew = new IORedis({
-      host,
-      port,
-      db,
-      maxRetriesPerRequest: 5,
-    });
-
     await this.startSpan('CACHE_CONNECT_WRITE_REDIS', async () => {
+      const redisClientNew = new IORedis({
+        host,
+        port,
+        db,
+        maxRetriesPerRequest: 5,
+      });
       await new Promise((resolve, reject) => {
         redisClientNew.on('error', err => {
           if (this.runningAsFallback) {
@@ -136,14 +135,14 @@ export class RedisCache implements CacheInterface {
         : 0;
     }
 
-    const redisClientNew = new IORedis({
-      host,
-      port,
-      db,
-      maxRetriesPerRequest: 5,
-    });
-
     await this.startSpan('CACHE_CONNECT_READ_REDIS', async () => {
+      const redisClientNew = new IORedis({
+        host,
+        port,
+        db,
+        maxRetriesPerRequest: 5,
+      });
+
       await new Promise<any>((resolve, reject) => {
         redisClientNew.on('error', err => {
           if (this.runningAsFallback) {
