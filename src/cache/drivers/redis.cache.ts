@@ -205,23 +205,27 @@ export class RedisCache implements CacheInterface {
       return;
     }
 
-    const uncompressedBuffer = await this.startSpan(
-      'CACHE_DECOMPRESS',
-      async () => {
-        return await new Promise<Buffer>((resolve, reject) => {
-          zlib.brotliDecompress(response, (err, buffer) => {
-            if (err) {
-              reject(err);
-              return;
-            }
-            resolve(buffer);
-          });
-        });
-      },
-    );
+    // const uncompressedBuffer = await this.startSpan(
+    //   'CACHE_DECOMPRESS',
+    //   async () => {
+    //     return await new Promise<Buffer>((resolve, reject) => {
+    //       zlib.brotliDecompress(response, (err, buffer) => {
+    //         if (err) {
+    //           reject(err);
+    //           return;
+    //         }
+    //         resolve(buffer);
+    //       });
+    //     });
+    //   },
+    // );
+
+    // return await this.startSpan('CACHE_DESERIALIZE', async () =>
+    //   deserialize(uncompressedBuffer),
+    // );
 
     return await this.startSpan('CACHE_DESERIALIZE', async () =>
-      deserialize(uncompressedBuffer),
+      deserialize(response),
     );
   }
 
@@ -244,25 +248,25 @@ export class RedisCache implements CacheInterface {
 
     const requestBufffer = serialize(data);
 
-    const compressedBuffer = await new Promise<Buffer>((resolve, reject) => {
-      zlib.brotliCompress(
-        requestBufffer,
-        {
-          params: {
-            [zlib.constants.BROTLI_PARAM_QUALITY]: 4,
-          },
-        },
-        (err, buffer) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          resolve(buffer);
-        },
-      );
-    });
-
-    await client.setex(cacheHash, expire, compressedBuffer);
+    // const compressedBuffer = await new Promise<Buffer>((resolve, reject) => {
+    //   zlib.brotliCompress(
+    //     requestBufffer,
+    //     {
+    //       params: {
+    //         [zlib.constants.BROTLI_PARAM_QUALITY]: 4,
+    //       },
+    //     },
+    //     (err, buffer) => {
+    //       if (err) {
+    //         reject(err);
+    //         return;
+    //       }
+    //       resolve(buffer);
+    //     },
+    //   );
+    // });
+    // await client.setex(cacheHash, expire, compressedBuffer);
+    await client.setex(cacheHash, expire, requestBufffer);
   }
 
   public async clearAll(cachePrefix: string): Promise<void> {
