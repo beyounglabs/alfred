@@ -196,7 +196,7 @@ export class RedisCache implements CacheInterface {
     }
 
     const uncompressedBuffer = await new Promise<Buffer>((resolve, reject) => {
-      zlib.inflate(response, (err, buffer) => {
+      zlib.brotliDecompress(response, (err, buffer) => {
         if (err) {
           reject(err);
           return;
@@ -228,7 +228,7 @@ export class RedisCache implements CacheInterface {
     const requestBufffer = Buffer.from(JSON.stringify(data), 'utf-8');
 
     const compressedBuffer = await new Promise<Buffer>((resolve, reject) => {
-      zlib.deflate(requestBufffer, (err, buffer) => {
+      zlib.brotliCompress(requestBufffer, (err, buffer) => {
         if (err) {
           reject(err);
           return;
