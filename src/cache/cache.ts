@@ -12,8 +12,8 @@ export class Cache {
 
   constructor(instance?: string, apm?: Apm) {
     this.instance = instance || 'default';
-    this.drivers[this.instance] = CacheFactory.get(this.instance);
     this.apm = apm;
+    this.drivers[this.instance] = CacheFactory.get(this.instance, this.apm);
   }
 
   public async verifyOriginalDriverOnError(
@@ -27,7 +27,7 @@ export class Cache {
 
       this.isVerifyngOriginalCache = true;
 
-      const originalDriver = CacheFactory.get(this.instance);
+      const originalDriver = CacheFactory.get(this.instance, this.apm);
       await originalDriver.get(cacheHash);
       this.drivers[this.instance] = originalDriver;
 
