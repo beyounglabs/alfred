@@ -49,48 +49,50 @@ export class RedisCache implements CacheInterface {
       maxRetriesPerRequest: 5,
     });
 
-    await new Promise((resolve, reject) => {
-      redisClientNew.on('error', err => {
-        if (this.runningAsFallback) {
-          return;
-        }
+    await this.startSpan('CACHE_CONNECT_WRITE_REDIS', async () => {
+      await new Promise((resolve, reject) => {
+        redisClientNew.on('error', err => {
+          if (this.runningAsFallback) {
+            return;
+          }
 
-        if (process.env.REDIS_CACHE_FALLBACK_HOST) {
-          const redisClientFallback = new IORedis({
-            host: process.env.REDIS_CACHE_FALLBACK_HOST || 'redis',
-            port: process.env.REDIS_CACHE_FALLBACK_PORT
-              ? Number(process.env.REDIS_CACHE_FALLBACK_PORT)
-              : 6379,
-            db: process.env.REDIS_CACHE_FALLBACK_DB
-              ? Number(process.env.REDIS_CACHE_FALLBACK_DB)
-              : 0,
-            maxRetriesPerRequest: 5,
-          });
+          if (process.env.REDIS_CACHE_FALLBACK_HOST) {
+            const redisClientFallback = new IORedis({
+              host: process.env.REDIS_CACHE_FALLBACK_HOST || 'redis',
+              port: process.env.REDIS_CACHE_FALLBACK_PORT
+                ? Number(process.env.REDIS_CACHE_FALLBACK_PORT)
+                : 6379,
+              db: process.env.REDIS_CACHE_FALLBACK_DB
+                ? Number(process.env.REDIS_CACHE_FALLBACK_DB)
+                : 0,
+              maxRetriesPerRequest: 5,
+            });
 
-          redisClientFallback.on('error', errFallback => {
-            reject(`Error on connecting to fallback redis: ${errFallback}`);
-          });
+            redisClientFallback.on('error', errFallback => {
+              reject(`Error on connecting to fallback redis: ${errFallback}`);
+            });
 
-          redisClientFallback.on('ready', () => {
-            this.redisWriteClient = redisClientFallback;
+            redisClientFallback.on('ready', () => {
+              this.redisWriteClient = redisClientFallback;
 
-            resolve(undefined);
+              resolve(undefined);
 
-            this.runningAsFallback = true;
-            console.log(`Redis is running with fallback: ${err}`);
-          });
-        } else {
-          reject(`Error on connecting to redis: ${err}`);
-        }
-      });
+              this.runningAsFallback = true;
+              console.log(`Redis is running with fallback: ${err}`);
+            });
+          } else {
+            reject(`Error on connecting to redis: ${err}`);
+          }
+        });
 
-      redisClientNew.on('ready', () => {
-        this.redisWriteClient = redisClientNew;
+        redisClientNew.on('ready', () => {
+          this.redisWriteClient = redisClientNew;
 
-        resolve(undefined);
+          resolve(undefined);
 
-        this.runningAsFallback = false;
-        console.log('Redis is running with the primary');
+          this.runningAsFallback = false;
+          console.log('Redis is running with the primary');
+        });
       });
     });
 
@@ -141,48 +143,50 @@ export class RedisCache implements CacheInterface {
       maxRetriesPerRequest: 5,
     });
 
-    await new Promise<any>((resolve, reject) => {
-      redisClientNew.on('error', err => {
-        if (this.runningAsFallback) {
-          return;
-        }
+    await this.startSpan('CACHE_CONNECT_READ_REDIS', async () => {
+      await new Promise<any>((resolve, reject) => {
+        redisClientNew.on('error', err => {
+          if (this.runningAsFallback) {
+            return;
+          }
 
-        if (process.env.REDIS_CACHE_FALLBACK_HOST) {
-          const redisClientFallback = new IORedis({
-            host: process.env.REDIS_CACHE_FALLBACK_HOST || 'redis',
-            port: process.env.REDIS_CACHE_FALLBACK_PORT
-              ? Number(process.env.REDIS_CACHE_FALLBACK_PORT)
-              : 6379,
-            db: process.env.REDIS_CACHE_FALLBACK_DB
-              ? Number(process.env.REDIS_CACHE_FALLBACK_DB)
-              : 0,
-            maxRetriesPerRequest: 5,
-          });
+          if (process.env.REDIS_CACHE_FALLBACK_HOST) {
+            const redisClientFallback = new IORedis({
+              host: process.env.REDIS_CACHE_FALLBACK_HOST || 'redis',
+              port: process.env.REDIS_CACHE_FALLBACK_PORT
+                ? Number(process.env.REDIS_CACHE_FALLBACK_PORT)
+                : 6379,
+              db: process.env.REDIS_CACHE_FALLBACK_DB
+                ? Number(process.env.REDIS_CACHE_FALLBACK_DB)
+                : 0,
+              maxRetriesPerRequest: 5,
+            });
 
-          redisClientFallback.on('error', errFallback => {
-            reject(`Error on connecting to fallback redis: ${errFallback}`);
-          });
+            redisClientFallback.on('error', errFallback => {
+              reject(`Error on connecting to fallback redis: ${errFallback}`);
+            });
 
-          redisClientFallback.on('ready', () => {
-            this.redisWriteClient = redisClientFallback;
+            redisClientFallback.on('ready', () => {
+              this.redisWriteClient = redisClientFallback;
 
-            resolve(undefined);
+              resolve(undefined);
 
-            this.runningAsFallback = true;
-            console.log(`Redis is running with fallback: ${err}`);
-          });
-        } else {
-          reject(`Error on connecting to redis: ${err}`);
-        }
-      });
+              this.runningAsFallback = true;
+              console.log(`Redis is running with fallback: ${err}`);
+            });
+          } else {
+            reject(`Error on connecting to redis: ${err}`);
+          }
+        });
 
-      redisClientNew.on('ready', () => {
-        this.redisReadClient = redisClientNew;
+        redisClientNew.on('ready', () => {
+          this.redisReadClient = redisClientNew;
 
-        resolve(undefined);
+          resolve(undefined);
 
-        this.runningAsFallback = false;
-        console.log('Redis is running with the primary');
+          this.runningAsFallback = false;
+          console.log('Redis is running with the primary');
+        });
       });
     });
 
