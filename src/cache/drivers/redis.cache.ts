@@ -2,6 +2,7 @@ import * as IORedis from 'ioredis';
 import * as moment from 'moment';
 import * as zlib from 'zlib';
 import { CacheInterface } from '../cache.interface';
+import { serialize, deserialize } from 'v8';
 
 export class RedisCache implements CacheInterface {
   protected instance: string;
@@ -205,7 +206,7 @@ export class RedisCache implements CacheInterface {
       });
     });
 
-    return JSON.parse(uncompressedBuffer.toString());
+    return deserialize(uncompressedBuffer);
   }
 
   public async delete(cacheHash: string): Promise<any> {
@@ -225,7 +226,7 @@ export class RedisCache implements CacheInterface {
       expire = moment().add(24, 'hours').diff(moment(), 'seconds');
     }
 
-    const requestBufffer = Buffer.from(JSON.stringify(data), 'utf-8');
+    const requestBufffer = serialize(data);
 
     const compressedBuffer = await new Promise<Buffer>((resolve, reject) => {
       zlib.brotliCompress(requestBufffer, (err, buffer) => {
