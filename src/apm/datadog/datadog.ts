@@ -40,4 +40,6 @@ export class Datadog implements ApmInterface {
   getBrowserTimingHeader(): string {
     return '';
   }
+
+  recordMetric(name: string, value: any): void {}
 }

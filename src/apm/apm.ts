@@ -58,4 +58,12 @@ export class Apm implements ApmInterface {
 
     return apmInstance.getBrowserTimingHeader();
   }
+
+  recordMetric(name: string, value: any): void {
+    if (!apmInstance) {
+      return;
+    }
+
+    return apmInstance.recordMetric(name, value);
+  }
 }

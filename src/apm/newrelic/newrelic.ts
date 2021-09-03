@@ -41,6 +41,14 @@ export class Newrelic implements ApmInterface {
     newrelicInstance.addCustomAttributes(attributes);
   }
 
+  recordMetric(name: string, value: any): void {
+    if (!newrelicInstance) {
+      return;
+    }
+
+    newrelicInstance.recordMetric(name, value);
+  }
+
   getBrowserTimingHeader(): string {
     return newrelicInstance.getBrowserTimingHeader();
   }
