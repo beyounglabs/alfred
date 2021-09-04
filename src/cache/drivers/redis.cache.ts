@@ -227,8 +227,12 @@ export class RedisCache implements CacheInterface {
     //   deserialize(uncompressedBuffer),
     // );
 
+    // return await this.startSpan('CACHE_DESERIALIZE', async () =>
+    //   deserialize(response),
+    // );
+
     return await this.startSpan('CACHE_DESERIALIZE', async () =>
-      deserialize(response),
+      JSON.parse(response),
     );
   }
 
@@ -249,7 +253,9 @@ export class RedisCache implements CacheInterface {
       expire = moment().add(24, 'hours').diff(moment(), 'seconds');
     }
 
-    const requestBufffer = serialize(data);
+    // const requestBufffer = serialize(data);
+
+    const requestBufffer = JSON.stringify(data);
 
     // const compressedBuffer = await new Promise<Buffer>((resolve, reject) => {
     //   zlib.brotliCompress(
