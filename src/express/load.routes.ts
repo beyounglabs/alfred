@@ -43,10 +43,7 @@ export async function loadRoutes(
         if (request.headers.authorization) {
           try {
             response.locals.auth = await auth(request, route);
-          } catch (e) {
-            response.status(403).send({ message: e.message });
-            return next();
-          }
+          } catch (e) {}
         }
 
         if (route.protected && !response.locals.auth) {
