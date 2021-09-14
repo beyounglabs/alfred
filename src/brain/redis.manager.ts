@@ -1,25 +1,51 @@
 import { ClientOpts, createClient, RedisClient } from 'redis';
 
-let client: RedisClient | undefined;
+let writeClient: RedisClient | undefined;
+let readClient: RedisClient | undefined;
 let subscribeClient: RedisClient | undefined;
-let staticClientOpts: ClientOpts;
+let staticWriteClientOpts: ClientOpts;
+let staticReadClientOpts: ClientOpts;
 export class RedisManager {
-  constructor(clientOpts?: ClientOpts) {
-    if (clientOpts) {
-      staticClientOpts = clientOpts;
+  constructor(writeClientOpts?: ClientOpts, readClientOpts?: ClientOpts) {
+    if (writeClientOpts) {
+      staticWriteClientOpts = writeClientOpts;
+    }
+
+    if (readClientOpts) {
+      staticReadClientOpts = readClientOpts;
+    } else if (writeClientOpts) {
+      staticReadClientOpts = writeClientOpts;
     }
   }
 
   public async getClient(): Promise<RedisClient> {
-    if (client) {
-      return client;
+    return await this.getWriteClient();
+  }
+
+  public async getWriteClient(): Promise<RedisClient> {
+    if (writeClient) {
+      return writeClient;
     }
 
-    const redisClient = createClient(staticClientOpts);
-    return new Promise<RedisClient>((resolve) => {
+    const redisClient = createClient(staticWriteClientOpts);
+    return new Promise<RedisClient>(resolve => {
       redisClient.on('ready', () => {
-        client = redisClient;
-        resolve(client);
+        writeClient = redisClient;
+        resolve(writeClient);
+      });
+    });
+  }
+
+  public async getReadClient(): Promise<RedisClient> {
+    if (readClient) {
+      return readClient;
+    }
+
+    const redisClient = createClient(staticReadClientOpts);
+    return new Promise<RedisClient>(resolve => {
+      redisClient.on('ready', () => {
+        readClient = redisClient;
+        resolve(readClient);
       });
     });
   }
@@ -29,8 +55,8 @@ export class RedisManager {
       return subscribeClient;
     }
 
-    const redisClient = createClient(staticClientOpts);
-    return new Promise<RedisClient>((resolve) => {
+    const redisClient = createClient(staticWriteClientOpts);
+    return new Promise<RedisClient>(resolve => {
       redisClient.on('ready', () => {
         subscribeClient = redisClient;
         resolve(subscribeClient);
@@ -39,9 +65,14 @@ export class RedisManager {
   }
 
   public closeConnection() {
-    if (client) {
-      client.end(true);
-      client = undefined;
+    if (writeClient) {
+      writeClient.end(true);
+      writeClient = undefined;
+    }
+
+    if (readClient) {
+      readClient.end(true);
+      readClient = undefined;
     }
 
     if (subscribeClient) {

@@ -6,7 +6,7 @@ import { RedisManager } from '../redis.manager';
 export class StoreFinder {
   public async findAll(): Promise<any> {
     const redisManager = new RedisManager();
-    const redisClient = await redisManager.getClient();
+    const redisClient = await redisManager.getReadClient();
 
     const getAsync = promisify(redisClient.get).bind(redisClient);
     const keysAsync = promisify(redisClient.keys).bind(redisClient);
@@ -30,7 +30,7 @@ export class StoreFinder {
 
   public async findOneByCode(code: string): Promise<any> {
     const redisManager = new RedisManager();
-    const redisClient = await redisManager.getClient();
+    const redisClient = await redisManager.getReadClient();
 
     const getAsync = promisify(redisClient.get).bind(redisClient);
     const key = `Store:${code}`;
@@ -45,7 +45,7 @@ export class StoreFinder {
 
   public async findOneByDomain(domain: string): Promise<any> {
     const redisManager = new RedisManager();
-    const redisClient = await redisManager.getClient();
+    const redisClient = await redisManager.getReadClient();
 
     const getAsync = promisify(redisClient.get).bind(redisClient);
     const key = `Store_Domain:${domain}`;
