@@ -39,16 +39,26 @@ export class Cache {
     }
   }
 
+  protected async startSpan(span: string, func: Function): Promise<any> {
+    if (!this.apm) {
+      return await func();
+    }
+
+    return await this.apm.startSpan(span, func);
+  }
+
   public async get(cacheHash: string): Promise<any> {
     try {
       return await this.drivers[this.instance].get(cacheHash);
     } catch (e) {
-      console.error(
-        `Error on get cache, switching to local cache: ${e.message} `,
-      );
-      this.verifyOriginalDriverOnError(cacheHash);
-      this.drivers[this.instance] = new LocalCache();
-      return await this.drivers[this.instance].get(cacheHash);
+      return await this.startSpan('CACHE_GET_FALLBACK', async () => {
+        console.error(
+          `Error on get cache, switching to local cache: ${e.message} `,
+        );
+        this.verifyOriginalDriverOnError(cacheHash);
+        this.drivers[this.instance] = new LocalCache();
+        return await this.drivers[this.instance].get(cacheHash);
+      });
     }
   }
 

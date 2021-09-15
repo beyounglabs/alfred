@@ -65,7 +65,7 @@ export class RedisCache implements CacheInterface {
       });
     }
 
-    redisReadClientLock[this.instance] = true;
+    redisWriteClientLock[this.instance] = true;
 
     await this.startSpan('CACHE_CONNECT_WRITE_REDIS', async () => {
       const redisClientNew = new IORedis({
@@ -214,7 +214,7 @@ export class RedisCache implements CacheInterface {
             });
 
             redisClientFallback.on('ready', () => {
-              redisWriteClient[this.instance] = redisClientFallback;
+              redisReadClient[this.instance] = redisClientFallback;
 
               resolve(undefined);
 
