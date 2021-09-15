@@ -5,11 +5,12 @@ import { CacheInterface } from '../cache.interface';
 import { serialize, deserialize } from 'v8';
 import { Apm } from '../../apm/apm';
 
+let redisWriteClient: { [code: string]: IORedis.Redis | undefined } = {};
+let redisReadClient: { [code: string]: IORedis.Redis | undefined } = {};
+let runningAsFallback: boolean = false;
+
 export class RedisCache implements CacheInterface {
   protected instance: string;
-  protected redisWriteClient: IORedis.Redis | null = null;
-  protected redisReadClient: IORedis.Redis | null = null;
-  protected runningAsFallback: boolean = false;
   protected apm?: Apm;
 
   constructor(instance?: string, apm?: Apm) {
@@ -18,8 +19,8 @@ export class RedisCache implements CacheInterface {
   }
 
   protected async getWriteClient(): Promise<IORedis.Redis> {
-    if (this.redisWriteClient) {
-      return this.redisWriteClient;
+    if (redisWriteClient[this.instance]) {
+      return redisWriteClient[this.instance]!;
     }
 
     const instancePrefix = this.instance.toUpperCase();
@@ -51,7 +52,7 @@ export class RedisCache implements CacheInterface {
       });
       await new Promise((resolve, reject) => {
         redisClientNew.on('error', err => {
-          if (this.runningAsFallback) {
+          if (runningAsFallback) {
             return;
           }
 
@@ -72,11 +73,11 @@ export class RedisCache implements CacheInterface {
             });
 
             redisClientFallback.on('ready', () => {
-              this.redisWriteClient = redisClientFallback;
+              redisWriteClient[this.instance] = redisClientFallback;
 
               resolve(undefined);
 
-              this.runningAsFallback = true;
+              runningAsFallback = true;
               console.log(`Redis is running with fallback: ${err}`);
             });
           } else {
@@ -85,26 +86,26 @@ export class RedisCache implements CacheInterface {
         });
 
         redisClientNew.on('ready', () => {
-          this.redisWriteClient = redisClientNew;
+          redisWriteClient[this.instance] = redisClientNew;
 
           resolve(undefined);
 
-          this.runningAsFallback = false;
+          runningAsFallback = false;
           console.log('Redis is running with the primary');
         });
       });
     });
 
-    if (!this.redisWriteClient) {
+    if (!redisWriteClient[this.instance]) {
       throw new Error('No Redis CLient Found');
     }
 
-    return this.redisWriteClient;
+    return redisWriteClient[this.instance]!;
   }
 
   protected async getReadClient(): Promise<IORedis.Redis> {
-    if (this.redisReadClient) {
-      return this.redisReadClient;
+    if (redisReadClient[this.instance]) {
+      return redisReadClient[this.instance]!;
     }
 
     const instancePrefix = this.instance.toUpperCase();
@@ -113,8 +114,8 @@ export class RedisCache implements CacheInterface {
       !process.env.REDIS_CACHE_SLAVE_HOST &&
       !process.env[`REDIS_CACHE_${instancePrefix}_SLAVE_HOST`]
     ) {
-      this.redisReadClient = await this.getWriteClient();
-      return this.redisReadClient;
+      redisReadClient[this.instance] = await this.getWriteClient();
+      return redisReadClient[this.instance]!;
     }
 
     let host: string = process.env.REDIS_CACHE_SLAVE_HOST || 'redis';
@@ -145,7 +146,7 @@ export class RedisCache implements CacheInterface {
 
       await new Promise<any>((resolve, reject) => {
         redisClientNew.on('error', err => {
-          if (this.runningAsFallback) {
+          if (runningAsFallback) {
             return;
           }
 
@@ -166,11 +167,11 @@ export class RedisCache implements CacheInterface {
             });
 
             redisClientFallback.on('ready', () => {
-              this.redisWriteClient = redisClientFallback;
+              redisWriteClient[this.instance] = redisClientFallback;
 
               resolve(undefined);
 
-              this.runningAsFallback = true;
+              runningAsFallback = true;
               console.log(`Redis is running with fallback: ${err}`);
             });
           } else {
@@ -179,21 +180,21 @@ export class RedisCache implements CacheInterface {
         });
 
         redisClientNew.on('ready', () => {
-          this.redisReadClient = redisClientNew;
+          redisReadClient[this.instance] = redisClientNew;
 
           resolve(undefined);
 
-          this.runningAsFallback = false;
+          runningAsFallback = false;
           console.log('Redis is running with the primary');
         });
       });
     });
 
-    if (!this.redisReadClient) {
+    if (!redisReadClient[this.instance]) {
       throw new Error('No Redis CLient Found');
     }
 
-    return this.redisReadClient;
+    return redisReadClient[this.instance]!;
   }
 
   public async get(cacheHash: string): Promise<any> {
@@ -250,7 +251,9 @@ export class RedisCache implements CacheInterface {
     let expire = expireInSeconds;
 
     if (!expire) {
-      expire = moment().add(24, 'hours').diff(moment(), 'seconds');
+      expire = moment()
+        .add(24, 'hours')
+        .diff(moment(), 'seconds');
     }
 
     // const requestBufffer = serialize(data);
@@ -305,14 +308,14 @@ export class RedisCache implements CacheInterface {
   }
 
   public async close(): Promise<void> {
-    if (this.redisReadClient) {
-      this.redisReadClient.disconnect();
-      this.redisReadClient = null;
+    if (redisReadClient[this.instance]) {
+      redisReadClient[this.instance]!.disconnect();
+      redisReadClient[this.instance] = undefined;
     }
 
-    if (this.redisWriteClient) {
-      this.redisWriteClient.disconnect();
-      this.redisWriteClient = null;
+    if (redisWriteClient[this.instance]) {
+      redisWriteClient[this.instance]!.disconnect();
+      redisWriteClient[this.instance] = undefined;
     }
   }
 
