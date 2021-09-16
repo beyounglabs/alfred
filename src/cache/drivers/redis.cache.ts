@@ -22,18 +22,24 @@ export class RedisCache implements CacheInterface {
   }
 
   protected async awaitLockWriteClient() {
+    let isResolved = false;
     return await new Promise(resolve => {
       setTimeout(async () => {
         if (redisWriteClient[this.instance]) {
+          isResolved = true;
           resolve(undefined);
           return;
         }
 
         await this.awaitLockWriteClient();
+        isResolved = true;
         resolve(undefined);
       }, 100);
 
       setTimeout(() => {
+        if (!isResolved) {
+          return;
+        }
         console.log(`awaitLockWriteClient timeout of ${MAX_LOCK_TIMEOUT}`);
         resolve(undefined);
       }, MAX_LOCK_TIMEOUT);
@@ -141,18 +147,24 @@ export class RedisCache implements CacheInterface {
   }
 
   protected async awaitLockReadClient() {
+    let isResolved = false;
     return await new Promise(resolve => {
       setTimeout(async () => {
         if (redisReadClient[this.instance]) {
+          isResolved = false;
           resolve(undefined);
           return;
         }
 
         await this.awaitLockReadClient();
+        isResolved = false;
         resolve(undefined);
       }, 100);
 
       setTimeout(() => {
+        if (isResolved) {
+          return;
+        }
         console.log(`awaitLockReadClient timeout of ${MAX_LOCK_TIMEOUT}`);
         resolve(undefined);
       }, MAX_LOCK_TIMEOUT);
