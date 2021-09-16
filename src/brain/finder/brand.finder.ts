@@ -6,7 +6,7 @@ import { RedisManager } from '../redis.manager';
 export class BrandFinder {
   public async findAll(): Promise<any> {
     const redisManager = new RedisManager();
-    const redisClient = await redisManager.getClient();
+    const redisClient = await redisManager.getReadClient();
 
     const mgetAsync = promisify(redisClient.mget).bind(redisClient) as any;
     const scanAsync = promisify(redisClient.scan).bind(redisClient) as any;
@@ -48,7 +48,7 @@ export class BrandFinder {
 
   public async findOneByCode(code: string): Promise<any> {
     const redisManager = new RedisManager();
-    const redisClient = await redisManager.getClient();
+    const redisClient = await redisManager.getReadClient();
 
     const getAsync = promisify(redisClient.get).bind(redisClient);
     const key = `Brand:${code}`;

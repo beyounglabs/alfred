@@ -12,8 +12,13 @@ export class BrainParameter {
 
   protected redis: RedisManager;
 
-  constructor(clientOpts: ClientOpts, service: string, profile: string) {
-    this.redis = new RedisManager(clientOpts);
+  constructor(
+    clientOpts: ClientOpts,
+    service: string,
+    profile: string,
+    replicaClientOpts?: ClientOpts,
+  ) {
+    this.redis = new RedisManager(clientOpts, replicaClientOpts);
     this.service = service;
     this.profile = profile;
   }
@@ -23,7 +28,7 @@ export class BrainParameter {
   }
 
   public async getFromRedis(param?: string): Promise<any> {
-    const redisClient = await this.redis.getClient();
+    const redisClient = await this.redis.getReadClient();
 
     return new Promise<any>((resolve, reject) => {
       redisClient.get(this.getKey(), (error, result) => {
