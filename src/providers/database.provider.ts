@@ -3,9 +3,6 @@ import { createConnection, useContainer } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { Connection } from 'typeorm/connection/Connection';
 
-
-
-
 @Service('database.provider')
 export class DatabaseProvider {
   public connection: Connection;
@@ -68,19 +65,7 @@ export class DatabaseProvider {
         namingStrategy: new SnakeNamingStrategy(),
 
         flags: ['+LOCAL_FILES'],
-
       };
-
-      // if (process.env.REDIS_CACHE_HOST) {
-      //   connectionOptions.cache = {
-      //     type: 'redis',
-      //     options: {
-      //       host: process.env.REDIS_CACHE_HOST,
-      //       port: process.env.REDIS_CACHE_PORT,
-      //       db: process.env.REDIS_CACHE_DB ? process.env.REDIS_CACHE_DB : 0,
-      //     },
-      //   };
-      // }
 
       this.connection = await createConnection(connectionOptions);
     }
