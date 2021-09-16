@@ -4,6 +4,9 @@ import * as zlib from 'zlib';
 import { CacheInterface } from '../cache.interface';
 import { serialize, deserialize } from 'v8';
 import { Apm } from '../../apm/apm';
+import * as uniqidGenerate from 'uniqid';
+import { hostname } from 'os';
+import { format } from 'date-fns';
 
 let redisWriteClient: { [code: string]: IORedis.Redis | undefined } = {};
 let redisReadClient: { [code: string]: IORedis.Redis | undefined } = {};
@@ -83,6 +86,9 @@ export class RedisCache implements CacheInterface {
 
     redisWriteClientLock[this.instance] = true;
 
+    const connectionHash = uniqidGenerate();
+    const hostName = hostname();
+
     await this.startSpan('CACHE_CONNECT_WRITE_REDIS', async () => {
       const redisClientNew = new IORedis({
         host,
@@ -90,9 +96,20 @@ export class RedisCache implements CacheInterface {
         db,
         maxRetriesPerRequest: 2,
       });
+
+      console.log(
+        `[${connectionHash}] Starting to connect to Write Redis ${
+          this.instance
+        } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
+      );
+
       await new Promise((resolve, reject) => {
         redisClientNew.on('error', err => {
-          console.error('on error writeClient ', err);
+          console.log(
+            `[${connectionHash}] Error on Write Redis ${
+              this.instance
+            } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')} ${err}`,
+          );
 
           if (runningAsFallback) {
             return;
@@ -128,6 +145,12 @@ export class RedisCache implements CacheInterface {
         });
 
         redisClientNew.on('ready', () => {
+          console.log(
+            `[${connectionHash}] Connected to Write Redis ${
+              this.instance
+            } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
+          );
+
           redisWriteClient[this.instance] = redisClientNew;
 
           resolve(undefined);
@@ -216,6 +239,9 @@ export class RedisCache implements CacheInterface {
         : 0;
     }
 
+    const connectionHash = uniqidGenerate();
+    const hostName = hostname();
+
     await this.startSpan('CACHE_CONNECT_READ_REDIS', async () => {
       const redisClientNew = new IORedis({
         host,
@@ -224,9 +250,19 @@ export class RedisCache implements CacheInterface {
         maxRetriesPerRequest: 2,
       });
 
+      console.log(
+        `[${connectionHash}] Starting to connect to Read Redis ${
+          this.instance
+        } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
+      );
+
       await new Promise<any>((resolve, reject) => {
         redisClientNew.on('error', err => {
-          console.error('on error readClient ', err);
+          console.log(
+            `[${connectionHash}] Error on Read Redis ${
+              this.instance
+            } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')} ${err}`,
+          );
 
           if (runningAsFallback) {
             return;
@@ -263,6 +299,12 @@ export class RedisCache implements CacheInterface {
         });
 
         redisClientNew.on('ready', () => {
+          console.log(
+            `[${connectionHash}] Connected to Read Redis ${
+              this.instance
+            } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
+          );
+
           redisReadClient[this.instance] = redisClientNew;
 
           resolve(undefined);
