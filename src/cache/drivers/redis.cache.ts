@@ -75,7 +75,7 @@ export class RedisCache implements CacheInterface {
     }
 
     if (redisWriteClientLock[this.instance]) {
-      await this.startSpan('CACHE_AWAIT_CONNECTION_LOCK', async () => {
+      await this.startSpan('CACHE_AWAIT_CONNECTION_WRITE_LOCK', async () => {
         await this.awaitLockWriteClient();
       });
     }
@@ -210,7 +210,7 @@ export class RedisCache implements CacheInterface {
     }
 
     if (redisReadClientLock[this.instance]) {
-      await this.startSpan('CACHE_AWAIT_CONNECTION_LOCK', async () => {
+      await this.startSpan('CACHE_AWAIT_CONNECTION_READ_LOCK', async () => {
         await this.awaitLockReadClient();
       });
     }
