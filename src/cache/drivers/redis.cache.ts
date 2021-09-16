@@ -10,6 +10,7 @@ let redisReadClient: { [code: string]: IORedis.Redis | undefined } = {};
 let redisWriteClientLock: { [code: string]: boolean | undefined } = {};
 let redisReadClientLock: { [code: string]: boolean | undefined } = {};
 let runningAsFallback: boolean = false;
+const MAX_LOCK_TIMEOUT = 2000;
 
 export class RedisCache implements CacheInterface {
   protected instance: string;
@@ -31,6 +32,11 @@ export class RedisCache implements CacheInterface {
         await this.awaitLockWriteClient();
         resolve(undefined);
       }, 100);
+
+      setTimeout(() => {
+        console.log(`awaitLockWriteClient timeout of ${MAX_LOCK_TIMEOUT}`);
+        resolve(undefined);
+      }, MAX_LOCK_TIMEOUT);
     });
   }
 
@@ -65,6 +71,10 @@ export class RedisCache implements CacheInterface {
       });
     }
 
+    if (redisWriteClient[this.instance]) {
+      return redisWriteClient[this.instance]!;
+    }
+
     redisWriteClientLock[this.instance] = true;
 
     await this.startSpan('CACHE_CONNECT_WRITE_REDIS', async () => {
@@ -72,10 +82,12 @@ export class RedisCache implements CacheInterface {
         host,
         port,
         db,
-        maxRetriesPerRequest: 5,
+        maxRetriesPerRequest: 2,
       });
       await new Promise((resolve, reject) => {
         redisClientNew.on('error', err => {
+          console.error('on error writeClient ', err);
+
           if (runningAsFallback) {
             return;
           }
@@ -89,7 +101,7 @@ export class RedisCache implements CacheInterface {
               db: process.env.REDIS_CACHE_FALLBACK_DB
                 ? Number(process.env.REDIS_CACHE_FALLBACK_DB)
                 : 0,
-              maxRetriesPerRequest: 5,
+              maxRetriesPerRequest: 2,
             });
 
             redisClientFallback.on('error', errFallback => {
@@ -139,6 +151,11 @@ export class RedisCache implements CacheInterface {
         await this.awaitLockReadClient();
         resolve(undefined);
       }, 100);
+
+      setTimeout(() => {
+        console.log(`awaitLockReadClient timeout of ${MAX_LOCK_TIMEOUT}`);
+        resolve(undefined);
+      }, MAX_LOCK_TIMEOUT);
     });
   }
 
@@ -161,6 +178,10 @@ export class RedisCache implements CacheInterface {
       await this.startSpan('CACHE_AWAIT_CONNECTION_LOCK', async () => {
         await this.awaitLockReadClient();
       });
+    }
+
+    if (redisReadClient[this.instance]) {
+      return redisReadClient[this.instance]!;
     }
 
     redisReadClientLock[this.instance] = true;
@@ -188,11 +209,13 @@ export class RedisCache implements CacheInterface {
         host,
         port,
         db,
-        maxRetriesPerRequest: 5,
+        maxRetriesPerRequest: 2,
       });
 
       await new Promise<any>((resolve, reject) => {
         redisClientNew.on('error', err => {
+          console.error('on error readClient ', err);
+
           if (runningAsFallback) {
             return;
           }
@@ -206,7 +229,7 @@ export class RedisCache implements CacheInterface {
               db: process.env.REDIS_CACHE_FALLBACK_DB
                 ? Number(process.env.REDIS_CACHE_FALLBACK_DB)
                 : 0,
-              maxRetriesPerRequest: 5,
+              maxRetriesPerRequest: 2,
             });
 
             redisClientFallback.on('error', errFallback => {
