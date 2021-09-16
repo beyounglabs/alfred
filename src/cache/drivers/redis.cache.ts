@@ -10,10 +10,8 @@ import { format } from 'date-fns';
 
 let redisWriteClient: { [code: string]: IORedis.Redis | undefined } = {};
 let redisReadClient: { [code: string]: IORedis.Redis | undefined } = {};
-let redisWriteClientLock: { [code: string]: boolean | undefined } = {};
-let redisReadClientLock: { [code: string]: boolean | undefined } = {};
+
 let runningAsFallback: boolean = false;
-const MAX_LOCK_TIMEOUT = 2000;
 
 export class RedisCache implements CacheInterface {
   protected instance: string;
@@ -22,31 +20,6 @@ export class RedisCache implements CacheInterface {
   constructor(instance?: string, apm?: Apm) {
     this.instance = instance || 'default';
     this.apm = apm;
-  }
-
-  protected async awaitLockWriteClient() {
-    let isResolved = false;
-    return await new Promise(resolve => {
-      setTimeout(async () => {
-        if (redisWriteClient[this.instance]) {
-          isResolved = true;
-          resolve(undefined);
-          return;
-        }
-
-        await this.awaitLockWriteClient();
-        isResolved = true;
-        resolve(undefined);
-      }, 100);
-
-      setTimeout(() => {
-        if (!isResolved) {
-          return;
-        }
-        console.log(`awaitLockWriteClient timeout of ${MAX_LOCK_TIMEOUT}`);
-        resolve(undefined);
-      }, MAX_LOCK_TIMEOUT);
-    });
   }
 
   protected async getWriteClient(): Promise<IORedis.Redis> {
@@ -73,18 +46,6 @@ export class RedisCache implements CacheInterface {
         ? Number(process.env[`REDIS_CACHE_${instancePrefix}_DB`])
         : 0;
     }
-
-    if (redisWriteClientLock[this.instance]) {
-      await this.startSpan('CACHE_AWAIT_CONNECTION_WRITE_LOCK', async () => {
-        await this.awaitLockWriteClient();
-      });
-    }
-
-    if (redisWriteClient[this.instance]) {
-      return redisWriteClient[this.instance]!;
-    }
-
-    redisWriteClientLock[this.instance] = true;
 
     const connectionHash = uniqidGenerate();
     const hostName = hostname();
@@ -156,7 +117,7 @@ export class RedisCache implements CacheInterface {
           resolve(undefined);
 
           runningAsFallback = false;
-          redisWriteClientLock[this.instance] = false;
+
           console.log('Redis is running with the primary');
         });
       });
@@ -167,31 +128,6 @@ export class RedisCache implements CacheInterface {
     }
 
     return redisWriteClient[this.instance]!;
-  }
-
-  protected async awaitLockReadClient() {
-    let isResolved = false;
-    return await new Promise(resolve => {
-      setTimeout(async () => {
-        if (redisReadClient[this.instance]) {
-          isResolved = false;
-          resolve(undefined);
-          return;
-        }
-
-        await this.awaitLockReadClient();
-        isResolved = false;
-        resolve(undefined);
-      }, 100);
-
-      setTimeout(() => {
-        if (isResolved) {
-          return;
-        }
-        console.log(`awaitLockReadClient timeout of ${MAX_LOCK_TIMEOUT}`);
-        resolve(undefined);
-      }, MAX_LOCK_TIMEOUT);
-    });
   }
 
   protected async getReadClient(): Promise<IORedis.Redis> {
@@ -208,18 +144,6 @@ export class RedisCache implements CacheInterface {
       redisReadClient[this.instance] = await this.getWriteClient();
       return redisReadClient[this.instance]!;
     }
-
-    if (redisReadClientLock[this.instance]) {
-      await this.startSpan('CACHE_AWAIT_CONNECTION_READ_LOCK', async () => {
-        await this.awaitLockReadClient();
-      });
-    }
-
-    if (redisReadClient[this.instance]) {
-      return redisReadClient[this.instance]!;
-    }
-
-    redisReadClientLock[this.instance] = true;
 
     let host: string = process.env.REDIS_CACHE_SLAVE_HOST || 'redis';
     let port: number = process.env.REDIS_CACHE_SLAVE_PORT
@@ -290,7 +214,7 @@ export class RedisCache implements CacheInterface {
               resolve(undefined);
 
               runningAsFallback = true;
-              redisReadClientLock[this.instance] = false;
+
               console.log(`Redis is running with fallback: ${err}`);
             });
           } else {
