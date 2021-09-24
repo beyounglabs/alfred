@@ -30,7 +30,7 @@ export class BrainParameter {
   public async getFromRedis(param?: string): Promise<any> {
     const redisClient = await this.redis.getReadClient();
 
-    return new Promise((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       redisClient.get(this.getKey(), (error, result) => {
         if (error) {
           reject(error);

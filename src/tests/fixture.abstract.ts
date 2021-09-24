@@ -11,5 +11,5 @@ export abstract class FixtureAbstract {
     this.queryRunner = queryRunner;
   }
 
-  public abstract async run();
+  public abstract run(): Promise<void>;
 }

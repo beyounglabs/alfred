@@ -8,14 +8,32 @@ export class StoreFinder {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
 
-    const getAsync = promisify(redisClient.get).bind(redisClient);
-    const keysAsync = promisify(redisClient.keys).bind(redisClient);
+    const mgetAsync = promisify(redisClient.mget).bind(redisClient) as any;
+    const scanAsync = promisify(redisClient.scan).bind(redisClient) as any;
 
-    const keys = await keysAsync(`Store:*`);
-    const items: any[] = [];
-    for (const key of keys) {
-      items.push(JSON.parse(await getAsync(key)));
+    let nextCursor: string | null = '0';
+
+    let keys: string[] = [];
+
+    while (nextCursor !== null) {
+      const result = await scanAsync([
+        nextCursor,
+        'MATCH',
+        `Store:*`,
+        'COUNT',
+        5000,
+      ]);
+
+      nextCursor = result[0];
+
+      keys = [...keys, ...result[1]];
+
+      if (nextCursor === '0') {
+        nextCursor = null;
+      }
     }
+
+    const items: any[] = (await mgetAsync(keys)).map(item => JSON.parse(item));
 
     return orderBy(
       ObjectConverter.underscoreToCamelCase(items),

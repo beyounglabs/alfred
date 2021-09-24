@@ -1,4 +1,5 @@
 import * as md5 from 'md5';
+import { Apm } from '../apm/apm';
 import { CacheFactory } from './cache.factory';
 import { CacheInterface } from './cache.interface';
 import { LocalCache } from './drivers/local.cache';
@@ -7,9 +8,12 @@ export class Cache {
   protected drivers: { [code: string]: CacheInterface } = {};
   protected isVerifyngOriginalCache: boolean = false;
   protected instance: string;
-  constructor(instance?: string) {
+  protected apm?: Apm;
+
+  constructor(instance?: string, apm?: Apm) {
     this.instance = instance || 'default';
-    this.drivers[this.instance] = CacheFactory.get(this.instance);
+    this.apm = apm;
+    this.drivers[this.instance] = CacheFactory.get(this.instance, this.apm);
   }
 
   public async verifyOriginalDriverOnError(
@@ -23,7 +27,7 @@ export class Cache {
 
       this.isVerifyngOriginalCache = true;
 
-      const originalDriver = CacheFactory.get(this.instance);
+      const originalDriver = CacheFactory.get(this.instance, this.apm);
       await originalDriver.get(cacheHash);
       this.drivers[this.instance] = originalDriver;
 
@@ -35,16 +39,26 @@ export class Cache {
     }
   }
 
+  protected async startSpan(span: string, func: Function): Promise<any> {
+    if (!this.apm) {
+      return await func();
+    }
+
+    return await this.apm.startSpan(span, func);
+  }
+
   public async get(cacheHash: string): Promise<any> {
     try {
       return await this.drivers[this.instance].get(cacheHash);
     } catch (e) {
-      console.error(
-        `Error on get cache, switching to local cache: ${e.message} `,
-      );
-      this.verifyOriginalDriverOnError(cacheHash);
-      this.drivers[this.instance] = new LocalCache();
-      return await this.drivers[this.instance].get(cacheHash);
+      return await this.startSpan('CACHE_GET_FALLBACK', async () => {
+        console.error(
+          `Error on get cache, switching to local cache: ${e.message} `,
+        );
+        this.verifyOriginalDriverOnError(cacheHash);
+        this.drivers[this.instance] = new LocalCache();
+        return await this.drivers[this.instance].get(cacheHash);
+      });
     }
   }
 

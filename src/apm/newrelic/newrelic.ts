@@ -19,19 +19,13 @@ export class Newrelic implements ApmInterface {
     newrelicInstance.setTransactionName(name);
   }
 
-  async startSpan(span: string, func: Function): Promise<void> {
+  async startSpan(span: string, func: Function): Promise<any> {
     if (!newrelicInstance) {
-      return;
+      return await func();
     }
 
-    return await new Promise((resolve, reject) => {
-      newrelicInstance.startSegment(span, true, async () => {
-        try {
-          resolve(await func());
-        } catch (e) {
-          reject(e);
-        }
-      });
+    return await newrelicInstance.startSegment(span, true, async () => {
+      return await func();
     });
   }
 
@@ -45,6 +39,14 @@ export class Newrelic implements ApmInterface {
     }
 
     newrelicInstance.addCustomAttributes(attributes);
+  }
+
+  recordMetric(name: string, value: any): void {
+    if (!newrelicInstance) {
+      return;
+    }
+
+    newrelicInstance.recordMetric(name, value);
   }
 
   getBrowserTimingHeader(): string {

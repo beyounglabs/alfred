@@ -7,7 +7,7 @@ import {
   LoggerInterface,
 } from './contracts/logger.interface';
 
-let loggers: { [index: string]: winston.LoggerInstance } = {};
+let loggers: { [index: string]: winston.Logger | null } = {};
 
 const EXPIRATION_TIME = 3600000;
 
@@ -22,9 +22,9 @@ export class InfoLogger implements LoggerInterface {
     }, EXPIRATION_TIME);
   }
 
-  public getLogger(): winston.LoggerInstance {
+  public getLogger(): winston.Logger {
     if (loggers[this.data.infoIndex]) {
-      return loggers[this.data.infoIndex];
+      return loggers[this.data.infoIndex]!;
     }
 
     if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
@@ -57,7 +57,7 @@ export class InfoLogger implements LoggerInterface {
       }),
     );
 
-    const logger = new winston.Logger({
+    const logger = winston.createLogger({
       transports,
       exitOnError: false,
     });
@@ -69,7 +69,7 @@ export class InfoLogger implements LoggerInterface {
 
   public async log(data: LogDataInterface): Promise<void> {
     try {
-      const logger: winston.LoggerInstance = this.getLogger();
+      const logger: winston.Logger = this.getLogger();
 
       const message = data['message'] ? data['message'] : 'log_default';
 
@@ -88,7 +88,7 @@ export class InfoLogger implements LoggerInterface {
   }
 
   public async close(): Promise<any> {
-    const logger: winston.LoggerInstance = this.getLogger();
+    const logger: winston.Logger = this.getLogger();
 
     loggers[this.data.infoIndex] = null;
 

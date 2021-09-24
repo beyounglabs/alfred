@@ -63,18 +63,9 @@ export class DatabaseProvider {
           connectionLimit: process.env.DB_POOL_CONNECTION_LIMIT || 10,
         },
         namingStrategy: new SnakeNamingStrategy(),
-      };
 
-      // if (process.env.REDIS_CACHE_HOST) {
-      //   connectionOptions.cache = {
-      //     type: 'redis',
-      //     options: {
-      //       host: process.env.REDIS_CACHE_HOST,
-      //       port: process.env.REDIS_CACHE_PORT,
-      //       db: process.env.REDIS_CACHE_DB ? process.env.REDIS_CACHE_DB : 0,
-      //     },
-      //   };
-      // }
+        flags: ['+LOCAL_FILES'],
+      };
 
       this.connection = await createConnection(connectionOptions);
     }

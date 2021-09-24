@@ -27,4 +27,5 @@ exports.config = {
   slow_sql: {
     enabled: true,
   },
+  feature_flag: { new_promise_tracking: true },
 };

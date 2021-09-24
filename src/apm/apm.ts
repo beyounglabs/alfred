@@ -13,6 +13,10 @@ export class Apm implements ApmInterface {
       return;
     }
 
+    if (process.env.DISABLE_NEW_RELIC === '1') {
+      return;
+    }
+
     try {
       const apmPath = `./${apm}/${apm}`;
       const apmClassName = (await import(apmPath))[`${capitalize(apm)}`];
@@ -53,5 +57,13 @@ export class Apm implements ApmInterface {
     }
 
     return apmInstance.getBrowserTimingHeader();
+  }
+
+  recordMetric(name: string, value: any): void {
+    if (!apmInstance) {
+      return;
+    }
+
+    return apmInstance.recordMetric(name, value);
   }
 }

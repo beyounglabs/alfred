@@ -3,32 +3,17 @@ import { VariablesInterface } from './variables.interface';
 
 export class Vm {
   public async run(code: string, variables: VariablesInterface): Promise<any> {
-    const variableKeys = Object.keys(variables);
-    const variablesDefinitions = variableKeys
-      .map(variableKey => {
-        const variable = variables[variableKey];
-        let value: any;
+    const newVariables = {};
+    for (const code of Object.keys(variables)) {
+      newVariables[code] = variables[code].value;
+    }
 
-        if (variable.type === 'number') {
-          value = variable.value || 0;
-        } else if (variable.type === 'string') {
-          value = `'${variable.value || ''}'`;
-        } else if (variable.type === 'object') {
-          value = `JSON.parse('${
-            variable.value ? JSON.stringify(variable.value) : {}
-          }')`;
-        }
+    const variablesContext = vm.createContext(newVariables);
 
-        return `const ${variableKey} = ${value};`;
-      })
-      .join('\n      ');
-
-    const codeToRun = `   (() => {
-      ${variablesDefinitions}
-
+    const codeToRun = `(() => {
       return (${code});
     })()`;
 
-    return vm.runInThisContext(codeToRun);
+    return vm.runInContext(codeToRun, variablesContext);
   }
 }

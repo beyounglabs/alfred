@@ -1,4 +1,5 @@
-import Axios, { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig } from 'axios';
+import { AxiosInstance } from '../http/axios.instance';
 import { coalesce } from './coalesce';
 import { RequestError } from './request.error';
 
@@ -28,7 +29,7 @@ export async function request(
 
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await Axios(requestConfig);
+      const response = await AxiosInstance.request(requestConfig);
       const status = coalesce(() => response.data.status, 200);
       const message = coalesce(() => response.data.message, null);
 

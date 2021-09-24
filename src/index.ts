@@ -1,5 +1,3 @@
-console.log('==== DEPRECATED - import with alfred/XXXXX');
-
 export { loadEnv } from './env/load.env';
 export { jsonRequestMiddleware } from './express/json.request.middleware';
 export { loadRoutes } from './express/load.routes';
@@ -20,15 +18,9 @@ export {
 } from './logger/performance.logger';
 export { WarnLogger } from './logger/warn.logger';
 export { AbstractUpserter } from './mystique/abstract.upserter';
-export {
-  MystiqueActionInterface,
-} from './mystique/contracts/mystique.action.interface';
-export {
-  MystiqueFieldInterface,
-} from './mystique/contracts/mystique.field.interface';
-export {
-  MystiqueResultHeaderInterface,
-} from './mystique/contracts/mystique.result.header.interface';
+export { MystiqueActionInterface } from './mystique/contracts/mystique.action.interface';
+export { MystiqueFieldInterface } from './mystique/contracts/mystique.field.interface';
+export { MystiqueResultHeaderInterface } from './mystique/contracts/mystique.result.header.interface';
 export { DatabaseProvider } from './providers/database.provider';
 export { RedisProvider } from './providers/redis.provider';
 export { QueueGenerator } from './queue/queue.generator';
