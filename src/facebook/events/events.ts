@@ -1,6 +1,6 @@
-import { InfoLogger } from '@beyounglabs/alfred';
 import * as bizSdk from 'facebook-nodejs-business-sdk';
 import { ErrorLogger } from '../../logger/error.logger';
+import { InfoLogger } from '../../logger/info.logger';
 
 export class Events {
   protected Content = bizSdk.Content;

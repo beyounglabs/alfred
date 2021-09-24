@@ -1,9 +1,7 @@
-import { Cart } from '../../cart/cart';
-import { CheckoutRequestInterface } from '../../checkout/contracts/checkout.request.interface';
 import { Events } from './events';
 
 export class Purchase extends Events {
-  public async execute(checkoutRequest: CheckoutRequestInterface, cart: Cart) {
+  public async execute(checkoutRequest: any, cart: any) {
     if (this.readyToSend === false) {
       return true;
     }
