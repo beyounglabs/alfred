@@ -1,5 +1,6 @@
 import { CacheInterface } from '../cache.interface';
 import * as LRUCache from 'lru-cache';
+import { CompressionInterface } from '../compression.interface';
 
 const options = {
   max: 5000,
@@ -9,6 +10,12 @@ const options = {
 let cache = new LRUCache(options);
 
 export class LocalCache implements CacheInterface {
+  protected compression: CompressionInterface;
+
+  public setCompression(compression: CompressionInterface): void {
+    this.compression = compression;
+  }
+
   public async get(cacheHash: string): Promise<any> {
     return cache.get(cacheHash);
   }

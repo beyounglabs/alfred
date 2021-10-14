@@ -1,12 +1,12 @@
+import { format } from 'date-fns';
 import * as IORedis from 'ioredis';
 import * as moment from 'moment';
-import * as zlib from 'zlib';
-import { CacheInterface } from '../cache.interface';
-import { serialize, deserialize } from 'v8';
-import { Apm } from '../../apm/apm';
-import * as uniqidGenerate from 'uniqid';
 import { hostname } from 'os';
-import { format } from 'date-fns';
+import * as uniqidGenerate from 'uniqid';
+import { Apm } from '../../apm/apm';
+import { CacheInterface } from '../cache.interface';
+import { CompressionInterface } from '../compression.interface';
+import { NoCompression } from '../compression/no.compression';
 
 let redisWriteClient: { [code: string]: IORedis.Redis | undefined } = {};
 let redisReadClient: { [code: string]: IORedis.Redis | undefined } = {};
@@ -16,10 +16,16 @@ let runningAsFallback: boolean = false;
 export class RedisCache implements CacheInterface {
   protected instance: string;
   protected apm?: Apm;
+  protected compression: CompressionInterface;
 
   constructor(instance?: string, apm?: Apm) {
     this.instance = instance || 'default';
     this.apm = apm;
+    this.compression = new NoCompression();
+  }
+
+  public setCompression(compression: CompressionInterface): void {
+    this.compression = compression;
   }
 
   protected async getWriteClient(): Promise<IORedis.Redis> {
@@ -251,27 +257,19 @@ export class RedisCache implements CacheInterface {
 
     const response = await this.startSpan(
       'CACHE_GET_BUFFER',
-      async () => await client.getBuffer(cacheHash),
+      async () => await client.getBuffer(this.getCacheHash(cacheHash)),
     );
 
     if (!response) {
       return;
     }
 
-    // const uncompressedBuffer = await this.startSpan(
-    //   'CACHE_DECOMPRESS',
-    //   async () => {
-    //     return await new Promise<Buffer>((resolve, reject) => {
-    //       zlib.brotliDecompress(response, (err, buffer) => {
-    //         if (err) {
-    //           reject(err);
-    //           return;
-    //         }
-    //         resolve(buffer);
-    //       });
-    //     });
-    //   },
-    // );
+    const uncompressedBuffer = await this.startSpan(
+      'CACHE_DECOMPRESS',
+      async () => {
+        return await this.compression.decompress(response);
+      },
+    );
 
     // return await this.startSpan('CACHE_DESERIALIZE', async () =>
     //   deserialize(uncompressedBuffer),
@@ -282,13 +280,13 @@ export class RedisCache implements CacheInterface {
     // );
 
     return await this.startSpan('CACHE_DESERIALIZE', async () =>
-      JSON.parse(response),
+      JSON.parse(uncompressedBuffer),
     );
   }
 
   public async delete(cacheHash: string): Promise<any> {
     const client = await this.getWriteClient();
-    await client.del(cacheHash);
+    await client.del(this.getCacheHash(cacheHash));
   }
 
   public async set(
@@ -307,25 +305,19 @@ export class RedisCache implements CacheInterface {
 
     const requestBufffer = JSON.stringify(data);
 
-    // const compressedBuffer = await new Promise<Buffer>((resolve, reject) => {
-    //   zlib.brotliCompress(
-    //     requestBufffer,
-    //     {
-    //       params: {
-    //         [zlib.constants.BROTLI_PARAM_QUALITY]: 4,
-    //       },
-    //     },
-    //     (err, buffer) => {
-    //       if (err) {
-    //         reject(err);
-    //         return;
-    //       }
-    //       resolve(buffer);
-    //     },
-    //   );
-    // });
-    // await client.setex(cacheHash, expire, compressedBuffer);
-    await client.setex(cacheHash, expire, requestBufffer);
+    const compressedBuffer = await this.compression.compress(requestBufffer);
+    await client.setex(this.getCacheHash(cacheHash), expire, compressedBuffer);
+  }
+
+  public getCacheHash(cacheHash: string) {
+    if (
+      this.compression.getSuffix() &&
+      cacheHash.endsWith(this.compression.getSuffix())
+    ) {
+      return cacheHash;
+    }
+
+    return cacheHash + this.compression.getSuffix();
   }
 
   public async clearAll(cachePrefix: string): Promise<void> {

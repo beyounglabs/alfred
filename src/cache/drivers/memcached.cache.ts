@@ -1,10 +1,12 @@
+import { format } from 'date-fns';
 import * as Memcached from 'memcached';
 import * as moment from 'moment';
-import * as uniqidGenerate from 'uniqid';
 import { hostname } from 'os';
-import { format } from 'date-fns';
+import * as uniqidGenerate from 'uniqid';
 import { Apm } from '../../apm/apm';
 import { CacheInterface } from '../cache.interface';
+import { CompressionInterface } from '../compression.interface';
+import { NoCompression } from '../compression/no.compression';
 
 let memcachedWriteClient: { [code: string]: Memcached | undefined } = {};
 let memcachedReadClient: { [code: string]: Memcached | undefined } = {};
@@ -12,10 +14,16 @@ let memcachedReadClient: { [code: string]: Memcached | undefined } = {};
 export class MemcachedCache implements CacheInterface {
   protected instance: string;
   protected apm?: Apm;
+  protected compression: CompressionInterface;
 
   constructor(instance?: string, apm?: Apm) {
     this.instance = instance || 'default';
     this.apm = apm;
+    this.compression = new NoCompression();
+  }
+
+  public setCompression(compression: CompressionInterface): void {
+    this.compression = compression;
   }
 
   protected async getWriteClient(): Promise<Memcached> {
