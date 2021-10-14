@@ -20,7 +20,7 @@ export class GzipCompression implements CompressionInterface {
       zlib.gzip(
         requestBufffer,
         {
-          level: ,
+          level: this.quality,
         },
         (err, buffer) => {
           if (err) {
