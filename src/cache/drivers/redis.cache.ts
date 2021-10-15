@@ -305,7 +305,13 @@ export class RedisCache implements CacheInterface {
 
     const requestBufffer = JSON.stringify(data);
 
-    const compressedBuffer = await this.compression.compress(requestBufffer);
+    const compressedBuffer = await this.startSpan(
+      'CACHE_COMPRESS',
+      async () => {
+        return await this.compression.compress(requestBufffer);
+      },
+    );
+
     await client.setex(this.getCacheHash(cacheHash), expire, compressedBuffer);
   }
 
