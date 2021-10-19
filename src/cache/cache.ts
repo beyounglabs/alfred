@@ -2,6 +2,7 @@ import * as md5 from 'md5';
 import { Apm } from '../apm/apm';
 import { CacheFactory } from './cache.factory';
 import { CacheInterface } from './cache.interface';
+import { CompressionInterface } from './compression.interface';
 import { LocalCache } from './drivers/local.cache';
 
 export class Cache {
@@ -90,6 +91,10 @@ export class Cache {
       this.drivers[this.instance] = new LocalCache();
       await this.drivers[this.instance].set(cacheHash, data, expireInSeconds);
     }
+  }
+
+  public setCompression(compression: CompressionInterface): void {
+    this.drivers[this.instance].setCompression(compression);
   }
 
   public async clearAll(): Promise<void> {
