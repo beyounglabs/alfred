@@ -2,6 +2,7 @@ import * as bluebird from 'bluebird';
 import * as dotenv from 'dotenv';
 import * as fsImport from 'fs';
 import { kebabCase } from 'lodash';
+import * as Mocha from 'mocha';
 import 'reflect-metadata';
 import { Container } from 'typedi/Container';
 import { Connection } from 'typeorm/connection/Connection';
@@ -24,9 +25,14 @@ export class TestCase {
       dotEnvImported = true;
     }
   }
-
-  public async setup(resetDatabase?: boolean) {
-    jest.setTimeout(1000 * 60); // 60 seconds
+  public async setup(
+    test:
+      | Mocha.ITestCallbackContext
+      | Mocha.ISuiteCallbackContext
+      | Mocha.IHookCallbackContext,
+    resetDatabase?: boolean,
+  ) {
+    test.timeout(1000 * 60); // 60 seconds
 
     this.loadDotEnv();
 
