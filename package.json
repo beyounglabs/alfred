@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "2.1.36",
+  "version": "2.1.37",
   "description": "Alfred JS Framework",
   "main": "index.js",
   "repository": "git@bitbucket.com:beautybrands/alfred.git",
@@ -55,7 +55,7 @@
     "mocha": "^4.0.1",
     "moment": "^2.19.2",
     "mysql2": "^1.5.3",
-    "newrelic": "^6.4.0",
+    "newrelic": "6.13.1",
     "nodemon": "^1.12.1",
     "nyc": "^11.4.1",
     "prettier": "^1.10.2",
