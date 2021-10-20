@@ -63,8 +63,6 @@ export class DatabaseProvider {
           connectionLimit: process.env.DB_POOL_CONNECTION_LIMIT || 10,
         },
         namingStrategy: new SnakeNamingStrategy(),
-
-        flags: ['+LOCAL_FILES'],
       };
 
       this.connection = await createConnection(connectionOptions);
