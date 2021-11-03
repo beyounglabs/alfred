@@ -24,6 +24,9 @@ exports.config = {
     level: 'info',
   },
   transaction_tracer: { record_sql: 'raw' },
+  error_collector: {
+    ignore_status_codes: [400, 401, 403, 404, 429],
+  },
   slow_sql: {
     enabled: true,
   },
