@@ -1,4 +1,4 @@
-class HttpError extends Error{
+export class HttpError extends Error{
   protected status: number;
 
   constructor(status: number, error: string){

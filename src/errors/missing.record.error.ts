@@ -1,4 +1,4 @@
-class MissingRecordError extends Error{
+export class MissingRecordError extends Error{
   protected status: number;
 
   constructor(error: string){
