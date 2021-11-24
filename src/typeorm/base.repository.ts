@@ -102,9 +102,7 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     const propList: any[] = [];
     const propsKeys = Object.keys(props);
 
-
     for (const propKey of propsKeys) {
-
       const value = props[propKey];
       if (!value) {
         propList.push('');
@@ -160,7 +158,11 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     return qb;
   }
 
-  public async cached(cacheKey: string, callback: CallableFunction) {
+  public async cached(
+    cacheKey: string,
+    callback: CallableFunction,
+    expireInSeconds?: number,
+  ) {
     if (this.getUseCache()) {
       const cachedResult = await cache.get(cacheKey);
       if (cachedResult) {
@@ -170,7 +172,7 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
 
     const result = await callback();
     if (this.getUseCache()) {
-      await cache.set(cacheKey, result);
+      await cache.set(cacheKey, result, expireInSeconds);
     }
 
     return result;
