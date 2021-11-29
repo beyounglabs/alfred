@@ -159,11 +159,11 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
   }
 
   public async cached(
-    cacheKey: string,
+    cacheKey: string | null | undefined,
     callback: CallableFunction,
     expireInSeconds?: number,
   ) {
-    if (this.getUseCache()) {
+    if (this.getUseCache() && cacheKey) {
       const cachedResult = await cache.get(cacheKey);
       if (cachedResult) {
         return cachedResult;
@@ -171,7 +171,7 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
     }
 
     const result = await callback();
-    if (this.getUseCache()) {
+    if (this.getUseCache() && cacheKey) {
       await cache.set(cacheKey, result, expireInSeconds);
     }
 
