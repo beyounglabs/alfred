@@ -71,6 +71,10 @@ export class WarnLogger implements LoggerInterface {
     try {
       const logger: winston.Logger = this.getLogger();
 
+      if (process.env.NODE_ENV === 'development') {
+        console.error(data);
+      }
+
       const message = data['message'] ? data['message'] : 'log_default';
 
       if (this.isStatic()) {
