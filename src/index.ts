@@ -37,5 +37,6 @@ export { Validator } from './validator/validator';
 export { Vm } from './vm/vm';
 export { getPerformanceTime } from './helpers/get.performance.time';
 export { closeAllLoggers } from './helpers/close.all.loggers';
+export { getServiceUrl } from './env/get.service.url';
 export { HttpError } from './errors/http.error';
 export { MissingRecordError } from './errors/missing.record.error';

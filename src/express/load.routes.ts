@@ -5,6 +5,7 @@ import { QueryManager } from '../typeorm/query.manager';
 import { ResponseInterface } from './response.interface';
 import { RouteInterface } from './route.interface';
 import { auth } from './auth';
+import { hostname } from 'os';
 
 export async function loadRoutes(
   app: Express,
@@ -12,6 +13,9 @@ export async function loadRoutes(
   apm: Apm,
 ) {
   const defaultMiddlewares: any[] = [trimRequest.all];
+
+  process.env.IS_PREVIEW = hostname().includes('preview') ? '1' : '0';
+
   for (const route of routes) {
     let middlewares = defaultMiddlewares.slice(0);
 
