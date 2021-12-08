@@ -14,8 +14,6 @@ export async function loadRoutes(
 ) {
   const defaultMiddlewares: any[] = [trimRequest.all];
 
-  process.env.IS_PREVIEW = hostname().includes('preview') ? '1' : '0';
-
   for (const route of routes) {
     let middlewares = defaultMiddlewares.slice(0);
 
@@ -39,6 +37,10 @@ export async function loadRoutes(
         request.setTimeout(Number(timeout) * 1000, () => {
           console.info(`Route ${route.path} got timeout of ${timeout} seconds`);
         });
+
+        process.env.IS_PREVIEW = request.hostname.includes('preview')
+          ? '1'
+          : '0';
 
         response.locals.queryManager = new QueryManager();
         response.locals.apm = apm;
