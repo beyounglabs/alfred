@@ -7,5 +7,6 @@ export interface ResponseInterface extends Response {
     queryManager: QueryManager;
     apm: Apm;
     auth: any;
+    isPreview: boolean;
   };
 }

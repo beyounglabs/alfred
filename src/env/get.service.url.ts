@@ -1,8 +1,8 @@
-export function getServiceUrl(service: string) {
+export function getServiceUrl(service: string, isPreview: boolean) {
   const codeWithoutPreview = `${service.toUpperCase()}_URL`;
   const codeWithPreview = `${service.toUpperCase()}_URL_PREVIEW`;
   let url: string | undefined = process.env[codeWithoutPreview];
-  if (process.env.IS_PREVIEW === '1' && process.env[codeWithPreview]) {
+  if (isPreview && process.env[codeWithPreview]) {
     url = process.env[codeWithPreview];
   }
 

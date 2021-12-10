@@ -38,12 +38,10 @@ export async function loadRoutes(
           console.info(`Route ${route.path} got timeout of ${timeout} seconds`);
         });
 
-        process.env.IS_PREVIEW = request.hostname.includes('preview')
-          ? '1'
-          : '0';
-
         response.locals.queryManager = new QueryManager();
         response.locals.apm = apm;
+        response.locals.isPreview = request.hostname.includes('preview');
+
         apm.setTransactionName(`${route.method.toLowerCase()} ${route.path}`);
 
         if (request.headers.authorization) {
