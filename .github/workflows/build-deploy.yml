@@ -3,49 +3,19 @@ on:
   push:
     branches:
       - master
-      - staging
-      - qa
-      - develop
+      - v2
+
 jobs:
-  build:
-    name: Build and Deploy
+  publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Get Source Code
-        uses: actions/checkout@v2
-
-      - name: Get Cache Date
-        id: get-cache-date
-        run: |
-          echo "::set-output name=date::$(/bin/date -u "+%Y-%m")"
-        shell: bash
-
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.4.1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Disable SSH strict checking
-        run: printf "Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
-
-      - name: Install Deps
-        run: wget https://github.com/mikefarah/yq/releases/download/3.3.2/yq_linux_amd64 && sudo mv ./yq_linux_amd64 /usr/local/bin/yq && sudo chmod +x /usr/local/bin/yq
-
-      - name: Cache OPS
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/ops
-          key: ${{ runner.os }}-${{ steps.get-cache-date.outputs.date }}-ops-v6
-
-      - name: Clone OPS
-        run: '[ ! -d "~/ops" ] && git clone --depth=1 --branch=master git@github.com:beyounglabs/ops.git ~/ops || (git -C ~/ops fetch --all && git -C ~/ops reset --hard origin/master)'
-
-      - name: Extract repository name
-        run: echo "REPOSITORY_NAME=$(echo ${GITHUB_REPOSITORY##*/})" >> $GITHUB_ENV
-
-      - name: Extract branch name
-        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')" >> $GITHUB_ENV
-
-      - name: Run Deploy
-        run: ~/ops/deploy/deploy.sh $REPOSITORY_NAME $BRANCH_NAME $(pwd) $GITHUB_RUN_NUMBER
+          node-version: '12.x'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@beyounglabs'
+      - run: yarn install
+      - run: npm run npm:publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
