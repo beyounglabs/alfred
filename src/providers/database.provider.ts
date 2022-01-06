@@ -68,9 +68,32 @@ export class DatabaseProvider {
       };
 
       this.connection = await createConnection(connectionOptions);
-    }
+    } else if (process.env.DB_TYPE === 'postgres') {
+      const connectionOptions: any = {
+        type: 'postgres',
+        host: process.env.DB_HOST,
+        charset: process.env.DB_CHARSET,
+        port: parseInt(String(process.env.DB_PORT), 10),
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        database,
+        logging: process.env.DB_LOGGING === 'true',
+        logger: 'file',
+        cache: false,
+        entities: [
+          `${__dirname}/../../../../${prefix}src/entities/*.entity{.ts,.js}`,
+        ],
+        migrations: [
+          `${__dirname}/../../../../${prefix}database/migrations/*.{.ts,.js}`,
+        ],
+        extra: {
+          connectionLimit: process.env.DB_POOL_CONNECTION_LIMIT || 10,
+        },
+        namingStrategy: new SnakeNamingStrategy(),
+      };
 
-    if (process.env.DB_TYPE === 'sqlite') {
+      this.connection = await createConnection(connectionOptions);
+    } else if (process.env.DB_TYPE === 'sqlite') {
       const connectionOptions: any = {
         type: 'sqlite',
         database,

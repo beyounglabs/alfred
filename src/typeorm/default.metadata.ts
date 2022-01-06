@@ -3,7 +3,6 @@ import { BooleanTransformer } from './transformers/boolean.transformer';
 import { JsonTransformer } from './transformers/json.transformer';
 import { NumberTransformer } from './transformers/number.transformer';
 
-
 export class DefaultMetadata {
   public static getDefaultEngine(): string {
     return String(process.env.DB_DEFAULT_ENGINE);
@@ -40,8 +39,12 @@ export class DefaultMetadata {
     }
 
     if (params.type === 'boolean') {
-      params.type = 'tinyint';
+      params.type = this.getBooleanDataType();
       params.transformer = new BooleanTransformer();
+    }
+
+    if (params.type === 'datetime') {
+      params.type = this.getDatetimeDataType();
     }
 
     return params;
@@ -85,5 +88,20 @@ export class DefaultMetadata {
     }
 
     return 'numeric';
+  }
+
+  public static getBooleanDataType(): any {
+    if (process.env.DB_TYPE === 'postgres') {
+      return 'boolean';
+    }
+    return 'tinyint';
+  }
+
+  public static getDatetimeDataType(): any {
+    if (process.env.DB_TYPE === 'postgres') {
+      return 'timestamp';
+    }
+
+    return 'datetime';
   }
 }
