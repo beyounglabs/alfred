@@ -1,6 +1,6 @@
-import { ClientOpts } from 'redis';
 import { RedisManager } from './redis.manager';
 import { writeFile } from 'fs-extra';
+import * as IORedis from 'ioredis';
 
 let hasCache: boolean = false;
 let cache: any = {};
@@ -13,10 +13,10 @@ export class BrainParameter {
   protected redis: RedisManager;
 
   constructor(
-    clientOpts: ClientOpts,
+    clientOpts: IORedis.RedisOptions,
     service: string,
     profile: string,
-    replicaClientOpts?: ClientOpts,
+    replicaClientOpts?: IORedis.RedisOptions,
   ) {
     this.redis = new RedisManager(clientOpts, replicaClientOpts);
     this.service = service;

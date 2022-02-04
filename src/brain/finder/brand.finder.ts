@@ -1,5 +1,4 @@
 import { orderBy } from 'lodash';
-import { promisify } from 'util';
 import { ObjectConverter } from '../../helpers/object.converter';
 import { RedisManager } from '../redis.manager';
 
@@ -8,21 +7,18 @@ export class BrandFinder {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
 
-    const mgetAsync = promisify(redisClient.mget).bind(redisClient) as any;
-    const scanAsync = promisify(redisClient.scan).bind(redisClient) as any;
-
     let nextCursor: string | null = '0';
 
     let keys: string[] = [];
 
     while (nextCursor !== null) {
-      const result = await scanAsync([
+      const result = await redisClient.scan(
         nextCursor,
         'MATCH',
         `Brand:*`,
         'COUNT',
         5000,
-      ]);
+      );
 
       nextCursor = result[0];
 
@@ -33,7 +29,9 @@ export class BrandFinder {
       }
     }
 
-    const items: any[] = (await mgetAsync(keys)).map(item => JSON.parse(item));
+    const items: any[] = (await redisClient.mget(keys)).map(item =>
+      JSON.parse(item!),
+    );
 
     return orderBy(
       ObjectConverter.underscoreToCamelCase(items),
@@ -50,10 +48,9 @@ export class BrandFinder {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
 
-    const getAsync = promisify(redisClient.get).bind(redisClient);
     const key = `Brand:${code}`;
 
-    const result = await getAsync(key);
+    const result = await redisClient.get(key);
     if (!result) {
       return;
     }
