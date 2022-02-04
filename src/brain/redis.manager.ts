@@ -1,12 +1,15 @@
-import { ClientOpts, createClient, RedisClient } from 'redis';
+import * as IORedis from 'ioredis';
 
-let writeClient: RedisClient | undefined;
-let readClient: RedisClient | undefined;
-let subscribeClient: RedisClient | undefined;
-let staticWriteClientOpts: ClientOpts;
-let staticReadClientOpts: ClientOpts;
+let writeClient: IORedis.Redis | undefined;
+let readClient: IORedis.Redis | undefined;
+let subscribeClient: IORedis.Redis | undefined;
+let staticWriteClientOpts: IORedis.RedisOptions;
+let staticReadClientOpts: IORedis.RedisOptions;
 export class RedisManager {
-  constructor(writeClientOpts?: ClientOpts, readClientOpts?: ClientOpts) {
+  constructor(
+    writeClientOpts?: IORedis.RedisOptions,
+    readClientOpts?: IORedis.RedisOptions,
+  ) {
     if (writeClientOpts) {
       staticWriteClientOpts = writeClientOpts;
     }
@@ -18,17 +21,21 @@ export class RedisManager {
     }
   }
 
-  public async getClient(): Promise<RedisClient> {
+  public async getClient(): Promise<IORedis.Redis> {
     return await this.getWriteClient();
   }
 
-  public async getWriteClient(): Promise<RedisClient> {
+  public async getWriteClient(): Promise<IORedis.Redis> {
     if (writeClient) {
       return writeClient;
     }
 
-    const redisClient = createClient(staticWriteClientOpts);
-    return new Promise<RedisClient>(resolve => {
+    const redisClient = new IORedis({
+      ...staticWriteClientOpts,
+      maxRetriesPerRequest: 2,
+    });
+
+    return new Promise<IORedis.Redis>(resolve => {
       redisClient.on('ready', () => {
         writeClient = redisClient;
         resolve(writeClient);
@@ -36,13 +43,17 @@ export class RedisManager {
     });
   }
 
-  public async getReadClient(): Promise<RedisClient> {
+  public async getReadClient(): Promise<IORedis.Redis> {
     if (readClient) {
       return readClient;
     }
 
-    const redisClient = createClient(staticReadClientOpts);
-    return new Promise<RedisClient>(resolve => {
+    const redisClient = new IORedis({
+      ...staticReadClientOpts,
+      maxRetriesPerRequest: 2,
+    });
+
+    return new Promise<IORedis.Redis>(resolve => {
       redisClient.on('ready', () => {
         readClient = redisClient;
         resolve(readClient);
@@ -50,13 +61,17 @@ export class RedisManager {
     });
   }
 
-  public async getSubscribeClient(): Promise<RedisClient> {
+  public async getSubscribeClient(): Promise<IORedis.Redis> {
     if (subscribeClient) {
       return subscribeClient;
     }
 
-    const redisClient = createClient(staticWriteClientOpts);
-    return new Promise<RedisClient>(resolve => {
+    const redisClient = new IORedis({
+      ...staticWriteClientOpts,
+      maxRetriesPerRequest: 2,
+    });
+
+    return new Promise<IORedis.Redis>(resolve => {
       redisClient.on('ready', () => {
         subscribeClient = redisClient;
         resolve(subscribeClient);
@@ -66,17 +81,17 @@ export class RedisManager {
 
   public closeConnection() {
     if (writeClient) {
-      writeClient.end(true);
+      writeClient.disconnect();
       writeClient = undefined;
     }
 
     if (readClient) {
-      readClient.end(true);
+      readClient.disconnect();
       readClient = undefined;
     }
 
     if (subscribeClient) {
-      subscribeClient.end(true);
+      subscribeClient.disconnect();
       subscribeClient = undefined;
     }
   }
