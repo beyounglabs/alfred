@@ -4,8 +4,8 @@ export function parseVariables(string: String, data: { [x: string]: any }) {
   const variables = [] as any;
   const list = [] as any;
 
-  for (const text of string.split('$')) {
-    const textWith$ = '$' + text;
+  for (const text of string.split('${')) {
+    const textWith$ = '${' + text;
 
     const result = /\${([\w.]+)}/g.exec(textWith$);
 
