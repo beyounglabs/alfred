@@ -5,7 +5,11 @@ import { NumberTransformer } from './transformers/number.transformer';
 
 export class DefaultMetadata {
   public static getDefaultEngine(): string {
-    return String(process.env.DB_DEFAULT_ENGINE);
+    if (process.env.DB_TYPE === 'sqlite') {
+      return '';
+    }
+
+    return String(process.env.DB_DEFAULT_ENGINE ?? 'InnoDB');
   }
 
   public static getColumnOptions(params: ColumnOptions): ColumnOptions {
