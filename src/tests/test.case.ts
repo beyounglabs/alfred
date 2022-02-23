@@ -56,9 +56,8 @@ export class TestCase {
 
   protected async resetDatabase() {
     if (!executed) {
-      const databaseProvider: DatabaseProvider = Container.get(
-        DatabaseProvider,
-      );
+      const databaseProvider: DatabaseProvider =
+        Container.get(DatabaseProvider);
       let databaseName: string = String(process.env.DB_DATABASE);
       if (process.env.DB_TYPE === 'sqlite') {
         databaseName += '.cache';
@@ -67,7 +66,7 @@ export class TestCase {
       let connection: Connection = await databaseProvider.connect(databaseName);
 
       await connection.createQueryRunner().clearDatabase(databaseName);
-      await connection.createQueryRunner().createDatabase(databaseName);
+      await connection.createQueryRunner().createDatabase(databaseName, true);
       await connection.close();
 
       connection = await databaseProvider.connect(databaseName);
