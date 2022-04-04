@@ -48,10 +48,10 @@ export class Cache {
     return await this.apm.startSpan<T>(span, func);
   }
 
-  public async get<T = any>(cacheHash: string): Promise<T | undefined> {
+  public async get<T = any>(cacheHash: string): Promise<T | null> {
     try {
       if (process.env.CACHE_DISABLED === '1') {
-        return;
+        return null;
       }
 
       return await this.drivers[this.instance].get(cacheHash);
@@ -69,10 +69,10 @@ export class Cache {
 
   public async getMultiple<T = any>(
     cacheHashes: string[],
-  ): Promise<T[] | undefined> {
+  ): Promise<Array<T | null>> {
     try {
       if (process.env.CACHE_DISABLED === '1') {
-        return;
+        return cacheHashes.map(cacheHash => null);
       }
 
       return await this.drivers[this.instance].getMultiple(cacheHashes);
