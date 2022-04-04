@@ -150,6 +150,17 @@ export class MemcachedCache implements CacheInterface {
     );
   }
 
+  /**
+   * Review this
+   */
+  public async getMultiple(cacheHashes: string[]): Promise<any> {
+    const result: any[] = [];
+    for (const cacheHash of cacheHashes) {
+      result.push(this.get(cacheHash));
+    }
+    return result;
+  }
+
   public async delete(cacheHash: string): Promise<any> {
     const client = await this.getWriteClient();
 

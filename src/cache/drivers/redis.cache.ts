@@ -284,6 +284,49 @@ export class RedisCache implements CacheInterface {
     );
   }
 
+  public async getMultiple(cacheHashes: string[]): Promise<any> {
+    const client = await this.getReadClient();
+
+    const responses = await this.startSpan(
+      'CACHE_GET_BUFFER',
+      async () =>
+        await client.mgetBuffer(
+          cacheHashes.map(cacheHash => this.getCacheHash(cacheHash)),
+        ),
+    );
+
+    if (!responses) {
+      return [];
+    }
+
+    const cacheReponse: any[] = [];
+
+    for (const response of responses) {
+      const uncompressedBuffer = await this.startSpan(
+        'CACHE_DECOMPRESS',
+        async () => {
+          return await this.compression.decompress(response);
+        },
+      );
+
+      // return await this.startSpan('CACHE_DESERIALIZE', async () =>
+      //   deserialize(uncompressedBuffer),
+      // );
+
+      // return await this.startSpan('CACHE_DESERIALIZE', async () =>
+      //   deserialize(response),
+      // );
+
+      cacheReponse.push(
+        await this.startSpan('CACHE_DESERIALIZE', async () =>
+          JSON.parse(uncompressedBuffer),
+        ),
+      );
+    }
+
+    return cacheReponse;
+  }
+
   public async delete(cacheHash: string): Promise<any> {
     const client = await this.getWriteClient();
     await client.del(this.getCacheHash(cacheHash));

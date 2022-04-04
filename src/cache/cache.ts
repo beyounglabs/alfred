@@ -67,6 +67,30 @@ export class Cache {
     }
   }
 
+  public async getMultiple<T = any>(
+    cacheHashes: string[],
+  ): Promise<T[] | undefined> {
+    try {
+      if (process.env.CACHE_DISABLED === '1') {
+        return;
+      }
+
+      return await this.drivers[this.instance].getMultiple(cacheHashes);
+    } catch (e) {
+      return await this.startSpan('CACHE_GET_FALLBACK', async () => {
+        console.error(
+          `Error on get cache, switching to local cache: ${e.message} `,
+        );
+
+        if (cacheHashes.length > 0) {
+          this.verifyOriginalDriverOnError(cacheHashes[0]);
+        }
+        this.drivers[this.instance] = new LocalCache();
+        return await this.drivers[this.instance].getMultiple(cacheHashes);
+      });
+    }
+  }
+
   public async delete(cacheHash: string): Promise<any> {
     try {
       return await this.drivers[this.instance].delete(cacheHash);
