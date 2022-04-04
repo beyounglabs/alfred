@@ -302,6 +302,11 @@ export class RedisCache implements CacheInterface {
     const cacheReponse: any[] = [];
 
     for (const response of responses) {
+      if (!response) {
+        cacheReponse.push(response);
+        continue;
+      }
+
       const uncompressedBuffer = await this.startSpan(
         'CACHE_DECOMPRESS',
         async () => {
