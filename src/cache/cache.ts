@@ -40,16 +40,20 @@ export class Cache {
     }
   }
 
-  protected async startSpan(span: string, func: Function): Promise<any> {
+  protected async startSpan<T = any>(span: string, func: Function): Promise<T> {
     if (!this.apm) {
       return await func();
     }
 
-    return await this.apm.startSpan(span, func);
+    return await this.apm.startSpan<T>(span, func);
   }
 
-  public async get(cacheHash: string): Promise<any> {
+  public async get<T = any>(cacheHash: string): Promise<T | undefined> {
     try {
+      if (process.env.CACHE_DISABLED === '1') {
+        return;
+      }
+
       return await this.drivers[this.instance].get(cacheHash);
     } catch (e) {
       return await this.startSpan('CACHE_GET_FALLBACK', async () => {
