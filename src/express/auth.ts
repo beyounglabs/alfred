@@ -99,6 +99,7 @@ export async function auth(
       id: response.user.id,
       username: username,
       email: response.user.email,
+      admin: response.user.admin,
     };
 
     return basicAuthCache[token];
