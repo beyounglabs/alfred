@@ -17,14 +17,18 @@ export class WarnLogger implements LoggerInterface {
   constructor(data: WarnInterface) {
     this.data = data;
 
+    if (!data.errorIndex) {
+      data.errorIndex = 'default';
+    }
+
     setTimeout(() => {
-      loggers[this.data.errorIndex] = null;
+      loggers[this.data.errorIndex!] = null;
     }, EXPIRATION_TIME);
   }
 
   public getLogger(): winston.Logger {
-    if (loggers[this.data.errorIndex]) {
-      return loggers[this.data.errorIndex]!;
+    if (loggers[this.data.errorIndex!]) {
+      return loggers[this.data.errorIndex!]!;
     }
 
     if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
@@ -62,7 +66,7 @@ export class WarnLogger implements LoggerInterface {
       exitOnError: false,
     });
 
-    loggers[this.data.errorIndex] = logger;
+    loggers[this.data.errorIndex!] = logger;
 
     return logger;
   }
@@ -88,13 +92,13 @@ export class WarnLogger implements LoggerInterface {
   }
 
   public isStatic() {
-    return this.data.errorIndex.endsWith('-static');
+    return this.data.errorIndex!.endsWith('-static');
   }
 
   public async close(): Promise<any> {
     const logger: winston.Logger = this.getLogger();
 
-    loggers[this.data.errorIndex] = null;
+    loggers[this.data.errorIndex!] = null;
 
     return Promise.resolve(logger.close());
   }

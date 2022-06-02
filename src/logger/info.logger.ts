@@ -15,16 +15,20 @@ export class InfoLogger implements LoggerInterface {
   protected data: InfoInterface;
 
   constructor(data: InfoInterface) {
+    if (!data.infoIndex) {
+      data.infoIndex = 'default';
+    }
+
     this.data = data;
 
     setTimeout(() => {
-      loggers[this.data.infoIndex] = null;
+      loggers[this.data.infoIndex!] = null;
     }, EXPIRATION_TIME);
   }
 
   public getLogger(): winston.Logger {
-    if (loggers[this.data.infoIndex]) {
-      return loggers[this.data.infoIndex]!;
+    if (loggers[this.data.infoIndex!]) {
+      return loggers[this.data.infoIndex!]!;
     }
 
     if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
@@ -62,7 +66,7 @@ export class InfoLogger implements LoggerInterface {
       exitOnError: false,
     });
 
-    loggers[this.data.infoIndex] = logger;
+    loggers[this.data.infoIndex!] = logger;
 
     return logger;
   }
@@ -84,13 +88,13 @@ export class InfoLogger implements LoggerInterface {
   }
 
   public isStatic() {
-    return this.data.infoIndex.endsWith('-static');
+    return this.data.infoIndex!.endsWith('-static');
   }
 
   public async close(): Promise<any> {
     const logger: winston.Logger = this.getLogger();
 
-    loggers[this.data.infoIndex] = null;
+    loggers[this.data.infoIndex!] = null;
 
     return Promise.resolve(logger.close());
   }

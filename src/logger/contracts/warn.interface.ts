@@ -1,3 +1,3 @@
 export interface WarnInterface {
-  errorIndex: string;
+  errorIndex?: string;
 }
