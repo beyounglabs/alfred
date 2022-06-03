@@ -19,9 +19,15 @@ export class LocalCache implements CacheInterface {
   public async get(cacheHash: string): Promise<any> {
     // change that for structuredClone. Node 17+
     const result = cache.get(cacheHash);
-    if (!result) {
+    const type = typeof result;
+    if (['string', 'number', 'boolean'].includes(type)) {
       return result;
     }
+
+    if (result === null || result === undefined) {
+      return result;
+    }
+
     return JSON.parse(JSON.stringify(result));
   }
 
