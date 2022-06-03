@@ -17,7 +17,8 @@ export class LocalCache implements CacheInterface {
   }
 
   public async get(cacheHash: string): Promise<any> {
-    return cache.get(cacheHash);
+    // change that for structuredClone. Node 17+
+    return JSON.parse(JSON.stringify(await cache.get(cacheHash)));
   }
 
   public async getMultiple(cacheHashes: string[]): Promise<any> {
