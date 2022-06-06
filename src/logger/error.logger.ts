@@ -14,11 +14,13 @@ const EXPIRATION_TIME = 3600000;
 export class ErrorLogger implements LoggerInterface {
   protected data: ErrorInterface;
 
-  constructor(data: ErrorInterface) {
-    this.data = data;
+  constructor(data?: ErrorInterface) {
+    this.data = data ?? {
+      errorIndex: 'default',
+    };
 
-    if (!data.errorIndex) {
-      data.errorIndex = 'default';
+    if (!this.data.errorIndex) {
+      this.data.errorIndex = 'default';
     }
 
     setTimeout(() => {

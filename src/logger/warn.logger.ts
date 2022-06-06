@@ -14,11 +14,13 @@ const EXPIRATION_TIME = 3600000;
 export class WarnLogger implements LoggerInterface {
   protected data: WarnInterface;
 
-  constructor(data: WarnInterface) {
-    this.data = data;
+  constructor(data?: WarnInterface) {
+    this.data = data ?? {
+      errorIndex: 'default',
+    };
 
-    if (!data.errorIndex) {
-      data.errorIndex = 'default';
+    if (!this.data.errorIndex) {
+      this.data.errorIndex = 'default';
     }
 
     setTimeout(() => {
