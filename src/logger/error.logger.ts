@@ -75,6 +75,11 @@ export class ErrorLogger implements LoggerInterface {
 
   public async log(data: LogDataInterface): Promise<void> {
     try {
+      if (process.env.NODE_ENV === 'testing') {
+        console.error(data);
+        return;
+      }
+
       const logger: winston.Logger = this.getLogger();
 
       if (process.env.NODE_ENV === 'development') {

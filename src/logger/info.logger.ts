@@ -73,6 +73,11 @@ export class InfoLogger implements LoggerInterface {
 
   public async log(data: LogDataInterface): Promise<void> {
     try {
+      if (process.env.NODE_ENV === 'testing') {
+        console.info(data);
+        return;
+      }
+
       const logger: winston.Logger = this.getLogger();
 
       const message = data['message'] ? data['message'] : 'log_default';

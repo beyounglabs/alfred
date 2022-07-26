@@ -13,7 +13,7 @@ export class Apm implements ApmInterface {
       return;
     }
 
-    if (process.env.DISABLE_NEW_RELIC === '1') {
+    if (process.env.DISABLE_APM === '1') {
       return;
     }
 

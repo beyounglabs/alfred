@@ -49,6 +49,11 @@ export class DebugLogger implements LoggerInterface {
 
   public async log(data: any): Promise<void> {
     try {
+      if (process.env.NODE_ENV === 'testing') {
+        console.debug(data);
+        return;
+      }
+
       const logger: winston.Logger = this.getLogger();
 
       const message = data['message'] ? data['message'] : 'log_default';
