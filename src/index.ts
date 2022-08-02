@@ -12,6 +12,7 @@ export { roundNumber } from './helpers/round.number';
 export { DebugLogger } from './logger/debug.logger';
 export { ErrorLogger } from './logger/error.logger';
 export { InfoLogger } from './logger/info.logger';
+export { Logger } from './logger-v2/logger';
 export {
   performanceLoggerEnd,
   performanceLoggerStart,
