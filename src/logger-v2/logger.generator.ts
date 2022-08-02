@@ -1,6 +1,7 @@
 import { hostname } from 'os';
 import * as winston from 'winston';
 import { LoggingWinston } from '@google-cloud/logging-winston';
+import { LoggerDataInterface } from './logger.data.interface';
 import { LoggerLevelType } from './logger.level.type';
 import { stat } from 'fs/promises';
 
@@ -8,19 +9,18 @@ let logger: winston.Logger | undefined = undefined;
 export abstract class LoggerGenerator {
   public static async log(
     level: LoggerLevelType,
-    message: string,
-    metadata: any,
+    data: LoggerDataInterface,
   ): Promise<void> {
     try {
       if (process.env.NODE_ENV === 'development') {
-        console.error(metadata);
+        console.error(data);
       }
 
       if (!logger) {
         logger = await this.getLogger();
       }
 
-      logger.log(level, message, metadata);
+      logger.log(level, data.message, data);
     } catch (e) {
       console.error('[LOGGING_ERROR]:', e.message);
     }
