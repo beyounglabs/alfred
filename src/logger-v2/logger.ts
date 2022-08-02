@@ -1,6 +1,6 @@
 import { LoggerGenerator } from './logger.generator';
 
-export class Logger {
+export abstract class Logger {
   public static async emerg(message: string, metadata: any): Promise<void> {
     return await LoggerGenerator.log('emerg', message, metadata);
   }
