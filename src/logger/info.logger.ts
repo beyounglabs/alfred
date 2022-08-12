@@ -6,11 +6,15 @@ import {
   LogDataInterface,
   LoggerInterface,
 } from './contracts/logger.interface';
+import { stat } from 'fs/promises';
 
 let loggers: { [index: string]: winston.Logger | null } = {};
 
 const EXPIRATION_TIME = 3600000;
 
+/**
+ * @depracated
+ */
 export class InfoLogger implements LoggerInterface {
   protected data: InfoInterface;
 
@@ -26,12 +30,16 @@ export class InfoLogger implements LoggerInterface {
     }, EXPIRATION_TIME);
   }
 
-  public getLogger(): winston.Logger {
+  public async getLogger(): Promise<winston.Logger> {
     if (loggers[this.data.infoIndex!]) {
       return loggers[this.data.infoIndex!]!;
     }
 
-    if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    const fileExists = await stat('/var/www/html/gcp-credentials.json')
+      .then(() => true)
+      .catch(() => false);
+
+    if (fileExists && !process.env.GOOGLE_APPLICATION_CREDENTIALS) {
       process.env.GOOGLE_APPLICATION_CREDENTIALS =
         '/var/www/html/gcp-credentials.json';
     }
@@ -78,7 +86,7 @@ export class InfoLogger implements LoggerInterface {
         return;
       }
 
-      const logger: winston.Logger = this.getLogger();
+      const logger: winston.Logger = await this.getLogger();
 
       const message = data['message'] ? data['message'] : 'log_default';
 
@@ -97,7 +105,7 @@ export class InfoLogger implements LoggerInterface {
   }
 
   public async close(): Promise<any> {
-    const logger: winston.Logger = this.getLogger();
+    const logger: winston.Logger = await this.getLogger();
 
     loggers[this.data.infoIndex!] = null;
 
