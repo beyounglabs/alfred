@@ -36,7 +36,7 @@ export async function request(
       if (status >= 400 && status < 600) {
         const error = new RequestError(message || 'No error message provided');
         error.response = response;
-
+        error.requestConfig = requestConfig;
         throw error;
       }
 
