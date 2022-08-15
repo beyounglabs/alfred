@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "3.0.107",
+  "version": "3.0.108",
   "description": "Alfred JS Framework",
   "main": "index.js",
   "repository": "git@bitbucket.com:beautybrands/alfred.git",
@@ -13,8 +13,8 @@
     "npm:publish": "rm -Rf dist && yarn build && cp package.json dist/ && cp -R scripts dist/ && cp -R defaults dist/  && cd dist/ && $(which npm) publish --access public"
   },
   "dependencies": {
-    "@google-cloud/debug-agent": "^5.1.0",
-    "@google-cloud/logging-winston": "^4.0.0",
+    "@google-cloud/debug-agent": "^7.1.0",
+    "@google-cloud/logging-winston": "^5.1.2",
     "@moebius/http-graceful-shutdown": "^1.1.0",
     "@types/bluebird": "^3.5.18",
     "@types/chai": "^4.0.4",
