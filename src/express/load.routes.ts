@@ -1,10 +1,10 @@
 import type { Express, NextFunction, Request } from 'express';
 import * as trimRequest from 'trim-request';
-import { Apm } from '../apm/apm';
+import type { Apm } from '../apm/apm';
 import { QueryManager } from '../typeorm/query.manager';
-import { ResponseInterface } from './response.interface';
-import { RouteInterface } from './route.interface';
 import { auth } from './auth';
+import type { ResponseInterface } from './response.interface';
+import type { RouteInterface } from './route.interface';
 
 export async function loadRoutes(
   app: Express,

@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { Request } from 'express';
+import type { Request } from 'express';
 import { JwtHelper } from '../helpers/jwt.helpers';
-import { RouteInterface } from './route.interface';
+import type { RouteInterface } from './route.interface';
 
 let basicAuthCache = {};
 
