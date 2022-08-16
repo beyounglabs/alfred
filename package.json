@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "3.0.113",
+  "version": "3.0.114",
   "description": "Alfred JS Framework",
   "main": "index.js",
   "repository": "git@bitbucket.com:beautybrands/alfred.git",
@@ -52,7 +52,7 @@
     "memcached": "^2.2.2",
     "moment": "^2.19.2",
     "mysql2": "^2.0.0",
-    "newrelic": "^8",
+    "newrelic": "^9",
     "prettier": "^2.0",
     "redis": "^2.8.0",
     "reflect-metadata": "^0.1.10",

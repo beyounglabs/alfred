@@ -529,6 +529,17 @@
     protobufjs "^6.10.0"
     yargs "^16.2.0"
 
+"@grpc/proto-loader@^0.6.13":
+  version "0.6.13"
+  resolved "https://registry.yarnpkg.com/@grpc/proto-loader/-/proto-loader-0.6.13.tgz#008f989b72a40c60c96cd4088522f09b05ac66bc"
+  integrity sha512-FjxPYDRTn6Ec3V0arm1FtSpmP6V50wuph2yILpyvTKzjc76oDdoihXqM1DzOW5ubvCC8GivfCnNtfaRE8myJ7g==
+  dependencies:
+    "@types/long" "^4.0.1"
+    lodash.camelcase "^4.3.0"
+    long "^4.0.0"
+    protobufjs "^6.11.3"
+    yargs "^16.2.0"
+
 "@grpc/proto-loader@^0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@grpc/proto-loader/-/proto-loader-0.7.0.tgz#743cc8a941cc251620c66ebe0d330e1411a33535"
@@ -787,31 +798,29 @@
   resolved "https://registry.yarnpkg.com/@moebius/http-graceful-shutdown/-/http-graceful-shutdown-1.1.0.tgz#b9d33e63358aa77b2103a577ea7ccdeae3e3c6d5"
   integrity sha512-cjODgYTIGuCwgsuVMZNDh8RBK697ULAoQAmLqMVpqnqF3nOlPaJHqtGrdLooyn81l83wzHYwG6kPvEIv+Fo+sQ==
 
-"@newrelic/aws-sdk@^4.1.1":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@newrelic/aws-sdk/-/aws-sdk-4.1.2.tgz#6548bbe408542cd9ee2999319dc14c11e37e4a95"
-  integrity sha512-B83gZDS6eseNAMd41s8FTyd+JSxKHl4cN8kQnh1k5aYe0XB/Mi3hxn0/mxGzui84L4kL0GJCCg/UOg+A2ciSQg==
-  dependencies:
-    semver "^7.3.5"
+"@newrelic/aws-sdk@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@newrelic/aws-sdk/-/aws-sdk-5.0.0.tgz#0a9f2abcfbd824b312536de7ad1b202bb2506fcf"
+  integrity sha512-0aW1/c2m0tcX+lP0fw/cA0hctviLUo18uWsX1pwar7KAAciHBiiS/ytRyZdN78pbZi/9A25CmKB0YFx3Ct+RDg==
 
-"@newrelic/koa@^6.1.1":
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/@newrelic/koa/-/koa-6.1.2.tgz#98e8e24ea0bee97197f02030e3ad09912dadacf2"
-  integrity sha512-nmjr5hv+nRDC2NaRF4+iex41K6iJ/UCujgnj8oyht1grazJXQHq0dJZdMxUVNMMO+m4ukTeisSlI4d/H/W9JUw==
+"@newrelic/koa@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@newrelic/koa/-/koa-7.0.0.tgz#3c88f987dfc02e1048d009da25d769310836e9b0"
+  integrity sha512-kjH2w2Nutpl+gwTYSybiM3Y8gcoxbaCt8l9WUylPDjOVXtIdG2d8XCMNr/cN8GDDUjXDNqvlQVZteelSRrOLDA==
 
-"@newrelic/native-metrics@^8.0.0":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@newrelic/native-metrics/-/native-metrics-8.0.0.tgz#6f5d31b57301ad97cbfa047e65ed7cb6c62a1aec"
-  integrity sha512-df/V1P6dxpX09PaA6Jx9pmkPbRrue5hDyRCc4w3bnqMbnybvwVwS+q1/QEPvjBPQJ5abTRlBcJ7UZ3sfGW1hzg==
+"@newrelic/native-metrics@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@newrelic/native-metrics/-/native-metrics-9.0.0.tgz#2186197defc664ceca3241a1d8f50c29aa4ab60a"
+  integrity sha512-WYDRs4hlFerUyism2TjF1PIJfP8w50Nc9Kt61zWNrGM3QYOrKXZ5ibA3R0fQgU0+LM7UWtQ9g7onFpVUGsj8QQ==
   dependencies:
     https-proxy-agent "^5.0.0"
-    nan "^2.15.0"
+    nan "^2.16.0"
     semver "^5.5.1"
 
-"@newrelic/superagent@^5.1.0":
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@newrelic/superagent/-/superagent-5.1.1.tgz#57e61878903718e1ba4310a365f65fae14a2b1a6"
-  integrity sha512-Bp2QtknriKHLKSfrBRyg4PjGJ8CCSkxYfZEDppOWmrGukJAP/9Vvr+ya0Mmj7SU8eIMMhaTvAnjvb2mVmX8wBw==
+"@newrelic/superagent@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@newrelic/superagent/-/superagent-6.0.0.tgz#8aee871547ebea90fcb37f98ea38d820cc1bc67b"
+  integrity sha512-5nClQp9ACd4BvLusAgFHjjKLDgAaC+dKmIsRNOPC82LOLFaoOgxxtbecnDIJ0NWCKQS+WOdmXdgYutwH+e5dsA==
 
 "@npmcli/fs@^1.0.0":
   version "1.1.1"
@@ -4895,7 +4904,7 @@ named-placeholders@^1.1.2:
   dependencies:
     lru-cache "^4.1.3"
 
-nan@^2.15.0:
+nan@^2.16.0:
   version "2.16.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.16.0.tgz#664f43e45460fb98faf00edca0bb0d7b8dce7916"
   integrity sha512-UdAqHyFngu7TfQKsCBgAA6pWDkT8MAO7d0jyOecVhN5354xbLqdn8mV9Tat9gepAupm0bt2DbeaSC8vS52MuFA==
@@ -4927,16 +4936,16 @@ negotiator@0.6.3, negotiator@^0.6.2:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
 
-newrelic@^8:
-  version "8.13.0"
-  resolved "https://registry.yarnpkg.com/newrelic/-/newrelic-8.13.0.tgz#a7beabfc10d915f75d74721adeb87dfa1eeb8e81"
-  integrity sha512-nWthu+uhAl3S0Ia8DSBuiv3feEunSJM2soJP/JZ1xPwbwrTH9E7Vp1mOAykWfCqgup0NKUS83NSFlJutx2yHUg==
+newrelic@^9:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/newrelic/-/newrelic-9.0.0.tgz#fc6db5f8e428e9cb204c9169bf5d69501d8737e7"
+  integrity sha512-5k4rlOdCWBp0/OVuf5l1ZYclA1J/Q5i0hV7POUbNEVYfyXCCwZKGh6y7y8364W5CQQ7v6jECPeTS6R8fuyL8vg==
   dependencies:
     "@grpc/grpc-js" "^1.5.5"
-    "@grpc/proto-loader" "^0.6.12"
-    "@newrelic/aws-sdk" "^4.1.1"
-    "@newrelic/koa" "^6.1.1"
-    "@newrelic/superagent" "^5.1.0"
+    "@grpc/proto-loader" "^0.6.13"
+    "@newrelic/aws-sdk" "^5.0.0"
+    "@newrelic/koa" "^7.0.0"
+    "@newrelic/superagent" "^6.0.0"
     "@tyriar/fibonacci-heap" "^2.0.7"
     async "^3.2.3"
     concat-stream "^2.0.0"
@@ -4946,7 +4955,7 @@ newrelic@^8:
     semver "^5.3.0"
     winston-transport "^4.5.0"
   optionalDependencies:
-    "@newrelic/native-metrics" "^8.0.0"
+    "@newrelic/native-metrics" "^9.0.0"
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -5419,7 +5428,7 @@ protobufjs-cli@1.0.0:
     tmp "^0.2.1"
     uglify-js "^3.7.7"
 
-protobufjs@6.11.3, protobufjs@^6.10.0, protobufjs@^6.11.2, protobufjs@^6.8.6:
+protobufjs@6.11.3, protobufjs@^6.10.0, protobufjs@^6.11.2, protobufjs@^6.11.3, protobufjs@^6.8.6:
   version "6.11.3"
   resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.11.3.tgz#637a527205a35caa4f3e2a9a4a13ddffe0e7af74"
   integrity sha512-xL96WDdCZYdU7Slin569tFX712BxsxslWwAfAhCYjQKGTq7dAU91Lomy6nLLhh/dyGhk/YH4TwTSRxTzhuHyZg==
