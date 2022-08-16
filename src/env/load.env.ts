@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 import { BrainParameter } from '../brain/brain.parameter';
+import { stat } from 'fs/promises';
 
 export async function loadEnv(subscribe: boolean) {
   let dotenvPath = '.env';
@@ -37,7 +38,25 @@ export async function loadEnv(subscribe: boolean) {
     brainReadRedisOpts,
   );
 
-  await brainParameter.updateEnv(true);
+  const cacheExists = await stat('/tmp/.env.cache')
+    .then(() => true)
+    .catch(() => false);
+
+  if (cacheExists) {
+    const { parsed } = dotenv.config({ path: '/tmp/.env.cache' });
+
+    process.env = {
+      ...JSON.parse(JSON.stringify(process.env)),
+      ...parsed,
+    };
+
+    brainParameter.updateEnv(true, false).then(() => {
+      brainParameter.dumpEnv('/tmp/.env.cache');
+    });
+  } else {
+    await brainParameter.updateEnv(true);
+    await brainParameter.dumpEnv('/tmp/.env.cache');
+  }
 
   if (subscribe) {
     brainParameter.subscribe().then();

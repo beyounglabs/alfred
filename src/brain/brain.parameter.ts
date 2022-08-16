@@ -106,7 +106,7 @@ export class BrainParameter {
     });
   }
 
-  public async dumpEnv() {
+  public async dumpEnv(path?: string) {
     let content = '';
     const keys = Object.keys(process.env)
       .sort()
@@ -118,12 +118,17 @@ export class BrainParameter {
       content += `${code}=${process.env[code]}\n`;
     }
 
-    const file = `${__dirname}/../../../../.env.dump`;
+    if (!path) {
+      path = `${__dirname}/../../../../.env.dump`;
+    }
 
-    await writeFile(file, content);
+    await writeFile(path, content);
   }
 
-  public async updateEnv(skipIfExists: boolean = false) {
+  public async updateEnv(
+    skipIfExists: boolean = false,
+    showInfo: boolean = true,
+  ) {
     const params = await this.getFromRedis();
     if (params === null || params === undefined) {
       throw new Error('Unable to get parameters from Brain');
@@ -131,7 +136,9 @@ export class BrainParameter {
 
     for (const code of Object.keys(params)) {
       if (process.env[code] && skipIfExists) {
-        console.info(`Skiping ${code} parameter from Brain`);
+        if (showInfo) {
+          console.info(`Skiping ${code} parameter from Brain`);
+        }
         continue;
       }
 
