@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "3.0.109",
+  "version": "3.0.110",
   "description": "Alfred JS Framework",
   "main": "index.js",
   "repository": "git@bitbucket.com:beautybrands/alfred.git",
@@ -70,7 +70,6 @@
     "validator": "^9.2.0",
     "validatorjs": "^3.14.2",
     "winston": "3.0.0",
-    "winston-slack-webhook-transport": "1.2.5",
     "yargs": "^13.2.1"
   }
 }
