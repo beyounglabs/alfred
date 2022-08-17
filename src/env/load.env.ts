@@ -38,9 +38,11 @@ export async function loadEnv(subscribe: boolean) {
     brainReadRedisOpts,
   );
 
-  const cacheExists = await stat('/tmp/.env.cache')
-    .then(() => true)
-    .catch(() => false);
+  const cacheExists =
+    process.env.NODE_ENV !== 'production' &&
+    (await stat('/tmp/.env.cache')
+      .then(() => true)
+      .catch(() => false));
 
   if (cacheExists) {
     const { parsed } = dotenv.config({ path: '/tmp/.env.cache' });
