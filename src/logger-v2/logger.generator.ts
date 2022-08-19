@@ -5,6 +5,7 @@ import { LoggerDataInterface } from './logger.data.interface';
 import { LoggerLevelType } from './logger.level.type';
 import { stat } from 'fs/promises';
 
+const DEFAULT_LOGGING_LEVEL: LoggerLevelType = 'notice';
 let logger: winston.Logger | undefined = undefined;
 export abstract class LoggerGenerator {
   public static async log(
@@ -12,6 +13,10 @@ export abstract class LoggerGenerator {
     data: LoggerDataInterface,
   ): Promise<void> {
     try {
+      if (data.isAxiosError) {
+        data = data.toJSON();
+      }
+
       if (process.env.NODE_ENV === 'development') {
         console.error(data);
       }
@@ -47,10 +52,10 @@ export abstract class LoggerGenerator {
       new Date().toISOString().replace(/T.+$/, ''),
     ].join('-');
 
-    let loggingLevel = process.env.LOGGING_LEVEL ?? 'warning';
+    let loggingLevel = process.env.LOGGING_LEVEL ?? DEFAULT_LOGGING_LEVEL;
     if (!Object.keys(winston.config.syslog.levels).includes(loggingLevel)) {
       console.error(`[LOGGING_ERROR]: Invalid LOGGING_LEVEL ${loggingLevel}`);
-      loggingLevel = 'warning';
+      loggingLevel = DEFAULT_LOGGING_LEVEL;
     }
 
     transports.push(
