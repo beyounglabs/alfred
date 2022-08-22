@@ -10,12 +10,13 @@ import {
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
 import { Cache } from '../cache/cache';
 
-let useCache: boolean = true;
 const cache = new Cache();
 
-export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
-  Entity
-> {
+export class BaseRepository<
+  Entity extends ObjectLiteral,
+> extends Repository<Entity> {
+  protected useCache: boolean = true;
+
   public setQueryRunner(queryRunner: QueryRunner) {
     Object.assign(this, {
       queryRunner: queryRunner,
@@ -24,11 +25,11 @@ export class BaseRepository<Entity extends ObjectLiteral> extends Repository<
   }
 
   public getUseCache() {
-    return useCache;
+    return this.useCache;
   }
 
   public setUseCache(uCache: boolean) {
-    useCache = uCache;
+    this.useCache = uCache;
   }
 
   /**
