@@ -1,15 +1,12 @@
-import * as IORedis from 'ioredis';
+import IORedis, { RedisOptions } from 'ioredis';
 
-let writeClient: IORedis.Redis | undefined;
-let readClient: IORedis.Redis | undefined;
-let subscribeClient: IORedis.Redis | undefined;
-let staticWriteClientOpts: IORedis.RedisOptions;
-let staticReadClientOpts: IORedis.RedisOptions;
+let writeClient: IORedis | undefined;
+let readClient: IORedis | undefined;
+let subscribeClient: IORedis | undefined;
+let staticWriteClientOpts: RedisOptions;
+let staticReadClientOpts: RedisOptions;
 export class RedisManager {
-  constructor(
-    writeClientOpts?: IORedis.RedisOptions,
-    readClientOpts?: IORedis.RedisOptions,
-  ) {
+  constructor(writeClientOpts?: RedisOptions, readClientOpts?: RedisOptions) {
     if (writeClientOpts) {
       staticWriteClientOpts = writeClientOpts;
     }
@@ -21,11 +18,11 @@ export class RedisManager {
     }
   }
 
-  public async getClient(): Promise<IORedis.Redis> {
+  public async getClient(): Promise<IORedis> {
     return await this.getWriteClient();
   }
 
-  public async getWriteClient(): Promise<IORedis.Redis> {
+  public async getWriteClient(): Promise<IORedis> {
     if (writeClient) {
       return writeClient;
     }
@@ -35,7 +32,7 @@ export class RedisManager {
       maxRetriesPerRequest: 2,
     });
 
-    return new Promise<IORedis.Redis>(resolve => {
+    return new Promise<IORedis>(resolve => {
       redisClient.on('ready', () => {
         writeClient = redisClient;
         resolve(writeClient);
@@ -43,7 +40,7 @@ export class RedisManager {
     });
   }
 
-  public async getReadClient(): Promise<IORedis.Redis> {
+  public async getReadClient(): Promise<IORedis> {
     if (readClient) {
       return readClient;
     }
@@ -53,7 +50,7 @@ export class RedisManager {
       maxRetriesPerRequest: 2,
     });
 
-    return new Promise<IORedis.Redis>(resolve => {
+    return new Promise<IORedis>(resolve => {
       redisClient.on('ready', () => {
         readClient = redisClient;
         resolve(readClient);
@@ -61,7 +58,7 @@ export class RedisManager {
     });
   }
 
-  public async getSubscribeClient(): Promise<IORedis.Redis> {
+  public async getSubscribeClient(): Promise<IORedis> {
     if (subscribeClient) {
       return subscribeClient;
     }
@@ -71,7 +68,7 @@ export class RedisManager {
       maxRetriesPerRequest: 2,
     });
 
-    return new Promise<IORedis.Redis>(resolve => {
+    return new Promise<IORedis>(resolve => {
       redisClient.on('ready', () => {
         subscribeClient = redisClient;
         resolve(subscribeClient);

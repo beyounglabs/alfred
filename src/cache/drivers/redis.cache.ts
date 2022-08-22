@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import * as IORedis from 'ioredis';
+import IORedis from 'ioredis';
 import * as moment from 'moment';
 import { hostname } from 'os';
 import * as uniqidGenerate from 'uniqid';
@@ -8,8 +8,8 @@ import { CacheInterface } from '../cache.interface';
 import { CompressionInterface } from '../compression.interface';
 import { NoCompression } from '../compression/no.compression';
 
-let redisWriteClient: { [code: string]: IORedis.Redis | undefined } = {};
-let redisReadClient: { [code: string]: IORedis.Redis | undefined } = {};
+let redisWriteClient: { [code: string]: IORedis | undefined } = {};
+let redisReadClient: { [code: string]: IORedis | undefined } = {};
 
 let runningAsFallback: boolean = false;
 
@@ -28,7 +28,7 @@ export class RedisCache implements CacheInterface {
     this.compression = compression;
   }
 
-  protected async getWriteClient(): Promise<IORedis.Redis> {
+  protected async getWriteClient(): Promise<IORedis> {
     if (redisWriteClient[this.instance]) {
       return redisWriteClient[this.instance]!;
     }
@@ -136,7 +136,7 @@ export class RedisCache implements CacheInterface {
     return redisWriteClient[this.instance]!;
   }
 
-  protected async getReadClient(): Promise<IORedis.Redis> {
+  protected async getReadClient(): Promise<IORedis> {
     if (redisReadClient[this.instance]) {
       return redisReadClient[this.instance]!;
     }
