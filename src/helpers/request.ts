@@ -21,8 +21,8 @@ export async function request(
   const requestConfig: AxiosRequestConfig = {
     method: method as any,
     url: (baseUrl || '') + url,
-    params: method === 'get' ? params : {},
-    data: ['put', 'delete', 'post'].indexOf(method) !== -1 ? params : {},
+    params: method === 'get' ? params : undefined,
+    data: ['put', 'delete', 'post'].indexOf(method) !== -1 ? params : undefined,
     withCredentials: true,
     ...config,
   };
