@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import * as http from 'http';
 import * as https from 'https';
+import axiosRetry from 'axios-retry';
 
 const config: AxiosRequestConfig = {
   //follow up to 10 HTTP 3xx redirects
@@ -25,3 +26,5 @@ if (!isFront) {
 // https://gist.github.com/ccnokes/94576dc38225936a3ca892b989c9d0c6
 
 export const AxiosInstance = axios.create(config);
+
+axiosRetry(AxiosInstance, { retries: 2 });
