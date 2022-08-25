@@ -25,7 +25,12 @@ export abstract class LoggerGenerator {
         logger = await this.getLogger();
       }
 
-      logger.log(level, data.message, data);
+      const message = data.message;
+
+      // @ts-ignore
+      delete data.message;
+
+      logger.log(level, message, data);
     } catch (e) {
       console.error('[LOGGING_ERROR]:', e.message);
     }
