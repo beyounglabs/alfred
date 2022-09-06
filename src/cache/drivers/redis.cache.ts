@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { hostname } from 'os';
 import * as uniqidGenerate from 'uniqid';
 import { Apm } from '../../apm/apm';
+import { Logger } from '../../logger-v2/logger';
 import { CacheInterface } from '../cache.interface';
 import { CompressionInterface } from '../compression.interface';
 import { NoCompression } from '../compression/no.compression';
@@ -64,19 +65,19 @@ export class RedisCache implements CacheInterface {
         maxRetriesPerRequest: 2,
       });
 
-      console.log(
-        `[${connectionHash}] Starting to connect to Write Redis ${
+      Logger.info({
+        message: `[${connectionHash}] Starting to connect to Write Redis ${
           this.instance
         } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
-      );
+      });
 
       await new Promise((resolve, reject) => {
         redisClientNew.on('error', err => {
-          console.log(
-            `[${connectionHash}] Error on Write Redis ${
+          Logger.error({
+            message: `[${connectionHash}] Error on Write Redis ${
               this.instance
             } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')} ${err}`,
-          );
+          });
 
           if (runningAsFallback) {
             return;
@@ -104,7 +105,9 @@ export class RedisCache implements CacheInterface {
               resolve(undefined);
 
               runningAsFallback = true;
-              console.log(`Redis is running with fallback: ${err}`);
+              Logger.notice({
+                message: `Redis is running with fallback: ${err}`,
+              });
             });
           } else {
             reject(`Error on connecting to redis: ${err}`);
@@ -112,11 +115,11 @@ export class RedisCache implements CacheInterface {
         });
 
         redisClientNew.on('ready', () => {
-          console.log(
-            `[${connectionHash}] Connected to Write Redis ${
+          Logger.info({
+            message: `[${connectionHash}] Connected to Write Redis ${
               this.instance
             } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
-          );
+          });
 
           redisWriteClient[this.instance] = redisClientNew;
 
@@ -124,7 +127,9 @@ export class RedisCache implements CacheInterface {
 
           runningAsFallback = false;
 
-          console.log('Redis is running with the primary');
+          Logger.info({
+            message: 'Redis is running with the primary',
+          });
         });
       });
     });
@@ -180,19 +185,19 @@ export class RedisCache implements CacheInterface {
         maxRetriesPerRequest: 2,
       });
 
-      console.log(
-        `[${connectionHash}] Starting to connect to Read Redis ${
+      Logger.info({
+        message: `[${connectionHash}] Starting to connect to Read Redis ${
           this.instance
         } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
-      );
+      });
 
       await new Promise<any>((resolve, reject) => {
         redisClientNew.on('error', err => {
-          console.log(
-            `[${connectionHash}] Error on Read Redis ${
+          Logger.error({
+            message: `[${connectionHash}] Error on Read Redis ${
               this.instance
             } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')} ${err}`,
-          );
+          });
 
           if (runningAsFallback) {
             return;
@@ -221,7 +226,9 @@ export class RedisCache implements CacheInterface {
 
               runningAsFallback = true;
 
-              console.log(`Redis is running with fallback: ${err}`);
+              Logger.notice({
+                message: `Redis is running with fallback: ${err}`,
+              });
             });
           } else {
             reject(`Error on connecting to redis: ${err}`);
@@ -229,18 +236,21 @@ export class RedisCache implements CacheInterface {
         });
 
         redisClientNew.on('ready', () => {
-          console.log(
-            `[${connectionHash}] Connected to Read Redis ${
+          Logger.info({
+            message: `[${connectionHash}] Connected to Read Redis ${
               this.instance
             } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
-          );
+          });
 
           redisReadClient[this.instance] = redisClientNew;
 
           resolve(undefined);
 
           runningAsFallback = false;
-          console.log('Redis is running with the primary');
+
+          Logger.info({
+            message: 'Redis is running with the primary',
+          });
         });
       });
     });

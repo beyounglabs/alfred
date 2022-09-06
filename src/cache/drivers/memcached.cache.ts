@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { hostname } from 'os';
 import * as uniqidGenerate from 'uniqid';
 import { Apm } from '../../apm/apm';
+import { Logger } from '../../logger-v2/logger';
 import { CacheInterface } from '../cache.interface';
 import { CompressionInterface } from '../compression.interface';
 import { NoCompression } from '../compression/no.compression';
@@ -53,11 +54,11 @@ export class MemcachedCache implements CacheInterface {
         poolSize: 500,
       });
 
-      console.log(
-        `[${connectionHash}] Starting to connect to Write Memcached ${
+      Logger.info({
+        message: `[${connectionHash}] Starting to connect to Write Memcached ${
           this.instance
         } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
-      );
+      });
 
       memcachedWriteClient[this.instance] = memcachedClientNew;
     });
@@ -108,11 +109,11 @@ export class MemcachedCache implements CacheInterface {
         poolSize: 500,
       });
 
-      console.log(
-        `[${connectionHash}] Starting to connect to Read Memcached ${
+      Logger.info({
+        message: `[${connectionHash}] Starting to connect to Read Memcached ${
           this.instance
         } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
-      );
+      });
 
       memcachedReadClient[this.instance] = memcachedClientNew;
     });
@@ -135,7 +136,6 @@ export class MemcachedCache implements CacheInterface {
             return;
           }
 
-          console.log('Teste', data);
           resolve(data);
         });
       });
