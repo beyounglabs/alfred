@@ -1,4 +1,5 @@
 import { capitalize } from 'lodash';
+import { Logger } from '../logger-v2/logger';
 import { ApmInterface } from './contracts/apm.interface';
 
 let apmInstance: ApmInterface;
@@ -23,7 +24,7 @@ export class Apm implements ApmInterface {
       apmInstance = new apmClassName();
       await apmInstance.start();
     } catch (e) {
-      console.log(`Failed to load APM ${apm}: ${e.message}`);
+      Logger.error({ message: `Failed to load APM ${apm}: ${e.message}` });
     }
   }
 

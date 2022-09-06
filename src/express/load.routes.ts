@@ -1,6 +1,7 @@
 import type { Express, NextFunction, Request } from 'express';
 import * as trimRequest from 'trim-request';
 import type { Apm } from '../apm/apm';
+import { Logger } from '../logger-v2/logger';
 import { QueryManager } from '../typeorm/query.manager';
 import { auth } from './auth';
 import type { ResponseInterface } from './response.interface';
@@ -34,7 +35,9 @@ export async function loadRoutes(
           route.timeout || process.env.SERVER_TIMEOUT || defaultTimeout;
 
         request.setTimeout(Number(timeout) * 1000, () => {
-          console.info(`Route ${route.path} got timeout of ${timeout} seconds`);
+          Logger.notice({
+            message: `Route ${route.path} got timeout of ${timeout} seconds`,
+          });
         });
 
         response.locals.queryManager = new QueryManager();
