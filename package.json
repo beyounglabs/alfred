@@ -11,8 +11,8 @@
     "test:watch": "jest --watch",
     "install": "./scripts/install.sh",
     "build:publish": "rm -Rf dist && yarn build && cp package.json dist/ && cp -R scripts dist/ && cp -R defaults dist/",
-    "npm:publish": "yarn build-publish && cd dist/ && $(which npm) publish --access public",
-    "npm:publish-beta": "yarn build-publish && cd dist/ && $(which npm) publish --access public --tag beta"
+    "npm:publish": "yarn build:publish && cd dist/ && $(which npm) publish --access public",
+    "npm:publish-beta": "yarn build:publish && cd dist/ && $(which npm) publish --access public --tag beta"
   },
   "dependencies": {
     "@google-cloud/debug-agent": "^7.1.0",
