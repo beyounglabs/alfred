@@ -38,14 +38,16 @@ export async function loadEnv(subscribe: boolean) {
     brainReadRedisOpts,
   );
 
+  const cacheFile = `/tmp/.env.cache.${process.env.BRAIN_PROFILE}`;
+
   const cacheExists =
     process.env.NODE_ENV !== 'production' &&
-    (await stat('/tmp/.env.cache')
+    (await stat(cacheFile)
       .then(() => true)
       .catch(() => false));
 
   if (cacheExists) {
-    const { parsed } = dotenv.config({ path: '/tmp/.env.cache' });
+    const { parsed } = dotenv.config({ path: cacheFile });
 
     process.env = {
       ...JSON.parse(JSON.stringify(process.env)),
@@ -53,11 +55,11 @@ export async function loadEnv(subscribe: boolean) {
     };
 
     brainParameter.updateEnv(true, false).then(() => {
-      brainParameter.dumpEnv('/tmp/.env.cache');
+      brainParameter.dumpEnv(cacheFile);
     });
   } else {
     await brainParameter.updateEnv(true);
-    await brainParameter.dumpEnv('/tmp/.env.cache');
+    await brainParameter.dumpEnv(cacheFile);
   }
 
   if (subscribe) {
