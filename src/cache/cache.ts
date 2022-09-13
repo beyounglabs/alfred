@@ -1,5 +1,6 @@
 import * as md5 from 'md5';
 import { Apm } from '../apm/apm';
+import { Logger } from '../logger-v2/logger';
 import { CacheFactory } from './cache.factory';
 import { CacheInterface } from './cache.interface';
 import { CompressionInterface } from './compression.interface';
@@ -57,9 +58,9 @@ export class Cache {
       return await this.drivers[this.instance].get(cacheHash);
     } catch (e) {
       return await this.startSpan('CACHE_GET_FALLBACK', async () => {
-        console.error(
-          `Error on get cache, switching to local cache: ${e.message} `,
-        );
+        Logger.error({
+          message: `Error on get cache, switching to local cache: ${e.message} `,
+        });
         this.verifyOriginalDriverOnError(cacheHash);
         this.drivers[this.instance] = new LocalCache();
         return await this.drivers[this.instance].get(cacheHash);
@@ -78,9 +79,9 @@ export class Cache {
       return await this.drivers[this.instance].getMultiple(cacheHashes);
     } catch (e) {
       return await this.startSpan('CACHE_GET_FALLBACK', async () => {
-        console.error(
-          `Error on get cache, switching to local cache: ${e.message} `,
-        );
+        Logger.error({
+          message: `Error on get cache, switching to local cache: ${e.message} `,
+        });
 
         if (cacheHashes.length > 0) {
           this.verifyOriginalDriverOnError(cacheHashes[0]);
@@ -95,9 +96,10 @@ export class Cache {
     try {
       return await this.drivers[this.instance].delete(cacheHash);
     } catch (e) {
-      console.error(
-        `Error on get cache, switching to local cache: ${e.message} `,
-      );
+      Logger.error({
+        message: `Error on get cache, switching to local cache: ${e.message} `,
+      });
+
       this.verifyOriginalDriverOnError(cacheHash);
       this.drivers[this.instance] = new LocalCache();
       return await this.drivers[this.instance].delete(cacheHash);
@@ -112,9 +114,9 @@ export class Cache {
     try {
       await this.drivers[this.instance].set(cacheHash, data, expireInSeconds);
     } catch (e) {
-      console.error(
-        `Error on set cache, switching to local cache: ${e.message} `,
-      );
+      Logger.error({
+        message: `Error on set cache, switching to local cache: ${e.message} `,
+      });
       this.verifyOriginalDriverOnError(cacheHash);
       this.drivers[this.instance] = new LocalCache();
       await this.drivers[this.instance].set(cacheHash, data, expireInSeconds);

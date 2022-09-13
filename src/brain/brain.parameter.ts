@@ -1,6 +1,7 @@
 import { RedisManager } from './redis.manager';
 import { writeFile } from 'fs-extra';
 import * as IORedis from 'ioredis';
+import { Logger } from '../logger-v2/logger';
 
 let hasCache: boolean = false;
 let cache: any = {};
@@ -137,7 +138,7 @@ export class BrainParameter {
     for (const code of Object.keys(params)) {
       if (process.env[code] && skipIfExists) {
         if (showInfo) {
-          console.info(`Skiping ${code} parameter from Brain`);
+          Logger.info({ message: `Skiping ${code} parameter from Brain` });
         }
         continue;
       }
