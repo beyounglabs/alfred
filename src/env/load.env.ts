@@ -17,12 +17,12 @@ export async function loadEnv(subscribe: boolean) {
   };
 
   const brainWriteRedisOpts = {
-    host: process.env.BRAIN_REDIS_HOST,
+    host: process.env.BRAIN_REDIS_HOST!,
     port: parseInt(process.env.BRAIN_REDIS_PORT || '6379', 10),
   };
 
   const brainReadRedisOpts = {
-    host: process.env.BRAIN_REDIS_SLAVE_HOST ?? process.env.BRAIN_REDIS_HOST,
+    host: process.env.BRAIN_REDIS_SLAVE_HOST ?? process.env.BRAIN_REDIS_HOST!,
     port: parseInt(
       process.env.BRAIN_REDIS_SLAVE_PORT ??
         process.env.BRAIN_REDIS_PORT ??
