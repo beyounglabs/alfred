@@ -1,12 +1,25 @@
-import IORedis, { RedisOptions } from 'ioredis';
+import IORedis, { Cluster, ClusterOptions, RedisOptions } from 'ioredis';
 
-let writeClient: IORedis | undefined;
-let readClient: IORedis | undefined;
-let subscribeClient: IORedis | undefined;
-let staticWriteClientOpts: RedisOptions;
-let staticReadClientOpts: RedisOptions;
+let writeClient: IORedis | Cluster | undefined;
+let readClient: IORedis | Cluster | undefined;
+let subscribeClient: IORedis | Cluster | undefined;
+let staticWriteClientOpts: RedisCustomOptions;
+let staticReadClientOpts: RedisCustomOptions;
+
+export type RedisMode = 'standard' | 'cluster';
+
+export type RedisCustomOptions = {
+  mode?: RedisMode;
+  host: string;
+  port: number;
+  db?: number;
+};
+
 export class RedisManager {
-  constructor(writeClientOpts?: RedisOptions, readClientOpts?: RedisOptions) {
+  constructor(
+    writeClientOpts?: RedisCustomOptions,
+    readClientOpts?: RedisCustomOptions,
+  ) {
     if (writeClientOpts) {
       staticWriteClientOpts = writeClientOpts;
     }
@@ -18,21 +31,31 @@ export class RedisManager {
     }
   }
 
-  public async getClient(): Promise<IORedis> {
+  public async getClient(): Promise<IORedis | Cluster> {
     return await this.getWriteClient();
   }
 
-  public async getWriteClient(): Promise<IORedis> {
+  public async getWriteClient(): Promise<IORedis | Cluster> {
     if (writeClient) {
       return writeClient;
     }
 
-    const redisClient = new IORedis({
-      ...staticWriteClientOpts,
-      maxRetriesPerRequest: 2,
-    });
+    const redisClient: IORedis | Cluster =
+      staticWriteClientOpts.mode !== 'cluster'
+        ? new IORedis({
+            host: staticWriteClientOpts.host,
+            port: staticWriteClientOpts.port,
+            db: staticWriteClientOpts.db,
+            maxRetriesPerRequest: 2,
+          })
+        : new Cluster([
+            {
+              host: staticWriteClientOpts.host,
+              port: staticWriteClientOpts.port,
+            },
+          ]);
 
-    return new Promise<IORedis>(resolve => {
+    return new Promise<IORedis | Cluster>(resolve => {
       redisClient.on('ready', () => {
         writeClient = redisClient;
         resolve(writeClient);
@@ -40,9 +63,13 @@ export class RedisManager {
     });
   }
 
-  public async getReadClient(): Promise<IORedis> {
+  public async getReadClient(): Promise<IORedis | Cluster> {
     if (readClient) {
       return readClient;
+    }
+
+    if (staticReadClientOpts.mode === 'cluster') {
+      return await this.getWriteClient();
     }
 
     const redisClient = new IORedis({
@@ -50,7 +77,7 @@ export class RedisManager {
       maxRetriesPerRequest: 2,
     });
 
-    return new Promise<IORedis>(resolve => {
+    return new Promise<IORedis | Cluster>(resolve => {
       redisClient.on('ready', () => {
         readClient = redisClient;
         resolve(readClient);
@@ -58,17 +85,27 @@ export class RedisManager {
     });
   }
 
-  public async getSubscribeClient(): Promise<IORedis> {
+  public async getSubscribeClient(): Promise<IORedis | Cluster> {
     if (subscribeClient) {
       return subscribeClient;
     }
 
-    const redisClient = new IORedis({
-      ...staticWriteClientOpts,
-      maxRetriesPerRequest: 2,
-    });
+    const redisClient: IORedis | Cluster =
+      staticWriteClientOpts.mode !== 'cluster'
+        ? new IORedis({
+            host: staticWriteClientOpts.host,
+            port: staticWriteClientOpts.port,
+            db: staticWriteClientOpts.db,
+            maxRetriesPerRequest: 2,
+          })
+        : new Cluster([
+            {
+              host: staticWriteClientOpts.host,
+              port: staticWriteClientOpts.port,
+            },
+          ]);
 
-    return new Promise<IORedis>(resolve => {
+    return new Promise<IORedis | Cluster>(resolve => {
       redisClient.on('ready', () => {
         subscribeClient = redisClient;
         resolve(subscribeClient);
