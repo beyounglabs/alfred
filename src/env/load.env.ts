@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import { BrainParameter } from '../brain/brain.parameter';
 import { stat } from 'fs/promises';
+import { RedisCustomOptions, RedisMode } from '../brain/redis.manager';
 
 export async function loadEnv(subscribe: boolean) {
   let dotenvPath = '.env';
@@ -16,12 +17,13 @@ export async function loadEnv(subscribe: boolean) {
     ...parsed,
   };
 
-  const brainWriteRedisOpts = {
+  const brainWriteRedisOpts: RedisCustomOptions = {
     host: process.env.BRAIN_REDIS_HOST!,
     port: parseInt(process.env.BRAIN_REDIS_PORT || '6379', 10),
+    mode: (process.env.BRAIN_REDIS_MODE as RedisMode) ?? 'standard',
   };
 
-  const brainReadRedisOpts = {
+  const brainReadRedisOpts: RedisCustomOptions = {
     host: process.env.BRAIN_REDIS_SLAVE_HOST ?? process.env.BRAIN_REDIS_HOST!,
     port: parseInt(
       process.env.BRAIN_REDIS_SLAVE_PORT ??
@@ -29,6 +31,7 @@ export async function loadEnv(subscribe: boolean) {
         '6379',
       10,
     ),
+    mode: (process.env.BRAIN_REDIS_MODE as RedisMode) ?? 'standard',
   };
 
   const brainParameter = new BrainParameter(
