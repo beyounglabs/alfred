@@ -1,4 +1,4 @@
-import IORedis, { Cluster, ClusterOptions, RedisOptions } from 'ioredis';
+import IORedis, { Cluster } from 'ioredis';
 
 let writeClient: IORedis | Cluster | undefined;
 let readClient: IORedis | Cluster | undefined;
@@ -14,6 +14,24 @@ export type RedisCustomOptions = {
   port: number;
   db?: number;
 };
+
+export function createConnection(
+  options: RedisCustomOptions,
+): IORedis | Cluster {
+  return options.mode !== 'cluster'
+    ? new IORedis({
+        host: options.host,
+        port: options.port,
+        db: options.db,
+        maxRetriesPerRequest: 2,
+      })
+    : new Cluster([
+        {
+          host: options.host,
+          port: options.port,
+        },
+      ]);
+}
 
 export class RedisManager {
   constructor(
@@ -40,20 +58,7 @@ export class RedisManager {
       return writeClient;
     }
 
-    const redisClient: IORedis | Cluster =
-      staticWriteClientOpts.mode !== 'cluster'
-        ? new IORedis({
-            host: staticWriteClientOpts.host,
-            port: staticWriteClientOpts.port,
-            db: staticWriteClientOpts.db,
-            maxRetriesPerRequest: 2,
-          })
-        : new Cluster([
-            {
-              host: staticWriteClientOpts.host,
-              port: staticWriteClientOpts.port,
-            },
-          ]);
+    const redisClient = createConnection(staticWriteClientOpts);
 
     return new Promise<IORedis | Cluster>(resolve => {
       redisClient.on('ready', () => {
@@ -90,20 +95,12 @@ export class RedisManager {
       return subscribeClient;
     }
 
-    const redisClient: IORedis | Cluster =
-      staticWriteClientOpts.mode !== 'cluster'
-        ? new IORedis({
-            host: staticWriteClientOpts.host,
-            port: staticWriteClientOpts.port,
-            db: staticWriteClientOpts.db,
-            maxRetriesPerRequest: 2,
-          })
-        : new Cluster([
-            {
-              host: staticWriteClientOpts.host,
-              port: staticWriteClientOpts.port,
-            },
-          ]);
+    const redisClient = createConnection({
+      host: staticWriteClientOpts.host,
+      port: staticWriteClientOpts.port,
+      db: staticWriteClientOpts.db,
+      mode: staticWriteClientOpts.mode,
+    });
 
     return new Promise<IORedis | Cluster>(resolve => {
       redisClient.on('ready', () => {

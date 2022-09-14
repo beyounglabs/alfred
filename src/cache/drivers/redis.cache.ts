@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import { hostname } from 'os';
 import * as uniqidGenerate from 'uniqid';
 import { Apm } from '../../apm/apm';
-import { RedisMode } from '../../brain/redis.manager';
+import { createConnection, RedisMode } from '../../brain/redis.manager';
 import { Logger } from '../../logger-v2/logger';
 import { CacheInterface } from '../cache.interface';
 import { CompressionInterface } from '../compression.interface';
@@ -63,20 +63,12 @@ export class RedisCache implements CacheInterface {
     const hostName = hostname();
 
     await this.startSpan('CACHE_CONNECT_WRITE_REDIS', async () => {
-      let redisClientNew: IORedis | Cluster =
-        mode === 'standard'
-          ? new IORedis({
-              host,
-              port,
-              db,
-              maxRetriesPerRequest: 2,
-            })
-          : new Cluster([
-              {
-                host,
-                port,
-              },
-            ]);
+      let redisClientNew = createConnection({
+        host,
+        port,
+        db,
+        mode,
+      });
 
       Logger.info({
         message: `[${connectionHash}] Starting to connect to Write Redis ${

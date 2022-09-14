@@ -1,35 +1,36 @@
 // Based on https://github.com/eggytronixx/express-brute-redis-store
-import * as redis from 'redis';
-import AbstractClientStore from 'express-brute/lib/AbstractClientStore';
+import IORedis, { Cluster, ClusterOptions, RedisOptions } from 'ioredis';
+
+import * as AbstractClientStore from 'express-brute/lib/AbstractClientStore';
+import {
+  createConnection,
+  RedisCustomOptions,
+} from '../../brain/redis.manager';
 
 interface Settings {
   prefix: string;
 }
 
-interface RedisOptions {
-  host: string;
-  port: string;
-}
-
 interface Options {
-  settings: Settings;
-  redisOptions: RedisOptions;
+  settings?: Settings;
+  redisOptions?: RedisCustomOptions;
 }
 
 export class RedisStore extends AbstractClientStore {
-  public static defaultOptions = {
+  public static defaultOptions: Options = {
     settings: { prefix: '' },
     redisOptions: {
       host: '127.0.0.1',
-      port: '6379',
+      port: 6379,
+      mode: 'standard',
     },
   };
 
-  private client;
+  private client: IORedis | Cluster;
 
-  private settings;
+  private settings: Settings;
 
-  private redisOptions;
+  private redisOptions: RedisCustomOptions;
 
   constructor(options: RedisStore | Options | undefined) {
     super();
@@ -48,9 +49,10 @@ export class RedisStore extends AbstractClientStore {
         options = RedisStore.defaultOptions;
       }
 
-      this.settings = options.settings;
-      this.redisOptions = options.redisOptions;
-      this.client = redis.createClient(this.redisOptions);
+      this.settings = options.settings!;
+      this.redisOptions = options.redisOptions!;
+
+      this.client = createConnection(this.redisOptions);
     }
   }
 
@@ -76,14 +78,15 @@ export class RedisStore extends AbstractClientStore {
     let redisKey = this.settings.prefix + key;
 
     this.client.get(redisKey, (err, data) => {
+      let dataParsed: any = undefined;
       if (data) {
-        data = JSON.parse(data);
-        data.lastRequest = new Date(data.lastRequest);
-        data.firstRequest = new Date(data.firstRequest);
+        dataParsed = JSON.parse(data);
+        dataParsed.lastRequest = new Date(dataParsed.lastRequest);
+        dataParsed.firstRequest = new Date(dataParsed.firstRequest);
       }
 
       if (typeof callback == 'function') {
-        err ? callback(err) : callback(null, data);
+        err ? callback(err) : callback(null, dataParsed);
       }
     });
   }
