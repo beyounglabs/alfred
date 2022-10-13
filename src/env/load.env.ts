@@ -49,7 +49,7 @@ export async function loadEnv(subscribe: boolean) {
       .then(() => true)
       .catch(() => false));
 
-  if (cacheExists) {
+  if (cacheExists && subscribe) {
     const { parsed: cacheParsed } = dotenv.config({ path: cacheFile });
 
     process.env = {
