@@ -50,10 +50,11 @@ export async function loadEnv(subscribe: boolean) {
       .catch(() => false));
 
   if (cacheExists) {
-    const { parsed } = dotenv.config({ path: cacheFile });
+    const { parsed: cacheParsed } = dotenv.config({ path: cacheFile });
 
     process.env = {
       ...JSON.parse(JSON.stringify(process.env)),
+      ...cacheParsed,
       ...parsed,
     };
 
