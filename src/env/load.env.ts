@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import { BrainParameter } from '../brain/brain.parameter';
 import { stat } from 'fs/promises';
+import { RedisCustomOptions, RedisMode } from '../brain/redis.manager';
 
 export async function loadEnv(subscribe: boolean) {
   let dotenvPath = '.env';
@@ -16,19 +17,21 @@ export async function loadEnv(subscribe: boolean) {
     ...parsed,
   };
 
-  const brainWriteRedisOpts = {
-    host: process.env.BRAIN_REDIS_HOST,
+  const brainWriteRedisOpts: RedisCustomOptions = {
+    host: process.env.BRAIN_REDIS_HOST!,
     port: parseInt(process.env.BRAIN_REDIS_PORT || '6379', 10),
+    mode: (process.env.BRAIN_REDIS_MODE as RedisMode) ?? 'standard',
   };
 
-  const brainReadRedisOpts = {
-    host: process.env.BRAIN_REDIS_SLAVE_HOST ?? process.env.BRAIN_REDIS_HOST,
+  const brainReadRedisOpts: RedisCustomOptions = {
+    host: process.env.BRAIN_REDIS_SLAVE_HOST ?? process.env.BRAIN_REDIS_HOST!,
     port: parseInt(
       process.env.BRAIN_REDIS_SLAVE_PORT ??
         process.env.BRAIN_REDIS_PORT ??
         '6379',
       10,
     ),
+    mode: (process.env.BRAIN_REDIS_MODE as RedisMode) ?? 'standard',
   };
 
   const brainParameter = new BrainParameter(
@@ -38,26 +41,29 @@ export async function loadEnv(subscribe: boolean) {
     brainReadRedisOpts,
   );
 
+  const cacheFile = `/tmp/.env.cache.${process.env.BRAIN_PROFILE}`;
+
   const cacheExists =
     process.env.NODE_ENV !== 'production' &&
-    (await stat('/tmp/.env.cache')
+    (await stat(cacheFile)
       .then(() => true)
       .catch(() => false));
 
-  if (cacheExists) {
-    const { parsed } = dotenv.config({ path: '/tmp/.env.cache' });
+  if (cacheExists && subscribe) {
+    const { parsed: cacheParsed } = dotenv.config({ path: cacheFile });
 
     process.env = {
       ...JSON.parse(JSON.stringify(process.env)),
+      ...cacheParsed,
       ...parsed,
     };
 
     brainParameter.updateEnv(true, false).then(() => {
-      brainParameter.dumpEnv('/tmp/.env.cache');
+      brainParameter.dumpEnv(cacheFile);
     });
   } else {
     await brainParameter.updateEnv(true);
-    await brainParameter.dumpEnv('/tmp/.env.cache');
+    await brainParameter.dumpEnv(cacheFile);
   }
 
   if (subscribe) {

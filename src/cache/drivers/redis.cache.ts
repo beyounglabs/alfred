@@ -1,16 +1,17 @@
 import { format } from 'date-fns';
-import IORedis from 'ioredis';
+import IORedis, { Cluster } from 'ioredis';
 import * as moment from 'moment';
 import { hostname } from 'os';
 import * as uniqidGenerate from 'uniqid';
 import { Apm } from '../../apm/apm';
+import { createConnection, RedisMode } from '../../brain/redis.manager';
 import { Logger } from '../../logger-v2/logger';
 import { CacheInterface } from '../cache.interface';
 import { CompressionInterface } from '../compression.interface';
 import { NoCompression } from '../compression/no.compression';
 
-let redisWriteClient: { [code: string]: IORedis | undefined } = {};
-let redisReadClient: { [code: string]: IORedis | undefined } = {};
+let redisWriteClient: { [code: string]: IORedis | Cluster | undefined } = {};
+let redisReadClient: { [code: string]: IORedis | Cluster | undefined } = {};
 
 let runningAsFallback: boolean = false;
 
@@ -29,7 +30,7 @@ export class RedisCache implements CacheInterface {
     this.compression = compression;
   }
 
-  protected async getWriteClient(): Promise<IORedis> {
+  protected async getWriteClient(): Promise<IORedis | Cluster> {
     if (redisWriteClient[this.instance]) {
       return redisWriteClient[this.instance]!;
     }
@@ -44,6 +45,9 @@ export class RedisCache implements CacheInterface {
       ? Number(process.env.REDIS_CACHE_DB)
       : 0;
 
+    let mode: RedisMode =
+      (process.env.REDIS_CACHE_MODE as RedisMode) || 'standard';
+
     if (process.env[`REDIS_CACHE_${instancePrefix}_HOST`]) {
       host = process.env[`REDIS_CACHE_${instancePrefix}_HOST`]!;
       port = process.env[`REDIS_CACHE_${instancePrefix}_PORT`]
@@ -52,23 +56,27 @@ export class RedisCache implements CacheInterface {
       db = process.env[`REDIS_CACHE_${instancePrefix}_DB`]
         ? Number(process.env[`REDIS_CACHE_${instancePrefix}_DB`])
         : 0;
+      mode = process.env[`REDIS_CACHE_${instancePrefix}_MODE`]! as RedisMode;
     }
 
     const connectionHash = uniqidGenerate();
     const hostName = hostname();
 
     await this.startSpan('CACHE_CONNECT_WRITE_REDIS', async () => {
-      const redisClientNew = new IORedis({
+      let redisClientNew = createConnection({
         host,
         port,
         db,
-        maxRetriesPerRequest: 2,
+        mode,
       });
 
       Logger.info({
         message: `[${connectionHash}] Starting to connect to Write Redis ${
           this.instance
-        } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
+        } ${hostName} ${mode} mode ${format(
+          new Date(),
+          'YYYY-MM-DD HH:mm:ss',
+        )}`,
       });
 
       await new Promise((resolve, reject) => {
@@ -84,16 +92,30 @@ export class RedisCache implements CacheInterface {
           }
 
           if (process.env.REDIS_CACHE_FALLBACK_HOST) {
-            const redisClientFallback = new IORedis({
-              host: process.env.REDIS_CACHE_FALLBACK_HOST || 'redis',
-              port: process.env.REDIS_CACHE_FALLBACK_PORT
-                ? Number(process.env.REDIS_CACHE_FALLBACK_PORT)
-                : 6379,
-              db: process.env.REDIS_CACHE_FALLBACK_DB
-                ? Number(process.env.REDIS_CACHE_FALLBACK_DB)
-                : 0,
-              maxRetriesPerRequest: 2,
-            });
+            let mode: RedisMode =
+              (process.env.REDIS_CACHE_FALLBACK_MODE as RedisMode) ||
+              'standard';
+
+            const redisClientFallback =
+              mode === 'standard'
+                ? new IORedis({
+                    host: process.env.REDIS_CACHE_FALLBACK_HOST || 'redis',
+                    port: process.env.REDIS_CACHE_FALLBACK_PORT
+                      ? Number(process.env.REDIS_CACHE_FALLBACK_PORT)
+                      : 6379,
+                    db: process.env.REDIS_CACHE_FALLBACK_DB
+                      ? Number(process.env.REDIS_CACHE_FALLBACK_DB)
+                      : 0,
+                    maxRetriesPerRequest: 2,
+                  })
+                : new Cluster([
+                    {
+                      host: process.env.REDIS_CACHE_FALLBACK_HOST || 'redis',
+                      port: process.env.REDIS_CACHE_FALLBACK_PORT
+                        ? Number(process.env.REDIS_CACHE_FALLBACK_PORT)
+                        : 6379,
+                    },
+                  ]);
 
             redisClientFallback.on('error', errFallback => {
               reject(`Error on connecting to fallback redis: ${errFallback}`);
@@ -141,12 +163,21 @@ export class RedisCache implements CacheInterface {
     return redisWriteClient[this.instance]!;
   }
 
-  protected async getReadClient(): Promise<IORedis> {
+  protected async getReadClient(): Promise<IORedis | Cluster> {
     if (redisReadClient[this.instance]) {
       return redisReadClient[this.instance]!;
     }
 
     const instancePrefix = this.instance.toUpperCase();
+
+    const mode: RedisMode =
+      (process.env[`REDIS_CACHE_${instancePrefix}_MODE`] as RedisMode) ||
+      (process.env.REDIS_CACHE_MODE as RedisMode) ||
+      'standard';
+
+    if (mode === 'cluster') {
+      return await this.getWriteClient();
+    }
 
     if (
       !process.env.REDIS_CACHE_SLAVE_HOST &&
