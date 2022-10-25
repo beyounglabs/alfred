@@ -51,6 +51,10 @@ export class DefaultMetadata {
       params.type = this.getDatetimeDataType();
     }
 
+    if (params.type === 'blob') {
+      params.type = this.getBlobDataType();
+    }
+
     return params;
   }
 
@@ -84,6 +88,14 @@ export class DefaultMetadata {
     }
 
     return this.getTextDataType();
+  }
+
+  public static getBlobDataType(): any {
+    if (process.env.DB_TYPE === 'mysql') {
+      return 'longblob';
+    }
+
+    return 'bytea';
   }
 
   public static getDecimalDataType(): any {
