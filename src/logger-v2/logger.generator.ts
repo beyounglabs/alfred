@@ -5,8 +5,9 @@ import { LoggerDataInterface } from './logger.data.interface';
 import { LoggerLevelType } from './logger.level.type';
 import { stat } from 'fs/promises';
 
-const DEFAULT_LOGGING_LEVEL: LoggerLevelType = 'notice';
+let LOGGING_LEVEL: LoggerLevelType = 'notice';
 let logger: winston.Logger | undefined = undefined;
+
 export abstract class LoggerGenerator {
   public static async log(
     level: LoggerLevelType,
@@ -21,9 +22,7 @@ export abstract class LoggerGenerator {
         console.log(JSON.stringify(data, null, 2));
       }
 
-      if (!logger) {
-        logger = await this.getLogger();
-      }
+      logger = await this.getLogger();
 
       const message = data.message;
 
@@ -37,7 +36,10 @@ export abstract class LoggerGenerator {
   }
 
   public static async getLogger(): Promise<winston.Logger> {
-    if (logger) {
+    const loggingLevel = (process.env.LOGGING_LEVEL ??
+      LOGGING_LEVEL) as LoggerLevelType;
+
+    if (logger && loggingLevel === LOGGING_LEVEL) {
       return logger;
     }
 
@@ -57,11 +59,11 @@ export abstract class LoggerGenerator {
       new Date().toISOString().replace(/T.+$/, ''),
     ].join('-');
 
-    let loggingLevel = process.env.LOGGING_LEVEL ?? DEFAULT_LOGGING_LEVEL;
     if (!Object.keys(winston.config.syslog.levels).includes(loggingLevel)) {
       console.error(`[LOGGING_ERROR]: Invalid LOGGING_LEVEL ${loggingLevel}`);
-      loggingLevel = DEFAULT_LOGGING_LEVEL;
     }
+
+    LOGGING_LEVEL = loggingLevel;
 
     transports.push(
       new LoggingWinston({
