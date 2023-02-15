@@ -150,4 +150,8 @@ export class Cache {
       useBuild ? `BUILD${build}_` : ''
     }${md5(JSON.stringify(request))}`;
   }
+
+  public getDriver(): CacheInterface {
+    return this.drivers[this.instance];
+  }
 }
