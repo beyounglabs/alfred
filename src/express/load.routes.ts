@@ -53,7 +53,7 @@ export async function loadRoutes(
         }
 
         if (route.protected && !response.locals.auth) {
-          response.status(403).send({});
+          response.status(403).send({ status: 403, message: 'Forbidden' });
           return;
         }
 
