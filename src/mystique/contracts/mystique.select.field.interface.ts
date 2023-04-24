@@ -2,7 +2,7 @@ import { MystiqueBaseFieldInterface } from './mystique.base.field.interface';
 
 export interface MystiqueSelectFieldInterface
   extends MystiqueBaseFieldInterface {
-  type: 'select';
+  type: 'select' | 'select_boolean';
   values: {
     label: string;
     value: string | number;
