@@ -167,11 +167,11 @@ export class BaseRepository<
    * const cacheKey = this.getCacheKey(arguments);
    * return await this.cached(cacheKey, () => this.find({}));
    */
-  public async cached(
+  public async cached<T extends (...args: any[]) => any>(
     cacheKey: string | null | undefined,
-    callback: CallableFunction,
+    callback: T,
     expireInSeconds?: number,
-  ) {
+  ): Promise<ReturnType<T>> {
     if (this.getUseCache() && cacheKey) {
       const cachedResult = await cache.get(cacheKey);
       if (cachedResult) {
