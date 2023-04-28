@@ -162,6 +162,11 @@ export class BaseRepository<
     return qb;
   }
 
+  /**
+   * Usage:
+   * const cacheKey = this.getCacheKey(arguments);
+   * return await this.cached(cacheKey, () => this.find({}));
+   */
   public async cached(
     cacheKey: string | null | undefined,
     callback: CallableFunction,
