@@ -95,6 +95,9 @@ export class BaseRepository<
     return methodName;
   }
 
+  /**
+   * Usage this.getCacheKey(arguments)
+   */
   protected getCacheKey(props: IArguments): string {
     if (!this.getUseCache()) {
       return '';
