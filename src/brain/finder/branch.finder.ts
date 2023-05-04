@@ -2,6 +2,7 @@ import { orderBy } from 'lodash';
 import { ObjectConverter } from '../../helpers/object.converter';
 import { RedisManager } from '../redis.manager';
 import { Warehouse } from './warehouse.finder';
+import { Company } from './company.finder';
 
 export type Branch = {
   id: number;
@@ -28,6 +29,7 @@ export type Branch = {
   createdAt: string;
   updatedAt: string;
   accountingOfficeDocument?: string;
+  company: Company;
   warehouses: Warehouse[];
 };
 
