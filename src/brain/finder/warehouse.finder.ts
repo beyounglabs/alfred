@@ -1,9 +1,23 @@
 import { orderBy } from 'lodash';
 import { ObjectConverter } from '../../helpers/object.converter';
 import { RedisManager } from '../redis.manager';
+import { Branch } from './branch.finder';
+
+export type Warehouse = {
+  id: number;
+  code: string;
+  name: string;
+  shortName: string;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+  operatorLogisticCode: string;
+  waveConfig?: string;
+  branches: Branch[];
+};
 
 export class WarehouseFinder {
-  public async findAll(): Promise<any> {
+  public async findAll(): Promise<Warehouse[]> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
 
@@ -40,11 +54,11 @@ export class WarehouseFinder {
     );
   }
 
-  public async findActives(): Promise<any> {
+  public async findActives(): Promise<Warehouse[]> {
     return (await this.findAll()).filter(item => item.active);
   }
 
-  public async findOneByCode(code: string): Promise<any> {
+  public async findOneByCode(code: string): Promise<Warehouse | undefined> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
 

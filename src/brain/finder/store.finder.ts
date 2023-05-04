@@ -1,9 +1,26 @@
 import { orderBy } from 'lodash';
 import { ObjectConverter } from '../../helpers/object.converter';
 import { RedisManager } from '../redis.manager';
+import { Company } from './company.finder';
+
+export type Store = {
+  id: number;
+  code: string;
+  domain: string;
+  name: string;
+  companyId: number;
+  createdAt: string;
+  updatedAt?: string;
+  externalCode?: string;
+  customerAggregator: string;
+  active: number;
+  cashbackOwner: string;
+  aggregator: string;
+  company: Company;
+};
 
 export class StoreFinder {
-  public async findAll(): Promise<any> {
+  public async findAll(): Promise<Store[]> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
 
@@ -40,11 +57,11 @@ export class StoreFinder {
     );
   }
 
-  public async findActives(): Promise<any> {
+  public async findActives(): Promise<Store[]> {
     return (await this.findAll()).filter(item => item.active);
   }
 
-  public async findOneByCode(code: string): Promise<any> {
+  public async findOneByCode(code: string): Promise<Store | undefined> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
 
@@ -58,7 +75,7 @@ export class StoreFinder {
     return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
   }
 
-  public async findOneByDomain(domain: string): Promise<any> {
+  public async findOneByDomain(domain: string): Promise<Store | undefined> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
 

@@ -2,8 +2,35 @@ import { orderBy } from 'lodash';
 import { ObjectConverter } from '../../helpers/object.converter';
 import { RedisManager } from '../redis.manager';
 
+export type Branch = {
+  id: number;
+  code: string;
+  companyId: number;
+  document: string;
+  name: string;
+  shortName: string;
+  stateCode: number;
+  state: string;
+  cityCode: number;
+  city: string;
+  neighborhood: string;
+  street: string;
+  number: string;
+  postcode: string;
+  complement: string;
+  phone: string;
+  ie?: string;
+  im?: string;
+  cnae?: string;
+  crt: string;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+  accountingOfficeDocument?: string;
+};
+
 export class BranchFinder {
-  public async findAll(): Promise<any> {
+  public async findAll(): Promise<Branch[]> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
 
@@ -40,11 +67,11 @@ export class BranchFinder {
     );
   }
 
-  public async findActives(): Promise<any> {
+  public async findActives(): Promise<Branch[]> {
     return (await this.findAll()).filter(item => item.active);
   }
 
-  public async findOneByCode(code: string): Promise<any> {
+  public async findOneByCode(code: string): Promise<Branch | undefined> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
 
@@ -61,7 +88,7 @@ export class BranchFinder {
   public async findOneByCompanyCodeAndState(
     companyCode: string,
     state: string,
-  ): Promise<any> {
+  ): Promise<Branch | undefined> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
     const key = `Branch_CompanyState:${companyCode}_${state}`;

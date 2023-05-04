@@ -1,9 +1,22 @@
 import { orderBy } from 'lodash';
 import { ObjectConverter } from '../../helpers/object.converter';
 import { RedisManager } from '../redis.manager';
+import { Company } from './company.finder';
+
+export type Brand = {
+  id: number;
+  code: string;
+  name: string;
+  domain: string;
+  companyId: number;
+  createdAt: string;
+  updatedAt: string;
+  active: number;
+  company: Company;
+};
 
 export class BrandFinder {
-  public async findAll(): Promise<any> {
+  public async findAll(): Promise<Brand[]> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
 
@@ -40,11 +53,11 @@ export class BrandFinder {
     );
   }
 
-  public async findActives(): Promise<any> {
+  public async findActives(): Promise<Brand[]> {
     return (await this.findAll()).filter(item => item.active);
   }
 
-  public async findOneByCode(code: string): Promise<any> {
+  public async findOneByCode(code: string): Promise<Brand | undefined> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
 
