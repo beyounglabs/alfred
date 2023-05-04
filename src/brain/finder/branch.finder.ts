@@ -1,6 +1,7 @@
 import { orderBy } from 'lodash';
 import { ObjectConverter } from '../../helpers/object.converter';
 import { RedisManager } from '../redis.manager';
+import { Warehouse } from './warehouse.finder';
 
 export type Branch = {
   id: number;
@@ -27,6 +28,7 @@ export type Branch = {
   createdAt: string;
   updatedAt: string;
   accountingOfficeDocument?: string;
+  warehouses: Warehouse[];
 };
 
 export class BranchFinder {
