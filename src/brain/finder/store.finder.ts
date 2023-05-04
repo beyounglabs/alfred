@@ -75,6 +75,15 @@ export class StoreFinder {
     return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
   }
 
+  public async findOneByCodeOrFail(code: string): Promise<Store> {
+    const store = await this.findOneByCode(code);
+    if (!store) {
+      throw new Error(`Store ${code} not found`);
+    }
+
+    return store;
+  }
+
   public async findOneByDomain(domain: string): Promise<Store | undefined> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
@@ -87,5 +96,14 @@ export class StoreFinder {
     }
 
     return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
+  }
+
+  public async findOneByDomainOrFail(domain: string): Promise<Store> {
+    const store = await this.findOneByDomain(domain);
+    if (!store) {
+      throw new Error(`Store domain: ${domain} not found`);
+    }
+
+    return store;
   }
 }

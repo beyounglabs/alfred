@@ -79,4 +79,13 @@ export class CarrierFinder {
 
     return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
   }
+
+  public async findOneByCodeOrFail(code: string): Promise<Carrier> {
+    const carrier = await this.findOneByCode(code);
+    if (!carrier) {
+      throw new Error(`Carrier ${code} not found`);
+    }
+
+    return carrier;
+  }
 }

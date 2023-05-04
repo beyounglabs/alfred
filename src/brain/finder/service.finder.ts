@@ -66,4 +66,13 @@ export class ServiceFinder {
 
     return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
   }
+
+  public async findOneByCodeOrFail(code: string): Promise<Service> {
+    const service = await this.findOneByCode(code);
+    if (!service) {
+      throw new Error(`Service ${code} not found`);
+    }
+
+    return service;
+  }
 }

@@ -76,4 +76,13 @@ export class PartnerFinder {
 
     return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
   }
+
+  public async findOneByCodeOrFail(code: string): Promise<Partner> {
+    const partner = await this.findOneByCode(code);
+    if (!partner) {
+      throw new Error(`Partner ${code} not found`);
+    }
+
+    return partner;
+  }
 }

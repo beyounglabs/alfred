@@ -71,4 +71,13 @@ export class WarehouseFinder {
 
     return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
   }
+
+  public async findOneByCodeOrFail(code: string): Promise<Warehouse> {
+    const warehouse = await this.findOneByCode(code);
+    if (!warehouse) {
+      throw new Error(`Warehouse ${code} not found`);
+    }
+
+    return warehouse;
+  }
 }

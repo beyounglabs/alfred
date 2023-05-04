@@ -70,4 +70,13 @@ export class BrandFinder {
 
     return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
   }
+
+  public async findOneByCodeOrFail(code: string): Promise<Brand> {
+    const brand = await this.findOneByCode(code);
+    if (!brand) {
+      throw new Error(`Brand ${code} not found`);
+    }
+
+    return brand;
+  }
 }

@@ -85,6 +85,15 @@ export class BranchFinder {
     return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
   }
 
+  public async findOneByCodeOrFail(code: string): Promise<Branch> {
+    const branch = await this.findOneByCode(code);
+    if (!branch) {
+      throw new Error(`Branch ${code} not found`);
+    }
+
+    return branch;
+  }
+
   public async findOneByCompanyCodeAndState(
     companyCode: string,
     state: string,
@@ -99,5 +108,17 @@ export class BranchFinder {
     }
 
     return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
+  }
+
+  public async findOneByCompanyCodeAndStateOrFail(
+    companyCode: string,
+    state: string,
+  ): Promise<Branch> {
+    const branch = await this.findOneByCompanyCodeAndState(companyCode, state);
+    if (!branch) {
+      throw new Error(`Branch company:${companyCode} state:${state} not found`);
+    }
+
+    return branch;
   }
 }

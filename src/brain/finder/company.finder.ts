@@ -65,4 +65,13 @@ export class CompanyFinder {
 
     return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
   }
+
+  public async findOneByCodeOrFail(code: string): Promise<Company> {
+    const company = await this.findOneByCode(code);
+    if (!company) {
+      throw new Error(`Company ${code} not found`);
+    }
+
+    return company;
+  }
 }
