@@ -29,6 +29,7 @@ export type Branch = {
   createdAt: string;
   updatedAt: string;
   accountingOfficeDocument?: string;
+  freightCode?: string;
   company: Company;
   warehouses: Warehouse[];
 };
