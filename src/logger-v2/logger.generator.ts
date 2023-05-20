@@ -18,7 +18,10 @@ export abstract class LoggerGenerator {
         data = data.toJSON();
       }
 
-      if (process.env.NODE_ENV === 'development') {
+      if (
+        process.env.NODE_ENV === 'development' &&
+        process.env.DISABLE_LOCAL_LOG !== '1'
+      ) {
         console.log(JSON.stringify(data, null, 2));
       }
 
