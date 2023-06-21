@@ -5,9 +5,13 @@ import type { RouteInterface } from './route.interface';
 let basicAuthCache = {};
 
 export async function routeAuth(
-  authorization: string,
+  authorization: string | null | undefined,
   route: RouteInterface,
 ): Promise<any> {
+  if (!authorization) {
+    throw new Error('Authorization header is required');
+  }
+
   if (authorization.startsWith('Bearer')) {
     const authorizationSplit = authorization.split('Bearer ');
 
