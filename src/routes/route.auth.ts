@@ -1,19 +1,13 @@
 import axios from 'axios';
-import type { Request } from 'express';
 import { JwtHelper } from '../helpers/jwt.helpers';
 import type { RouteInterface } from './route.interface';
 
 let basicAuthCache = {};
 
-export async function auth(
-  request: Request,
+export async function routeAuth(
+  authorization: string,
   route: RouteInterface,
 ): Promise<any> {
-  if (!request.headers['authorization']) {
-    throw new Error('Token Bearer not found');
-  }
-
-  const authorization: string = request.headers['authorization'] as string;
   if (authorization.startsWith('Bearer')) {
     const authorizationSplit = authorization.split('Bearer ');
 

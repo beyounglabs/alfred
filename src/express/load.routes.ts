@@ -3,9 +3,9 @@ import * as trimRequest from 'trim-request';
 import type { Apm } from '../apm/apm';
 import { Logger } from '../logger-v2/logger';
 import { QueryManager } from '../typeorm/query.manager';
-import { auth } from './auth';
+import { routeAuth } from '../routes/route.auth';
 import type { ResponseInterface } from './response.interface';
-import type { RouteInterface } from './route.interface';
+import type { RouteInterface } from '../routes/route.interface';
 
 export async function loadRoutes(
   app: Express,
@@ -48,7 +48,10 @@ export async function loadRoutes(
 
         if (request.headers.authorization) {
           try {
-            response.locals.auth = await auth(request, route);
+            response.locals.auth = await routeAuth(
+              request.headers.authorization,
+              route,
+            );
           } catch (e) {}
         }
 
