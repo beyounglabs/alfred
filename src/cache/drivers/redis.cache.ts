@@ -312,6 +312,12 @@ export class RedisCache implements CacheInterface {
       },
     );
 
+    const uncompressedString = uncompressedBuffer.toString();
+
+    if (!uncompressedString) {
+      return uncompressedString;
+    }
+
     // return await this.startSpan('CACHE_DESERIALIZE', async () =>
     //   deserialize(uncompressedBuffer),
     // );
@@ -322,10 +328,10 @@ export class RedisCache implements CacheInterface {
 
     try {
       return await this.startSpan('CACHE_DESERIALIZE', async () =>
-        JSON.parse(uncompressedBuffer.toString()),
+        JSON.parse(uncompressedString),
       );
     } catch(e) {
-      e.message = `${e.message} - Raw value: ${uncompressedBuffer.toString()}`
+      e.message = `${e.message} - Raw value: ${uncompressedString}`
       throw e;
     }
   }
