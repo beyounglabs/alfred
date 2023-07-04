@@ -305,7 +305,7 @@ export class RedisCache implements CacheInterface {
       return;
     }
 
-    const uncompressedBuffer = await this.startSpan(
+    const uncompressedBuffer = await this.startSpan<Buffer>(
       'CACHE_DECOMPRESS',
       async () => {
         return await this.compression.decompress(response);
@@ -320,9 +320,14 @@ export class RedisCache implements CacheInterface {
     //   deserialize(response),
     // );
 
-    return await this.startSpan('CACHE_DESERIALIZE', async () =>
-      JSON.parse(uncompressedBuffer),
-    );
+    try {
+      return await this.startSpan('CACHE_DESERIALIZE', async () =>
+        JSON.parse(uncompressedBuffer.toString()),
+      );
+    } catch(e) {
+      e.message = `${e.message} - Raw value: ${uncompressedBuffer.toString()}`
+      throw e;
+    }
   }
 
   public async getMultiple(cacheHashes: string[]): Promise<any> {
@@ -453,7 +458,7 @@ export class RedisCache implements CacheInterface {
     }
   }
 
-  protected async startSpan(span: string, func: Function): Promise<any> {
+  protected async startSpan<T=any>(span: string, func: Function): Promise<T> {
     if (!this.apm) {
       return await func();
     }

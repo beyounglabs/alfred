@@ -80,7 +80,7 @@ export class Cache {
     } catch (e) {
       return await this.startSpan('CACHE_GET_FALLBACK', async () => {
         Logger.error({
-          message: `Error on get cache, switching to local cache: ${e.message} `,
+          message: `Error on get cache multiple, switching to local cache: ${e.message} `,
         });
 
         if (cacheHashes.length > 0) {
@@ -97,7 +97,7 @@ export class Cache {
       return await this.drivers[this.instance].delete(cacheHash);
     } catch (e) {
       Logger.error({
-        message: `Error on get cache, switching to local cache: ${e.message} `,
+        message: `Error on delete cache, switching to local cache: ${e.message} `,
       });
 
       this.verifyOriginalDriverOnError(cacheHash);
