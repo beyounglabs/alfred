@@ -76,6 +76,28 @@ export class BranchFinder {
     return (await this.findAll()).filter(item => item.active);
   }
 
+  public async findByFreightCode(freightCode: string): Promise<Branch[]> {
+    if (!freightCode) {
+      return [];
+    }
+
+    const redisManager = new RedisManager();
+    const redisClient = await redisManager.getReadClient();
+
+    const key = `Branch_FreightCode:${freightCode}`;
+
+    const result = await redisClient.get(key);
+    if (!result) {
+      return [];
+    }
+
+    return orderBy(
+      ObjectConverter.underscoreToCamelCase(result),
+      ['name', 'code'],
+      ['asc', 'asc'],
+    );
+  }
+
   public async findOneByCode(code: string): Promise<Branch | undefined> {
     const redisManager = new RedisManager();
     const redisClient = await redisManager.getReadClient();
