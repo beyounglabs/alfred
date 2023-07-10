@@ -92,7 +92,7 @@ export class BranchFinder {
     }
 
     return orderBy(
-      ObjectConverter.underscoreToCamelCase(result),
+      ObjectConverter.underscoreToCamelCase(JSON.parse(result)),
       ['name', 'code'],
       ['asc', 'asc'],
     );
