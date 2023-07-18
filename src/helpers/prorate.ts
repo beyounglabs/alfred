@@ -32,6 +32,13 @@ export function prorate(
     totalValue += item.value * qty;
   }
 
+  if (totalValue === 0) {
+    for (const item of items) {
+      item.value = 1;
+      totalValue += item.value;
+    }
+  }
+
   const proratedItems: number[] = [];
 
   for (const item of items) {
