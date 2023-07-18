@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, it, expect } from 'vitest';
 import { RemoveAccents } from '../../../src/helpers/remove.accents';
 
 describe('RemoveSpecialChars', () => {

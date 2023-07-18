@@ -1,7 +1,7 @@
 import { Container } from 'typedi';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { TestCase } from '../../../../src/tests/test.case';
 import { JsonTransformer } from '../../../../src/typeorm/transformers/json.transformer';
-import { expect } from 'chai';
 
 const testCase = Container.get(TestCase);
 

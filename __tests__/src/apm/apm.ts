@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { Apm } from '../../../src/apm/apm';
 
 describe('APM', () => {

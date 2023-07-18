@@ -1,14 +1,14 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "3.1.23",
+  "version": "3.1.24",
   "description": "Alfred JS Framework",
   "main": "index.js",
   "repository": "git@bitbucket.com:beautybrands/alfred.git",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "test": "NODE_ENV=testing jest",
-    "test:watch": "jest --watch",
+    "test": "NODE_ENV=testing vitest",
+    "test:watch": "vitest --watch",
     "install": "./scripts/install.sh",
     "build:publish": "rm -Rf dist && yarn build && cp package.json dist/ && cp -R scripts dist/ && cp -R defaults dist/",
     "npm:publish": "yarn build:publish && cd dist/ && $(which npm) publish --access public",
@@ -74,6 +74,7 @@
     "uniqid": "^4.1.1",
     "validator": "^9.2.0",
     "validatorjs": "^3.14.2",
+    "vitest": "^0.33.0",
     "winston": "^3.0.0",
     "yargs": "^13.2.1"
   }

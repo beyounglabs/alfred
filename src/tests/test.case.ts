@@ -1,14 +1,11 @@
-import * as bluebird from 'bluebird';
 import * as dotenv from 'dotenv';
-import * as fsImport from 'fs';
+import { readFile, writeFile } from 'fs/promises';
 import { kebabCase } from 'lodash';
 import 'reflect-metadata';
 import { Container } from 'typedi/Container';
 import { Connection } from 'typeorm/connection/Connection';
 import { DatabaseProvider } from '../providers/database.provider';
 import { FixtureAbstract } from './fixture.abstract';
-
-const fs: any = bluebird.promisifyAll(fsImport);
 
 let executed = true;
 if (String(process.env.DATABASE_RELOAD) === '1') {
@@ -26,7 +23,9 @@ export class TestCase {
   }
 
   public async setup(resetDatabase?: boolean) {
-    jest.setTimeout(1000 * 60); // 60 seconds
+    if (typeof jest !== 'undefined') {
+      jest.setTimeout(1000 * 60); // 60 seconds
+    }
 
     this.loadDotEnv();
 
@@ -77,9 +76,9 @@ export class TestCase {
     }
 
     if (process.env.DB_TYPE === 'sqlite') {
-      await fs.writeFileAsync(
+      await writeFile(
         String(process.env.DB_DATABASE),
-        await fs.readFileAsync(String(process.env.DB_DATABASE) + '.cache'),
+        await readFile(String(process.env.DB_DATABASE) + '.cache'),
       );
     }
   }
