@@ -9,6 +9,7 @@ export { ObjectConverter } from './helpers/object.converter';
 export { RemoveAccents } from './helpers/remove.accents';
 export { request } from './helpers/request';
 export { roundNumber } from './helpers/round.number';
+export { prorate } from './helpers/prorate';
 export { DebugLogger } from './logger/debug.logger';
 export { ErrorLogger } from './logger/error.logger';
 export { InfoLogger } from './logger/info.logger';
