@@ -76,4 +76,24 @@ describe('Prorate', () => {
     expect(proratedItems.length).to.be.equals(1);
     expect(proratedItems[0]).to.be.equals(100);
   });
+
+  it('Test 5', async () => {
+    const valueToBeProrated = 0;
+    const items: ProrateItem[] = [
+      {
+        qty: 2,
+        value: 10,
+      },
+      {
+        qty: 1,
+        value: 10,
+      },
+    ];
+
+    const proratedItems = prorate(valueToBeProrated, items);
+
+    expect(proratedItems.length).to.be.equals(2);
+    expect(proratedItems[0]).to.be.equals(0);
+    expect(proratedItems[1]).to.be.equals(0);
+  });
 });
