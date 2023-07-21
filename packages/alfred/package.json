@@ -1,12 +1,11 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
     "test": "NODE_ENV=testing vitest run",
     "test:watch": "vitest --watch",
-    "install": "./scripts/install.sh",
     "publish": "changeset publish"
   },
   "main": "src/index.ts",
