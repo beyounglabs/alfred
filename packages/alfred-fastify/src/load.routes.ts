@@ -1,8 +1,9 @@
-import { JwtHelper } from '@beyounglabs/alfred/helpers/jwt.helper';
+// import { QueryManager, JwtHelper } from '@beyounglabs/alfred';
 import { Apm } from '@beyounglabs/alfred/apm/apm';
 import { FastifyInstance } from 'fastify';
 import { RequestContext } from './request.context';
 import { RouteInterface } from './route.interface';
+import { routeAuth } from '@beyounglabs/alfred/routes/route.auth';
 
 export async function loadRoutes(
   server: FastifyInstance,
@@ -27,21 +28,14 @@ export async function loadRoutes(
 
         const ctx: RequestContext = {
           apm: apm,
+          // @todo remove typeorm dependecy
+          // queryManager: new QueryManager(),
           auth: undefined,
         };
 
         if (route.protected) {
           try {
-            const authHeader = req.headers.authorization;
-
-            if (!authHeader?.startsWith('Bearer ')) {
-              throw new Error('invalid token');
-            }
-
-            const token = authHeader.substring(7, authHeader.length);
-
-            ctx.auth = (await JwtHelper.verify(token)) as any;
-            ctx.auth.token = token;
+            ctx.auth = routeAuth(req.headers.authorization, route);
           } catch (e) {
             console.error(e);
             reply.status(403).send({ message: e.message });
@@ -51,7 +45,9 @@ export async function loadRoutes(
         try {
           await route.action(req, reply, ctx);
         } catch (e) {
-          //   next(e);
+          reply.status(500).send({ message: e.message });
+        } finally {
+          // await ctx.queryManager.release();
         }
       },
     });

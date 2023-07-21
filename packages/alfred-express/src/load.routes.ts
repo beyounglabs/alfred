@@ -40,6 +40,7 @@ export async function loadRoutes(
           });
         });
 
+        // @todo remove typeorm dependecy
         response.locals.queryManager = new QueryManager();
         response.locals.apm = apm;
         response.locals.isPreview = request.hostname.includes('preview');
@@ -65,6 +66,7 @@ export async function loadRoutes(
         } catch (e) {
           next(e);
         } finally {
+          // @todo remove typeorm dependecy
           await response.locals.queryManager.release();
         }
       },
