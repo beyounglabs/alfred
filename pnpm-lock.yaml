@@ -211,6 +211,9 @@ importers:
 
   packages/alfred-express:
     dependencies:
+      '@beyounglabs/alfred':
+        specifier: workspace:*
+        version: link:../alfred
       '@types/express':
         specifier: ^4.0.39
         version: 4.0.39
@@ -223,6 +226,15 @@ importers:
       express-brute:
         specifier: ^1.0.1
         version: 1.0.1(express@4.16.2)
+      ioredis:
+        specifier: ^5.2.2
+        version: 5.2.2
+      trim-request:
+        specifier: ^1.0.6
+        version: 1.0.6
+      typescript:
+        specifier: 4.7.*
+        version: 4.7.2
 
   packages/eslint-config-custom:
     dependencies:
