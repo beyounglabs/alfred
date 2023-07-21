@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "4.0.5",
+  "version": "4.0.6",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
@@ -8,8 +8,8 @@
     "test:watch": "vitest --watch",
     "publish": "changeset publish"
   },
-  "main": "dist/index.js",
-  "types": "src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "repository": "git@github.com:beyounglabs/alfred.git",
   "license": "MIT",
   "dependencies": {
