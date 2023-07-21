@@ -2,6 +2,13 @@
   "name": "@beyounglabs/alfred",
   "version": "4.0.0",
   "description": "Alfred JS Framework",
+  "scripts": {
+    "build": "tsc",
+    "test": "NODE_ENV=testing vitest",
+    "test:watch": "vitest --watch",
+    "install": "./scripts/install.sh",
+    "publish": "changeset publish"
+  },
   "main": "src/index.ts",
   "types": "src/index.ts",
   "typesVersions": {
@@ -13,6 +20,7 @@
     }
   },
   "publishConfig": {
+    "access": "public",
     "typesVersions": {
       "*": {
         "*": [
@@ -24,13 +32,6 @@
   },
   "repository": "git@github.com:beyounglabs/alfred.git",
   "license": "MIT",
-  "scripts": {
-    "build": "tsc",
-    "test": "NODE_ENV=testing vitest",
-    "test:watch": "vitest --watch",
-    "install": "./scripts/install.sh",
-    "publish": "changeset publish"
-  },
   "dependencies": {
     "@google-cloud/debug-agent": "^7.1.0",
     "@google-cloud/logging-winston": "^5.1.2",

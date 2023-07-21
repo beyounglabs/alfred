@@ -2,13 +2,32 @@
   "name": "@beyounglabs/alfred-express",
   "version": "0.0.1",
   "description": "Alfred JS Framework",
+  "scripts": {
+    "build": "tsc",
+    "publish": "changeset publish"
+  },
   "main": "src/index.ts",
   "types": "src/index.ts",
   "repository": "git@github.com:beyounglabs/alfred.git",
   "license": "MIT",
-  "scripts": {
-    "build": "tsc",
-    "publish": "changeset publish"
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*",
+        "src/*/index"
+      ]
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "typesVersions": {
+      "*": {
+        "*": [
+          "dist/*.d.ts",
+          "dist/*/index.d.ts"
+        ]
+      }
+    }
   },
   "dependencies": {
     "@beyounglabs/alfred": "workspace:*",
