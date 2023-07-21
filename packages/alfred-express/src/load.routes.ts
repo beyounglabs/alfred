@@ -4,8 +4,8 @@ import type { Apm } from '@beyounglabs/alfred/apm/apm';
 import { Logger } from '@beyounglabs/alfred/logger-v2/logger';
 import { QueryManager } from '@beyounglabs/alfred/typeorm/query.manager';
 import { routeAuth } from '@beyounglabs/alfred/routes/route.auth';
-import type { ResponseInterface } from '@beyounglabs/alfred/response.interface';
 import type { RouteInterface } from '@beyounglabs/alfred/routes/route.interface';
+import type { ResponseInterface } from './response.interface';
 
 export async function loadRoutes(
   app: Express,

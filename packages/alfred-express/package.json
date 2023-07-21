@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "Alfred JS Framework",
   "main": "src/index.ts",
-  "repository": "git@bitbucket.com:beautybrands/alfred.git",
+  "types": "src/index.ts",
+  "repository": "git@github.com:beyounglabs/alfred.git",
   "license": "MIT",
   "scripts": {
     "build": "tsc"
