@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
@@ -10,25 +10,6 @@
   },
   "main": "src/index.ts",
   "types": "src/index.ts",
-  "typesVersions": {
-    "*": {
-      "*": [
-        "src/*",
-        "src/*/index"
-      ]
-    }
-  },
-  "publishConfig": {
-    "access": "public",
-    "typesVersions": {
-      "*": {
-        "*": [
-          "dist/*.d.ts",
-          "dist/*/index.d.ts"
-        ]
-      }
-    }
-  },
   "repository": "git@github.com:beyounglabs/alfred.git",
   "license": "MIT",
   "dependencies": {
@@ -89,5 +70,27 @@
     "vitest": "^0.33.0",
     "winston": "^3.0.0",
     "yargs": "^13.2.1"
-  }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*",
+        "src/*/index"
+      ]
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "typesVersions": {
+      "*": {
+        "*": [
+          "dist/*.d.ts",
+          "dist/*/index.d.ts"
+        ]
+      }
+    }
+  },
+  "files": [
+    "/dist"
+  ]
 }
