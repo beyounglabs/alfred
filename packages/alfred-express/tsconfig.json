@@ -9,6 +9,7 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "useUnknownInCatchVariables": false,
+    "skipLibCheck": true,
     "target": "es2017",
     "sourceMap": true,
     "allowJs": false,

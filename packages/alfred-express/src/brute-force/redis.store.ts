@@ -1,11 +1,10 @@
 // Based on https://github.com/eggytronixx/express-brute-redis-store
 import IORedis, { Cluster, ClusterOptions, RedisOptions } from 'ioredis';
-
 import * as AbstractClientStore from 'express-brute/lib/AbstractClientStore';
 import {
   createConnection,
   RedisCustomOptions,
-} from '../../brain/redis.manager';
+} from '@beyounglabs/alfred/brain/redis.manager';
 
 interface Settings {
   prefix: string;
