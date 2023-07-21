@@ -1,0 +1,39 @@
+{
+  "name": "@beyounglabs/alfred-fastify",
+  "version": "0.0.1",
+  "description": "Alfred JS Framework",
+  "scripts": {
+    "build": "tsc",
+    "publish": "changeset publish"
+  },
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "repository": "git@github.com:beyounglabs/alfred.git",
+  "license": "MIT",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "src/*",
+        "src/*/index"
+      ]
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "typesVersions": {
+      "*": {
+        "*": [
+          "dist/*.d.ts",
+          "dist/*/index.d.ts"
+        ]
+      }
+    }
+  },
+  "dependencies": {
+    "@beyounglabs/alfred": "workspace:*",
+    "fastify": "^4.20.0",
+    "@fastify/swagger": "^8.8.0",
+    "ioredis": "^5.2.2",
+    "typescript": "4.7.*"
+  }
+}
