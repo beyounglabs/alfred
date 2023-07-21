@@ -7,8 +7,12 @@ import { MystiqueActionInterface } from './contracts/mystique.action.interface';
 import { MystiqueActionsType } from './contracts/mystique.actions.type';
 import { MystiqueFieldInterface } from './contracts/mystique.field.interface';
 import { MystiqueSearchConfigInterface } from './contracts/mystique.search.config.interface';
+import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
 
-export abstract class AbstractUpserter<E, R extends BaseRepository<E>> {
+export abstract class AbstractUpserter<
+  E extends ObjectLiteral,
+  R extends BaseRepository<E>,
+> {
   protected queryRunner: QueryRunner;
   protected repository: R;
 

@@ -23,7 +23,9 @@ export class TestCase {
   }
 
   public async setup(resetDatabase?: boolean) {
+    // @ts-ignore
     if (typeof jest !== 'undefined') {
+      // @ts-ignore
       jest.setTimeout(1000 * 60); // 60 seconds
     }
 

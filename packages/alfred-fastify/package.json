@@ -15,7 +15,7 @@
     "fastify": "^4.20.0",
     "@fastify/swagger": "^8.8.0",
     "ioredis": "^5.2.2",
-    "typescript": "4.7.*"
+    "typescript": "5.1.*"
   },
   "exports": {
     "./*": "./dist/index.*.js"
