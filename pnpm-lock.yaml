@@ -47,12 +47,6 @@ importers:
       '@types/cookie-parser':
         specifier: ^1.4.1
         version: 1.4.1
-      '@types/express':
-        specifier: ^4.0.39
-        version: 4.0.39
-      '@types/express-brute':
-        specifier: ^1.0.1
-        version: 1.0.1
       '@types/fs-extra':
         specifier: ^5.0.0
         version: 5.0.0
@@ -110,12 +104,6 @@ importers:
       dotenv:
         specifier: ^4.0.0
         version: 4.0.0
-      express:
-        specifier: ^4.16.2
-        version: 4.16.2
-      express-brute:
-        specifier: ^1.0.1
-        version: 1.0.1(express@4.16.2)
       facebook-nodejs-business-sdk:
         specifier: ^11.0.0
         version: 11.0.0
