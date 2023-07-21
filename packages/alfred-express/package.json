@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred-express",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
@@ -19,6 +19,9 @@
     "ioredis": "^5.2.2",
     "typescript": "4.7.*",
     "trim-request": "^1.0.6"
+  },
+  "exports": {
+    "./*": "./dist/index.*.js"
   },
   "typesVersions": {
     "*": {
