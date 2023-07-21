@@ -1,12 +1,12 @@
 {
   "name": "@beyounglabs/alfred-fastify",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
     "publish": "changeset publish"
   },
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "types": "src/index.ts",
   "repository": "git@github.com:beyounglabs/alfred.git",
   "license": "MIT",
