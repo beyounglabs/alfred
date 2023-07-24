@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "4.0.10",
+  "version": "4.0.11",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
@@ -84,7 +84,7 @@
     "access": "public",
     "typesVersions": {
       "*": {
-        "*": [
+        ".": [
           "dist/*.d.ts",
           "dist/*/index.d.ts"
         ]
