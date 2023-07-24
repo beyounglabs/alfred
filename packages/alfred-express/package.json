@@ -20,12 +20,6 @@
     "typescript": "5.1.*",
     "trim-request": "^1.0.6"
   },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
   "typesVersions": {
     "*": {
       "*": [
@@ -36,6 +30,12 @@
   },
   "publishConfig": {
     "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
     "typesVersions": {
       "*": {
         ".": [

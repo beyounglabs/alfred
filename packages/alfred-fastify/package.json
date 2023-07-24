@@ -17,12 +17,6 @@
     "ioredis": "^5.2.2",
     "typescript": "5.1.*"
   },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
   "typesVersions": {
     "*": {
       "*": [
@@ -33,6 +27,12 @@
   },
   "publishConfig": {
     "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
     "typesVersions": {
       "*": {
         ".": [
