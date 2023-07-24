@@ -1,10 +1,10 @@
 import type { Express, NextFunction, Request } from 'express';
 import * as trimRequest from 'trim-request';
-import type { Apm } from '@beyounglabs/alfred/apm/apm';
-import { Logger } from '@beyounglabs/alfred/logger-v2/logger';
-import { QueryManager } from '@beyounglabs/alfred/typeorm/query.manager';
-import { routeAuth } from '@beyounglabs/alfred/routes/route.auth';
-import type { RouteInterface } from '@beyounglabs/alfred/routes/route.interface';
+import type { Apm } from '@beyounglabs/alfred';
+import { Logger } from '@beyounglabs/alfred';
+import { QueryManager } from '@beyounglabs/alfred';
+import { routeAuth } from '@beyounglabs/alfred';
+import type { RouteInterface } from '@beyounglabs/alfred';
 import type { ResponseInterface } from './response.interface';
 
 export async function loadRoutes(

@@ -1,9 +1,9 @@
 // import { QueryManager, JwtHelper } from '@beyounglabs/alfred';
-import { Apm } from '@beyounglabs/alfred/apm/apm';
+import { Apm } from '@beyounglabs/alfred';
 import { FastifyInstance } from 'fastify';
 import { RequestContext } from './request.context';
 import { RouteInterface } from './route.interface';
-import { routeAuth } from '@beyounglabs/alfred/routes/route.auth';
+import { routeAuth } from '@beyounglabs/alfred';
 
 export async function loadRoutes(
   server: FastifyInstance,

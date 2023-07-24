@@ -1,6 +1,6 @@
 import { Response } from 'express';
-import { Apm } from '@beyounglabs/alfred/apm/apm';
-import { QueryManager } from '@beyounglabs/alfred/typeorm/query.manager';
+import { Apm } from '@beyounglabs/alfred';
+import { QueryManager } from '@beyounglabs/alfred';
 
 export interface ResponseInterface extends Response {
   locals: {
