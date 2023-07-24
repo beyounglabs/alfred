@@ -39,3 +39,4 @@ export { closeAllLoggers } from './helpers/close.all.loggers';
 export { getServiceUrl } from './env/get.service.url';
 export { HttpError } from './errors/http.error';
 export { MissingRecordError } from './errors/missing.record.error';
+export { Apm } from './apm/apm';
