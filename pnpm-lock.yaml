@@ -293,6 +293,9 @@ importers:
       '@fastify/swagger':
         specifier: ^8.8.0
         version: 8.8.0
+      '@gquittet/graceful-server':
+        specifier: ^4.0.7
+        version: 4.0.7
       fastify:
         specifier: ^4.20.0
         version: 4.20.0
@@ -1111,6 +1114,13 @@ packages:
       - supports-color
     dev: false
     optional: true
+
+  /@gquittet/graceful-server@4.0.7:
+    resolution: {integrity: sha512-0n/NRLRoCO9lwHeFU0A7uOF/EdPo8izf26Wr+tuXfcxKs7Sm0mY+4znndEHQD1yRqv4c8q0zWfjZPPAK3OHPvw==}
+    engines: {node: '>=14.0.0'}
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: false
 
   /@grpc/grpc-js@1.6.12:
     resolution: {integrity: sha512-JmvQ03OTSpVd9JTlj/K3IWHSz4Gk/JMLUTtW7Zb0KvO1LcOYGATh5cNuRYzCAeDR3O8wq+q8FZe97eO9MBrkUw==}

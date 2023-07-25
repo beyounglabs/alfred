@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred-fastify",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
@@ -13,8 +13,9 @@
   "dependencies": {
     "@beyounglabs/alfred": "workspace:*",
     "@beyounglabs/alfred-apm": "workspace:*",
-    "fastify": "^4.20.0",
+    "@gquittet/graceful-server": "^4.0.7",
     "@fastify/swagger": "^8.8.0",
+    "fastify": "^4.20.0",
     "ioredis": "^5.2.2",
     "typescript": "5.1.*"
   },
