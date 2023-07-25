@@ -2,9 +2,9 @@
 import IORedis, { Cluster, ClusterOptions, RedisOptions } from 'ioredis';
 import * as AbstractClientStore from 'express-brute/lib/AbstractClientStore';
 import {
-  createConnection,
+  createRedisConnection,
   RedisCustomOptions,
-} from '@beyounglabs/alfred/brain/redis.manager';
+} from '@beyounglabs/alfred-cache';
 
 interface Settings {
   prefix: string;
@@ -51,7 +51,7 @@ export class RedisStore extends AbstractClientStore {
       this.settings = options.settings!;
       this.redisOptions = options.redisOptions!;
 
-      this.client = createConnection(this.redisOptions);
+      this.client = createRedisConnection(this.redisOptions);
     }
   }
 

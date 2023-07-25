@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "noImplicitAny": false,
+    "removeComments": false,
+    "noLib": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "useUnknownInCatchVariables": false,
+    "skipLibCheck": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "allowJs": false,
+    "strict": true,
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "lib": ["es2015"]
+  },
+  "include": [
+    "src/**/*",
+    "../alfred-cache/src/redis.manager.ts",
+    "../alfred/src/env/get.service.url.ts"
+  ],
+  "exclude": ["node_modules", "**/*.test.ts"]
+}

@@ -1,7 +1,10 @@
 import * as bizSdk from 'facebook-nodejs-business-sdk';
-import { ErrorLogger } from '../../logger/error.logger';
-import { InfoLogger } from '../../logger/info.logger';
+import { Logger } from '../../logger/logger';
 
+
+/**
+ * @todo Remove this class from alfred main package
+ */
 export class Events {
   protected Content = bizSdk.Content;
   protected CustomData = bizSdk.CustomData;
@@ -12,18 +15,16 @@ export class Events {
   protected accessToken;
   protected pixelId;
 
-  protected infoLogger: InfoLogger;
-  protected errorLogger: ErrorLogger;
+
   protected readyToSend: Boolean = true;
 
-  constructor(infoLogger: InfoLogger, errorLogger: ErrorLogger) {
-    this.infoLogger = infoLogger;
-    this.errorLogger = errorLogger;
+  constructor() {
+
 
     if (!process.env.FACEBOOK_API_ACCESS_TOKEN) {
       this.readyToSend = false;
 
-      this.errorLogger.log({
+      Logger.error({
         message: 'FACEBOOK_API_ACCESS_TOKEN not configured',
       });
     }
@@ -31,7 +32,7 @@ export class Events {
     if (!process.env.FACEBOOK_PIXEL_ID) {
       this.readyToSend = false;
 
-      this.errorLogger.log({
+      Logger.error({
         message: 'FACEBOOK_PIXEL_ID not configured',
       });
     }

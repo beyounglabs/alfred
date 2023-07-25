@@ -1,8 +1,8 @@
 import type { Express, NextFunction, Request } from 'express';
 import * as trimRequest from 'trim-request';
-import type { Apm } from '@beyounglabs/alfred';
+import type { Apm } from '@beyounglabs/alfred-apm';
 import { Logger } from '@beyounglabs/alfred';
-import { QueryManager } from '@beyounglabs/alfred';
+import { QueryManager } from '@beyounglabs/alfred-typeorm';
 import { routeAuth } from '@beyounglabs/alfred';
 import type { RouteInterface } from '@beyounglabs/alfred';
 import type { ResponseInterface } from './response.interface';

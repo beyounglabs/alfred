@@ -1,6 +1,6 @@
 {
-  "name": "@beyounglabs/alfred-fastify",
-  "version": "0.0.12",
+  "name": "@beyounglabs/alfred-brain",
+  "version": "0.0.1",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
@@ -12,9 +12,9 @@
   "license": "MIT",
   "dependencies": {
     "@beyounglabs/alfred": "workspace:*",
-    "@beyounglabs/alfred-apm": "workspace:*",
-    "fastify": "^4.20.0",
-    "@fastify/swagger": "^8.8.0",
+    "@beyounglabs/alfred-cache": "workspace:*",
+    "dotenv": "^4.0.0",
+    "lodash": "^4.17.4",
     "ioredis": "^5.2.2",
     "typescript": "5.1.*"
   },

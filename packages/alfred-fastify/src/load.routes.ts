@@ -1,5 +1,5 @@
 // import { QueryManager, JwtHelper } from '@beyounglabs/alfred';
-import { Apm } from '@beyounglabs/alfred';
+import { Apm } from '@beyounglabs/alfred-apm';
 import { FastifyInstance } from 'fastify';
 import { RequestContext } from './request.context';
 import { RouteInterface } from './route.interface';

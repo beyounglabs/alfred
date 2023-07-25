@@ -12,6 +12,9 @@
   "license": "MIT",
   "dependencies": {
     "@beyounglabs/alfred": "workspace:*",
+    "@beyounglabs/alfred-apm": "workspace:*",
+    "@beyounglabs/alfred-cache": "workspace:*",
+    "@beyounglabs/alfred-typeorm": "workspace:*",
     "@types/express": "^4.0.39",
     "@types/express-brute": "^1.0.1",
     "express": "^4.16.2",
@@ -21,21 +24,10 @@
     "trim-request": "^1.0.6"
   },
   "typesVersions": {
-    "*": {
-      "*": [
-        "src/*",
-        "src/*/index"
-      ]
-    }
+    "*": {}
   },
   "publishConfig": {
     "access": "public",
-    "exports": {
-      ".": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.js"
-      }
-    },
     "typesVersions": {
       "*": {
         ".": [

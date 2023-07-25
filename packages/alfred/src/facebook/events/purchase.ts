@@ -1,3 +1,4 @@
+import { Logger } from '../../logger/logger';
 import { Events } from './events';
 
 export class Purchase extends Events {
@@ -52,7 +53,7 @@ export class Purchase extends Events {
     try {
       const response = await eventRequest.execute();
 
-      this.infoLogger.log({
+      Logger.debug({
         uniqId: checkoutRequest.cookies.session_id,
         message: 'facebook_api_purchase_event',
         content: {
@@ -62,7 +63,7 @@ export class Purchase extends Events {
 
       return response;
     } catch (error) {
-      this.errorLogger.log({
+      Logger.error({
         uniqId: checkoutRequest.cookies.session_id,
         message: 'facebook_api_purchase_event_fail',
         error,
