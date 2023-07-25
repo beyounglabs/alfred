@@ -1,7 +1,7 @@
 import {
   RedisCustomOptions,
   RedisManager,
-} from '../../alfred-cache/src/redis.manager';
+} from '@beyounglabs/alfred-cache';
 import { writeFile } from 'fs/promises';
 import { Logger } from '@beyounglabs/alfred';
 
