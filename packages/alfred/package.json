@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "4.0.16",
+  "version": "4.0.17",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
@@ -64,8 +64,14 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+          "types": "./dist/index.d.ts",
+          "default": "./dist/index.js"
+      }
     }
   },
   "typesVersions": {

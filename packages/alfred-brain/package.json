@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred-brain",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
@@ -20,8 +20,14 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+          "types": "./dist/index.d.ts",
+          "default": "./dist/index.js"
+      }
     }
   },
   "typesVersions": {
