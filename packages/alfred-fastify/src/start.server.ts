@@ -8,7 +8,10 @@ import { Apm } from '@beyounglabs/alfred-apm';
 export async function startServer(
   appRoutes: RouteInterface[],
   apm: Apm,
-): Promise<{ fastifyServer: FastifyInstance; gracefulServer: typeof GracefulServer }> {
+): Promise<{
+  fastifyServer: FastifyInstance;
+  gracefulServer: typeof GracefulServer;
+}> {
   const fastifyServer: FastifyInstance = Fastify({
     bodyLimit: 1024 * 1024 * 20, // === 20MB
     trustProxy: true,
@@ -39,6 +42,26 @@ export async function startServer(
 
   await loadSwagger(fastifyServer, process.env.BRAIN_SERVICE!);
   await loadRoutes(fastifyServer, appRoutes, apm);
+
+  try {
+    const port = Number(process.env.PORT || 3000);
+    console.log(`Starting on port ${port}`);
+    await fastifyServer.listen({ port, host: '0.0.0.0' });
+
+    if (process.env.NODE_ENV !== 'development') {
+      gracefulServer.setReady();
+    }
+
+    console.log(
+      ' App is running at http://localhost:%d in %s mode',
+      port,
+      process.env.NODE_ENV,
+    );
+    console.log(new Date(), '  Press CTRL-C to stop\n');
+  } catch (err) {
+    fastifyServer.log.error(err);
+    process.exit(1);
+  }
 
   return { fastifyServer, gracefulServer };
 }
