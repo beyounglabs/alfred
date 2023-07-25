@@ -22,7 +22,7 @@ export function getCustomRepository<T>(
 type RepositoryType = new (...args: any[]) => any;
 
 type RepositoryListType<T extends RepositoryType[]> = {
-  [P in keyof T]: T[P] extends RepositoryType ? InstanceType<T[P]> : never
+  [P in keyof T]: T[P] extends RepositoryType ? InstanceType<T[P]> : never;
 } & {
   [Symbol.iterator]: any;
 };

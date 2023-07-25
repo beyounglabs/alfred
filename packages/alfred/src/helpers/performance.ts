@@ -5,7 +5,7 @@ const isTesting = process.env.NODE_ENV === 'testing';
 export class Performance {
   protected id: string;
   protected startedAt: number;
-  protected shouldLog: boolean
+  protected shouldLog: boolean;
 
   constructor(id: string, shouldLog: boolean = true) {
     if (isTesting) {
@@ -32,9 +32,7 @@ export class Performance {
     pending--;
 
     this.shouldLog === true &&
-      console.info(
-        '  '.repeat(pending * 2) + `/${this.id} after ${diff}ms\n`,
-      );
+      console.info('  '.repeat(pending * 2) + `/${this.id} after ${diff}ms\n`);
 
     return diff;
   }

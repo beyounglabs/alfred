@@ -20,4 +20,3 @@ export { getPerformanceTime } from './helpers/get.performance.time';
 export { getServiceUrl } from './env/get.service.url';
 export { HttpError } from './errors/http.error';
 export { MissingRecordError } from './errors/missing.record.error';
-

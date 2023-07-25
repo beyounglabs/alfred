@@ -30,19 +30,19 @@ export class Validator {
   }
 
   public setAttributeArrayFormatter(): void {
-    this.setAttributeFormatter((attribute) => {
-      return attribute.split('.').filter(v => Number.isNaN(Number(v))).join('.');
-    })
+    this.setAttributeFormatter(attribute => {
+      return attribute
+        .split('.')
+        .filter(v => Number.isNaN(Number(v)))
+        .join('.');
+    });
   }
 
   public async validate(data, rules, customErrorMessages?) {
     const validator = new ValidatorJS(
       data,
       rules,
-      merge(
-        this.getDefaultErrorMessages(),
-        customErrorMessages,
-      ),
+      merge(this.getDefaultErrorMessages(), customErrorMessages),
     );
 
     const fails = await new Promise(resolve => {

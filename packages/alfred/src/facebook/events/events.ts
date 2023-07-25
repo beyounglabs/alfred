@@ -1,7 +1,6 @@
 import * as bizSdk from 'facebook-nodejs-business-sdk';
 import { Logger } from '../../logger/logger';
 
-
 /**
  * @todo Remove this class from alfred main package
  */
@@ -15,12 +14,9 @@ export class Events {
   protected accessToken;
   protected pixelId;
 
-
   protected readyToSend: Boolean = true;
 
   constructor() {
-
-
     if (!process.env.FACEBOOK_API_ACCESS_TOKEN) {
       this.readyToSend = false;
 

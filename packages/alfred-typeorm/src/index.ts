@@ -1,8 +1,8 @@
 export { BaseRepository } from './base.repository';
 export { DefaultMetadata } from './default.metadata';
 export {
-    getCustomRepositories,
-    getCustomRepository
+  getCustomRepositories,
+  getCustomRepository,
 } from './get.custom.repository';
 export { AbstractUpserter } from './mystique/abstract.upserter';
 export { MystiqueActionInterface } from './mystique/contracts/mystique.action.interface';
