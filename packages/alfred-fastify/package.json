@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred-fastify",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",

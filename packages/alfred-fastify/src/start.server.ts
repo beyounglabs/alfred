@@ -1,7 +1,14 @@
 import Fastify, { FastifyInstance } from 'fastify';
 import GracefulServer from '@gquittet/graceful-server';
+import { loadSwagger } from './load.swagger';
+import { loadRoutes } from './load.routes';
+import { RouteInterface } from './route.interface';
+import { Apm } from '@beyounglabs/alfred-apm';
 
-export function startServer(): FastifyInstance {
+export async function startServer(
+  appRoutes: RouteInterface[],
+  apm: Apm,
+): Promise<{ fastifyServer: FastifyInstance; gracefulServer: typeof GracefulServer }> {
   const fastifyServer: FastifyInstance = Fastify({
     bodyLimit: 1024 * 1024 * 20, // === 20MB
     trustProxy: true,
@@ -30,5 +37,8 @@ export function startServer(): FastifyInstance {
     });
   }
 
-  return fastifyServer;
+  await loadSwagger(fastifyServer, process.env.BRAIN_SERVICE!);
+  await loadRoutes(fastifyServer, appRoutes, apm);
+
+  return { fastifyServer, gracefulServer };
 }
