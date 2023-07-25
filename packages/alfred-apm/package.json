@@ -17,7 +17,8 @@
     "@types/newrelic": "^6.4.0"
   },
   "devDependencies": {
-    "vitest": "^0.33.0"
+    "vitest": "^0.33.0",
+    "@types/node": "^18"
   },
   "typesVersions": {
     "*": {}
