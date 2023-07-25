@@ -238,6 +238,10 @@ importers:
       uniqid:
         specifier: ^4.1.1
         version: 4.1.1
+    devDependencies:
+      '@types/node':
+        specifier: ^18
+        version: 18.0.0
 
   packages/alfred-express:
     dependencies:
