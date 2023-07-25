@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred-typeorm",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
@@ -25,6 +25,12 @@
   },
   "devDependencies": {
     "vitest": "^0.33.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "typesVersions": {
     "*": {}

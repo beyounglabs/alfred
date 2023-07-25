@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred-cache",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
@@ -24,6 +24,12 @@
   },
   "devDependencies": {
     "@types/node": "^18"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "typesVersions": {
     "*": {}
