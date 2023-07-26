@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "4.0.18",
+  "version": "4.0.19*",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
@@ -63,7 +63,7 @@
     "dotenv": "^4.0.0"
   },
   "exports": {
-    "*": {
+    ".": {
       "import": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
@@ -81,7 +81,7 @@
     "access": "public",
     "typesVersions": {
       "*": {
-        ".": [
+        "*": [
           "dist/*.d.ts",
           "dist/*/index.d.ts"
         ]
