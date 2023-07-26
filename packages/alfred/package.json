@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "4.0.19*",
+  "version": "4.0.19",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
