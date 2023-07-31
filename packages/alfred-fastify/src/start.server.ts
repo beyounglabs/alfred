@@ -13,6 +13,7 @@ export async function startServer(
   gracefulServer: typeof GracefulServer;
 }> {
   const fastifyServer: FastifyInstance = Fastify({
+    logger: true,
     bodyLimit: 1024 * 1024 * 20, // === 20MB
     trustProxy: true,
     keepAliveTimeout: 5000, // 5 seconds

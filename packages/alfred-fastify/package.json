@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred-fastify",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
@@ -27,8 +27,8 @@
         "default": "./dist/index.js"
       },
       "require": {
-          "types": "./dist/index.d.ts",
-          "default": "./dist/index.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     }
   },
