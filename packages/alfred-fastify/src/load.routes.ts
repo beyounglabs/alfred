@@ -39,6 +39,7 @@ export async function loadRoutes(
           } catch (e) {
             console.error(e);
             reply.status(403).send({ message: e.message });
+            return;
           }
         }
 
