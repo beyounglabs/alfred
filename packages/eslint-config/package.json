@@ -4,6 +4,7 @@
   "description": "ESLint configuration used by Beyoung Labs.",
   "main": "index.js",
   "license": "MIT",
+  "private": false,
   "peerDependencies": {
     "eslint": "^8.0.0",
     "typescript": ">=4"
