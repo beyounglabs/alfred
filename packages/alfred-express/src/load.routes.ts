@@ -1,4 +1,5 @@
-import type { Express, NextFunction, Request } from 'express';
+import type { NextFunction, Request } from 'express';
+import * as express from 'express';
 import * as trimRequest from 'trim-request';
 import type { Apm } from '@beyounglabs/alfred-apm';
 import { Logger } from '@beyounglabs/alfred';
@@ -8,7 +9,7 @@ import type { RouteInterface } from '@beyounglabs/alfred';
 import type { ResponseInterface } from './response.interface';
 
 export async function loadRoutes(
-  app: Express,
+  app: express.Express,
   routes: RouteInterface[],
   apm: Apm,
 ) {
