@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred",
-  "version": "4.0.24",
+  "version": "4.0.25",
   "description": "Alfred JS Framework (Core)",
   "scripts": {
     "build": "tsc",
@@ -13,7 +13,6 @@
   "repository": "git@github.com:beyounglabs/alfred.git",
   "license": "MIT",
   "dependencies": {
-    "@google-cloud/debug-agent": "^7.1.0",
     "@google-cloud/logging-winston": "^5.1.2",
     "@moebius/http-graceful-shutdown": "^1.1.0",
     "@prisma/client": "^4.3.1",

@@ -14,7 +14,7 @@ export {
 } from './logger/performance.logger';
 export { RedisProvider } from './providers/redis.provider';
 export { QueueGenerator } from './queue/queue.generator';
-import { QueueRequestInterface } from './queue/contracts/queue.request.interface';
+export { QueueRequestInterface } from './queue/contracts/queue.request.interface';
 export { Validator } from './validator/validator';
 export { Vm } from './vm/vm';
 export { getPerformanceTime } from './helpers/get.performance.time';
