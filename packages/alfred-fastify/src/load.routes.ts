@@ -7,7 +7,7 @@ import { routeAuth } from '@beyounglabs/alfred';
 
 export async function loadRoutes<RC = RequestContext>(
   server: FastifyInstance,
-  routes: RouteInterface[],
+  routes: RouteInterface<RC>[],
   apm: Apm,
   events?: {
     preRequest?: (
