@@ -6,7 +6,7 @@ export { ObjectConverter } from './helpers/object.converter';
 export { RemoveAccents } from './helpers/remove.accents';
 export { request } from './helpers/request';
 export { roundNumber } from './helpers/round.number';
-export { prorate } from './helpers/prorate';
+export { ProrateItem, prorate } from './helpers/prorate';
 export { Logger } from './logger/logger';
 export {
   performanceLoggerEnd,
