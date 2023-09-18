@@ -1,9 +1,13 @@
-import * as express from 'express';
+import type {
+  Request,
+  Response,
+  NextFunction,
+} from 'express-serve-static-core';
 
 export function jsonRequestMiddleware(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction,
+  req: Request,
+  res: Response,
+  next: NextFunction,
 ) {
   if (
     String(req.headers['content-type']).includes('application/json') === false

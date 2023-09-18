@@ -1,14 +1,13 @@
-import * as express from 'express';
-import * as trimRequest from 'trim-request';
-import type { Apm } from '@beyounglabs/alfred-apm';
-import { Logger } from '@beyounglabs/alfred';
-import { QueryManager } from '@beyounglabs/alfred-typeorm';
-import { routeAuth } from '@beyounglabs/alfred';
 import type { RouteInterface } from '@beyounglabs/alfred';
+import { Logger, routeAuth } from '@beyounglabs/alfred';
+import type { Apm } from '@beyounglabs/alfred-apm';
+import { QueryManager } from '@beyounglabs/alfred-typeorm';
+import type { Express, NextFunction, Request } from 'express-serve-static-core';
+import * as trimRequest from 'trim-request';
 import type { ResponseInterface } from './response.interface';
 
 export async function loadRoutes(
-  app: express.Express,
+  app: Express,
   routes: RouteInterface[],
   apm: Apm,
 ) {
@@ -25,9 +24,9 @@ export async function loadRoutes(
       route.path,
       middlewares,
       async (
-        request: express.Request,
+        request: Request,
         response: ResponseInterface,
-        next: express.NextFunction,
+        next: NextFunction,
       ) => {
         // 2 minutes
         const defaultTimeout = 2 * 60;
