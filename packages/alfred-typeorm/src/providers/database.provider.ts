@@ -81,10 +81,10 @@ export class DatabaseProvider {
         logger: 'file',
         cache: false,
         entities: [
-          `${__dirname}/../../../../${prefix}src/entities/*.entity{.ts,.js}`,
+          `${__dirname}/../../../../../${prefix}src/entities/*.entity{.ts,.js}`,
         ],
         migrations: [
-          `${__dirname}/../../../../${prefix}database/migrations/*.{.ts,.js}`,
+          `${__dirname}/../../../../../${prefix}database/migrations/*.{.ts,.js}`,
         ],
         extra: {
           connectionLimit: process.env.DB_POOL_CONNECTION_LIMIT || 10,
@@ -100,10 +100,10 @@ export class DatabaseProvider {
         logging: process.env.DB_LOGGING === 'true',
         logger: 'file',
         entities: [
-          `${__dirname}/../../../../${prefix}src/entities/*.entity{.ts,.js}`,
+          `${__dirname}/../../../../../${prefix}src/entities/*.entity{.ts,.js}`,
         ],
         migrations: [
-          `${__dirname}/../../../../${prefix}database/migrations/*.{.ts,.js}`,
+          `${__dirname}/../../../../../${prefix}database/migrations/*.{.ts,.js}`,
         ],
       };
 
