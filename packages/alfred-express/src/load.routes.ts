@@ -34,11 +34,17 @@ export async function loadRoutes(
         const timeout =
           route.timeout || process.env.SERVER_TIMEOUT || defaultTimeout;
 
-        request.setTimeout(Number(timeout) * 1000, () => {
-          Logger.notice({
-            message: `Route ${route.path} got timeout of ${timeout} seconds`,
+        /**
+         * @todo Remove this try/catch after is solved
+         * @link https://github.com/oven-sh/bun/issues/4964
+         **/
+        try {
+          request.setTimeout(Number(timeout) * 1000, () => {
+            Logger.notice({
+              message: `Route ${route.path} got timeout of ${timeout} seconds`,
+            });
           });
-        });
+        } catch (e) {}
 
         // @todo remove typeorm dependecy
         response.locals.queryManager = new QueryManager();

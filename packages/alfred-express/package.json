@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred-express",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Alfred JS Framework",
   "scripts": {
     "build": "tsc",
@@ -30,8 +30,8 @@
         "default": "./dist/index.js"
       },
       "require": {
-          "types": "./dist/index.d.ts",
-          "default": "./dist/index.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     }
   },
