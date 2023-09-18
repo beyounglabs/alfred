@@ -1,6 +1,6 @@
 // import { QueryManager, JwtHelper } from '@beyounglabs/alfred';
 import { Apm } from '@beyounglabs/alfred-apm';
-import { FastifyInstance } from 'fastify';
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { RequestContext } from './request.context';
 import { RouteInterface } from './route.interface';
 import { routeAuth } from '@beyounglabs/alfred';
@@ -9,6 +9,18 @@ export async function loadRoutes(
   server: FastifyInstance,
   routes: RouteInterface[],
   apm: Apm,
+  events?: {
+    preRequest?: (
+      req: FastifyRequest<any>,
+      res: FastifyReply,
+      ctx: RequestContext,
+    ) => Promise<void>;
+    postRequest?: (
+      req: FastifyRequest<any>,
+      res: FastifyReply,
+      ctx: RequestContext,
+    ) => Promise<void>;
+  },
 ) {
   const defaultMiddlewares: any[] = []; // trimRequest.all
   for (const route of routes) {
@@ -43,11 +55,18 @@ export async function loadRoutes(
           }
         }
 
+        if (events?.preRequest) {
+          await events?.preRequest(req, reply, ctx);
+        }
+
         try {
           await route.action(req, reply, ctx);
         } catch (e) {
           reply.status(500).send({ message: e.message });
         } finally {
+          if (events?.postRequest) {
+            await events?.postRequest(req, reply, ctx);
+          }
           // await ctx.queryManager.release();
         }
       },
