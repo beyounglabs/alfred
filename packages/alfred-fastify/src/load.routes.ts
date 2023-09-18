@@ -1,11 +1,11 @@
-// import { QueryManager, JwtHelper } from '@beyounglabs/alfred';
+// import { QueryManager } from '@beyounglabs/alfred';
 import { Apm } from '@beyounglabs/alfred-apm';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { RequestContext } from './request.context';
 import { RouteInterface } from './route.interface';
 import { routeAuth } from '@beyounglabs/alfred';
 
-export async function loadRoutes(
+export async function loadRoutes<RC = RequestContext>(
   server: FastifyInstance,
   routes: RouteInterface[],
   apm: Apm,
@@ -13,12 +13,12 @@ export async function loadRoutes(
     preRequest?: (
       req: FastifyRequest<any>,
       res: FastifyReply,
-      ctx: RequestContext,
+      ctx: RC,
     ) => Promise<void>;
     postRequest?: (
       req: FastifyRequest<any>,
       res: FastifyReply,
-      ctx: RequestContext,
+      ctx: RC,
     ) => Promise<void>;
   },
 ) {
@@ -38,10 +38,9 @@ export async function loadRoutes(
         // @todo  Verify how to implement timeout by route
         apm.setTransactionName(`${route.method.toLowerCase()} ${route.path}`);
 
-        const ctx: RequestContext = {
+        // @todo Improve type
+        const ctx: any = {
           apm: apm,
-          // @todo remove typeorm dependecy
-          // queryManager: new QueryManager(),
           auth: undefined,
         };
 
@@ -67,7 +66,6 @@ export async function loadRoutes(
           if (events?.postRequest) {
             await events?.postRequest(req, reply, ctx);
           }
-          // await ctx.queryManager.release();
         }
       },
     });
