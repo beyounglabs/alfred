@@ -1,7 +1,7 @@
 {
   "name": "@beyounglabs/alfred-cache",
-  "version": "0.0.3",
-  "description": "Alfred JS Framework",
+  "version": "0.0.4",
+  "description": "Alfred JS Framework (Cache)",
   "scripts": {
     "build": "tsc",
     "publish": "changeset publish"
@@ -32,8 +32,8 @@
         "default": "./dist/index.js"
       },
       "require": {
-          "types": "./dist/index.d.ts",
-          "default": "./dist/index.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     }
   },

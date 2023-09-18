@@ -1,7 +1,7 @@
 {
   "name": "@beyounglabs/alfred-apm",
-  "version": "0.0.3",
-  "description": "Alfred JS Framework",
+  "version": "0.0.4",
+  "description": "Alfred JS Framework (APM)",
   "scripts": {
     "build": "tsc",
     "publish": "changeset publish"
@@ -12,13 +12,14 @@
   "license": "MIT",
   "dependencies": {
     "@beyounglabs/alfred": "workspace:*",
+    "@types/newrelic": "^6.4.0",
     "lodash": "^4.17.4",
-    "typescript": "5.1.*",
-    "@types/newrelic": "^6.4.0"
+    "newrelic": "^11",
+    "typescript": "5.1.*"
   },
   "devDependencies": {
-    "vitest": "^0.33.0",
-    "@types/node": "^18"
+    "@types/node": "^18",
+    "vitest": "^0.33.0"
   },
   "exports": {
     ".": {
@@ -27,8 +28,8 @@
         "default": "./dist/index.js"
       },
       "require": {
-          "types": "./dist/index.d.ts",
-          "default": "./dist/index.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     }
   },

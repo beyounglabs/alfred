@@ -1,7 +1,7 @@
 {
   "name": "@beyounglabs/alfred-express",
-  "version": "0.0.15",
-  "description": "Alfred JS Framework",
+  "version": "0.0.16",
+  "description": "Alfred JS Framework (Express)",
   "scripts": {
     "build": "tsc",
     "publish": "changeset publish"

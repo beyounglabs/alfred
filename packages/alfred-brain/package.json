@@ -1,7 +1,7 @@
 {
   "name": "@beyounglabs/alfred-brain",
-  "version": "0.0.5",
-  "description": "Alfred JS Framework",
+  "version": "0.0.6",
+  "description": "Alfred JS Framework (Brain)",
   "scripts": {
     "build": "tsc",
     "publish": "changeset publish"
@@ -25,8 +25,8 @@
         "default": "./dist/index.js"
       },
       "require": {
-          "types": "./dist/index.d.ts",
-          "default": "./dist/index.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     }
   },
