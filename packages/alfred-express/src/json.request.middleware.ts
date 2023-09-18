@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
+import * as express from 'express';
 
 export function jsonRequestMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction,
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
 ) {
   if (
     String(req.headers['content-type']).includes('application/json') === false

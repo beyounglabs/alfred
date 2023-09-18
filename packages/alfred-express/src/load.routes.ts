@@ -1,4 +1,3 @@
-import type { NextFunction, Request } from 'express';
 import * as express from 'express';
 import * as trimRequest from 'trim-request';
 import type { Apm } from '@beyounglabs/alfred-apm';
@@ -26,9 +25,9 @@ export async function loadRoutes(
       route.path,
       middlewares,
       async (
-        request: Request,
+        request: express.Request,
         response: ResponseInterface,
-        next: NextFunction,
+        next: express.NextFunction,
       ) => {
         // 2 minutes
         const defaultTimeout = 2 * 60;
