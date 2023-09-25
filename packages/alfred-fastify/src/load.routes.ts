@@ -5,22 +5,24 @@ import { RequestContext } from './request.context';
 import { RouteInterface } from './route.interface';
 import { routeAuth } from '@beyounglabs/alfred';
 
+export type LoadRouteExents<RC = RequestContext> = {
+  preRequest?: (
+    req: FastifyRequest<any>,
+    res: FastifyReply,
+    ctx: RC,
+  ) => Promise<void>;
+  postRequest?: (
+    req: FastifyRequest<any>,
+    res: FastifyReply,
+    ctx: RC,
+  ) => Promise<void>;
+};
+
 export async function loadRoutes<RC = RequestContext>(
   server: FastifyInstance,
   routes: RouteInterface<RC>[],
   apm: Apm,
-  events?: {
-    preRequest?: (
-      req: FastifyRequest<any>,
-      res: FastifyReply,
-      ctx: RC,
-    ) => Promise<void>;
-    postRequest?: (
-      req: FastifyRequest<any>,
-      res: FastifyReply,
-      ctx: RC,
-    ) => Promise<void>;
-  },
+  events?: LoadRouteExents<RC>,
 ) {
   const defaultMiddlewares: any[] = []; // trimRequest.all
   for (const route of routes) {

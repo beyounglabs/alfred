@@ -1,13 +1,15 @@
 import Fastify, { FastifyInstance } from 'fastify';
 import GracefulServer from '@gquittet/graceful-server';
 import { loadSwagger } from './load.swagger';
-import { loadRoutes } from './load.routes';
+import { LoadRouteExents, loadRoutes } from './load.routes';
 import { RouteInterface } from './route.interface';
 import { Apm } from '@beyounglabs/alfred-apm';
+import { RequestContext } from './request.context';
 
-export async function startServer(
-  appRoutes: RouteInterface[],
+export async function startServer<RC = RequestContext>(
+  appRoutes: RouteInterface<RC>[],
   apm: Apm,
+  events?: LoadRouteExents<RC>,
 ): Promise<{
   fastifyServer: FastifyInstance;
   gracefulServer: typeof GracefulServer;
@@ -42,7 +44,7 @@ export async function startServer(
   }
 
   await loadSwagger(fastifyServer, process.env.BRAIN_SERVICE!);
-  await loadRoutes(fastifyServer, appRoutes, apm);
+  await loadRoutes<RC>(fastifyServer, appRoutes, apm, events);
 
   try {
     const port = Number(process.env.PORT || 3000);
