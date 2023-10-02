@@ -14,7 +14,9 @@ function roundFloor(value: number): number {
 }
 
 function findBestIndex(items: ProrateItem[]): number {
-  const index = items.findIndex(item => (item.qty ?? 1) === 1);
+  const index = items.findIndex(
+    item => (item.qty ?? 1) === 1 && item.value > 0,
+  );
   if (index === -1) {
     return 0;
   }
