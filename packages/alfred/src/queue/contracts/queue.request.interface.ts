@@ -5,6 +5,7 @@ export interface QueueRequestInterface {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   delay_seconds?: number;
   not_log_fields?: string[];
+  tags?: string[];
   data: {
     [x: string]: any;
   };
