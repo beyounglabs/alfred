@@ -22,3 +22,5 @@ export { getServiceUrl } from './env/get.service.url';
 export { HttpError } from './errors/http.error';
 export { MissingRecordError } from './errors/missing.record.error';
 export { AxiosInstance } from './http/axios.instance';
+export { getRequestErrorLog } from './helpers/get.request.error.log';
+export { objectToStringList } from './helpers/object.to.string.list';
