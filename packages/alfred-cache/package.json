@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred-cache",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Alfred JS Framework (Cache)",
   "scripts": {
     "build": "tsc",
