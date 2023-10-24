@@ -25,3 +25,8 @@ export { AxiosInstance } from './http/axios.instance';
 export { getRequestErrorLog } from './helpers/get.request.error.log';
 export { objectToStringList } from './helpers/object.to.string.list';
 export { parseVariables } from './helpers/parseVariables';
+export { MystiqueActionInterface } from './mystique/contracts/mystique.action.interface';
+export { MystiqueActionsType } from './mystique/contracts/mystique.actions.type';
+export { MystiqueFieldInterface } from './mystique/contracts/mystique.field.interface';
+export { MystiqueSearchConfigInterface } from './mystique/contracts/mystique.search.config.interface';
+export { MystiqueResultHeaderInterface } from './mystique/contracts/mystique.result.header.interface';

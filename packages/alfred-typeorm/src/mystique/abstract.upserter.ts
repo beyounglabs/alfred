@@ -1,12 +1,14 @@
 import { camelCase, kebabCase, snakeCase } from 'lodash';
 import * as moment from 'moment';
 import { EntityMetadata, getConnection, QueryRunner } from 'typeorm';
-import { ObjectConverter } from '@beyounglabs/alfred';
+import {
+  ObjectConverter,
+  MystiqueActionInterface,
+  MystiqueActionsType,
+  MystiqueFieldInterface,
+  MystiqueSearchConfigInterface,
+} from '@beyounglabs/alfred';
 import { BaseRepository } from '../base.repository';
-import { MystiqueActionInterface } from './contracts/mystique.action.interface';
-import { MystiqueActionsType } from './contracts/mystique.actions.type';
-import { MystiqueFieldInterface } from './contracts/mystique.field.interface';
-import { MystiqueSearchConfigInterface } from './contracts/mystique.search.config.interface';
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
 
 export abstract class AbstractUpserter<
