@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred-brain",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Alfred JS Framework (Brain)",
   "scripts": {
     "build": "tsc",

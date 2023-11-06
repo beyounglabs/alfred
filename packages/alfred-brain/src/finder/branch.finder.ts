@@ -30,8 +30,10 @@ export type Branch = {
   updatedAt: string;
   accountingOfficeDocument?: string;
   freightCode?: string;
+  stockCode?: string;
   company: Company;
   warehouses: Warehouse[];
+  orderTypes?: string[];
 };
 
 export class BranchFinder {
@@ -66,7 +68,7 @@ export class BranchFinder {
     );
 
     return orderBy(
-      ObjectConverter.underscoreToCamelCase(items),
+      items.map(item => this.formatBranch(item)),
       ['name', 'code'],
       ['asc', 'asc'],
     );
@@ -92,7 +94,7 @@ export class BranchFinder {
     }
 
     return orderBy(
-      ObjectConverter.underscoreToCamelCase(JSON.parse(result)),
+      JSON.parse(result).map((item: any) => this.formatBranch(item)),
       ['name', 'code'],
       ['asc', 'asc'],
     );
@@ -109,7 +111,7 @@ export class BranchFinder {
       return;
     }
 
-    return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
+    return this.formatBranch(JSON.parse(result));
   }
 
   public async findOneByCodeOrFail(code: string): Promise<Branch> {
@@ -134,7 +136,7 @@ export class BranchFinder {
       return;
     }
 
-    return ObjectConverter.underscoreToCamelCase(JSON.parse(result));
+    return this.formatBranch(JSON.parse(result));
   }
 
   public async findOneByCompanyCodeAndStateOrFail(
@@ -147,5 +149,21 @@ export class BranchFinder {
     }
 
     return branch;
+  }
+
+  protected formatBranch(branch: any): Branch | undefined {
+    if (!branch) {
+      return;
+    }
+
+    let branchFormatted = ObjectConverter.underscoreToCamelCase(branch);
+    if (
+      branchFormatted.orderTypes &&
+      typeof branchFormatted.orderTypes === 'string'
+    ) {
+      branchFormatted.orderTypes = JSON.parse(branchFormatted.orderTypes);
+    }
+
+    return branchFormatted;
   }
 }
