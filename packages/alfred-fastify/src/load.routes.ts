@@ -48,7 +48,7 @@ export async function loadRoutes<RC = RequestContext>(
 
         if (route.protected) {
           try {
-            ctx.auth = routeAuth(req.headers.authorization, route);
+            ctx.auth = await routeAuth(req.headers.authorization, route);
           } catch (e) {
             console.error(e);
             reply.status(403).send({ message: e.message });
