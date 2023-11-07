@@ -1,10 +1,10 @@
-import * as md5 from 'md5';
 import { Apm } from '@beyounglabs/alfred-apm';
 import { Logger } from '@beyounglabs/alfred';
 import { CacheFactory } from './cache.factory';
 import { CacheInterface } from './cache.interface';
 import { CompressionInterface } from './compression.interface';
 import { LocalCache } from './drivers/local.cache';
+import * as hash from 'object-hash';
 
 export class Cache {
   protected drivers: { [code: string]: CacheInterface } = {};
@@ -148,7 +148,7 @@ export class Cache {
 
     return `${this.getHashPrefix()}${cacheName}_${
       useBuild ? `BUILD${build}_` : ''
-    }${md5(JSON.stringify(request))}`;
+    }${hash(request)}`;
   }
 
   public getDriver(): CacheInterface {

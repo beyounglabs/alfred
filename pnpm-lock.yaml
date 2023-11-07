@@ -211,15 +211,15 @@ importers:
       lru-cache:
         specifier: ^5.1.1
         version: 5.1.1
-      md5:
-        specifier: ^2.2.1
-        version: 2.2.1
       memcached:
         specifier: ^2.2.2
         version: 2.2.2
       moment:
         specifier: ^2.19.2
         version: 2.19.2
+      object-hash:
+        specifier: ^3.0.0
+        version: 3.0.0
       typescript:
         specifier: 5.1.*
         version: 5.1.3
