@@ -3,6 +3,7 @@ import { ObjectConverter } from '@beyounglabs/alfred';
 import { RedisManager } from '@beyounglabs/alfred-cache';
 import { Warehouse } from './warehouse.finder';
 import { Company } from './company.finder';
+import { Store } from './store.finder';
 
 export type Branch = {
   id: number;
@@ -98,6 +99,28 @@ export class BranchFinder {
       ['name', 'code'],
       ['asc', 'asc'],
     );
+  }
+
+  public async findOneByFreightCodeAndStoreAndOrderType(
+    freightCode: string,
+    store: Store,
+    orderType: string,
+  ): Promise<Branch | undefined> {
+    const branches = await this.findByFreightCode(freightCode);
+
+    const filteredBranches = branches.filter(
+      b => b.companyId === store.companyId,
+    );
+
+    const branchByOrderType = filteredBranches.find(
+      b => b.orderTypes?.includes(orderType),
+    );
+
+    if (branchByOrderType) {
+      return branchByOrderType;
+    }
+
+    return filteredBranches.find(b => b.orderTypes === null);
   }
 
   public async findOneByCode(code: string): Promise<Branch | undefined> {
