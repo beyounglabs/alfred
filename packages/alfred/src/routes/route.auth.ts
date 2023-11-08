@@ -9,7 +9,9 @@ export async function routeAuth(
   route: RouteInterface,
 ): Promise<any> {
   if (!authorization) {
-    throw new Error('Authorization header is required');
+    throw new Error(
+      `Authorization header is required for route ${route.path} [${route.method}]`,
+    );
   }
 
   if (authorization.startsWith('Bearer')) {
