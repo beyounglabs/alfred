@@ -3,6 +3,7 @@ import { ObjectConverter } from '../../helpers/object.converter';
 import { RedisManager } from '../redis.manager';
 import { Warehouse } from './warehouse.finder';
 import { Company } from './company.finder';
+import { Store } from './store.finder';
 
 export type Branch = {
   id: number;
@@ -30,6 +31,8 @@ export type Branch = {
   updatedAt: string;
   accountingOfficeDocument?: string;
   freightCode?: string;
+  stockCode?: string;
+  orderTypes?: string[];
   company: Company;
   warehouses: Warehouse[];
 };
@@ -96,6 +99,28 @@ export class BranchFinder {
       ['name', 'code'],
       ['asc', 'asc'],
     );
+  }
+
+  public async findOneByFreightCodeAndStoreAndOrderType(
+    freightCode: string,
+    store: Store,
+    orderType: string,
+  ): Promise<Branch | undefined> {
+    const branches = await this.findByFreightCode(freightCode);
+
+    const filteredBranches = branches.filter(
+      b => b.companyId === store.companyId,
+    );
+
+    const branchByOrderType = filteredBranches.find(
+      b => b.orderTypes?.includes(orderType),
+    );
+
+    if (branchByOrderType) {
+      return branchByOrderType;
+    }
+
+    return filteredBranches.find(b => b.orderTypes === null);
   }
 
   public async findOneByCode(code: string): Promise<Branch | undefined> {
