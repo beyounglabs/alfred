@@ -34,6 +34,7 @@ export type Branch = {
   stockCode?: string;
   orderTypes?: string[];
   company: Company;
+  email: string;
   warehouses: Warehouse[];
 };
 
