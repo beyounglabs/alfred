@@ -22,6 +22,7 @@ export type Carrier = {
   shortName: string;
   labelAlias: string;
   freightTaxId: number;
+  pickup?: boolean;
 };
 
 export class CarrierFinder {
