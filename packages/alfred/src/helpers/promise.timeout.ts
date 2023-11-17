@@ -1,3 +1,5 @@
+import { Logger } from '../logger/logger';
+
 export async function promiseTimeout<T = any>(
   functions: Array<() => Promise<T>>,
   timeout: number,
@@ -8,10 +10,12 @@ export async function promiseTimeout<T = any>(
 
     return await new Promise((resolve, reject) => {
       let isResolved = false;
-      firstPromise.then(value => {
-        isResolved = true;
-        resolve(value);
-      });
+      firstPromise
+        .then(value => {
+          isResolved = true;
+          resolve(value);
+        })
+        .catch(e => reject(e));
       setTimeout(() => {
         if (!isResolved) {
           reject('Function timed out');
@@ -19,6 +23,14 @@ export async function promiseTimeout<T = any>(
       }, timeout);
     });
   } catch (e) {
+    await Logger.warning({
+      message: 'promise_timeout_error',
+      error: {
+        message: e.message,
+        stacK: e.stack,
+      },
+    });
+
     if (functions.length > 2) {
       return promiseTimeout(functions.slice(1), timeout);
     } else if (functions.length > 1) {
