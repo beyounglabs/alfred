@@ -30,3 +30,4 @@ export { MystiqueActionsType } from './mystique/contracts/mystique.actions.type'
 export { MystiqueFieldInterface } from './mystique/contracts/mystique.field.interface';
 export { MystiqueSearchConfigInterface } from './mystique/contracts/mystique.search.config.interface';
 export { MystiqueResultHeaderInterface } from './mystique/contracts/mystique.result.header.interface';
+export { promiseTimeout } from './helpers/promise.timeout';
