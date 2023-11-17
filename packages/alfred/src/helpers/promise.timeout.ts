@@ -3,6 +3,7 @@ import { Logger } from '../logger/logger';
 export async function promiseTimeout<T = any>(
   functions: Array<() => Promise<T>>,
   timeout: number,
+  label: string,
 ): Promise<T> {
   try {
     const func = functions[0];
@@ -16,15 +17,17 @@ export async function promiseTimeout<T = any>(
           resolve(value);
         })
         .catch(e => reject(e));
+
       setTimeout(() => {
         if (!isResolved) {
-          reject('Function timed out');
+          reject(new Error(`Function ${label} timed out`));
         }
       }, timeout);
     });
   } catch (e) {
     await Logger.warning({
       message: 'promise_timeout_error',
+      label,
       error: {
         message: e.message,
         stacK: e.stack,
@@ -32,7 +35,7 @@ export async function promiseTimeout<T = any>(
     });
 
     if (functions.length > 2) {
-      return promiseTimeout(functions.slice(1), timeout);
+      return promiseTimeout(functions.slice(1), timeout, label);
     } else if (functions.length > 1) {
       const fallbackFunc = functions[1];
       return fallbackFunc();
