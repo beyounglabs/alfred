@@ -73,7 +73,7 @@ export class RedisCache implements CacheInterface {
       Logger.info({
         message: `[${connectionHash}] Starting to connect to Write Redis ${
           this.instance
-        } ${hostName} ${mode} mode ${format(
+        } Redis Host: ${host} Machine: ${hostName} ${mode} mode ${format(
           new Date(),
           'YYYY-MM-DD HH:mm:ss',
         )}`,
@@ -84,7 +84,7 @@ export class RedisCache implements CacheInterface {
           Logger.error({
             message: `[${connectionHash}] Error on Write Redis ${
               this.instance
-            } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')} ${err}`,
+            } Redis Host: ${host} Machine: ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')} ${err}`,
           });
 
           if (runningAsFallback) {
@@ -140,7 +140,7 @@ export class RedisCache implements CacheInterface {
           Logger.info({
             message: `[${connectionHash}] Connected to Write Redis ${
               this.instance
-            } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
+            } Redis Host: ${host} Machine: ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
           });
 
           redisWriteClient[this.instance] = redisClientNew;
@@ -219,7 +219,7 @@ export class RedisCache implements CacheInterface {
       Logger.info({
         message: `[${connectionHash}] Starting to connect to Read Redis ${
           this.instance
-        } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
+        } Redis Host: ${host} Machine: ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
       });
 
       await new Promise<any>((resolve, reject) => {
@@ -227,7 +227,7 @@ export class RedisCache implements CacheInterface {
           Logger.error({
             message: `[${connectionHash}] Error on Read Redis ${
               this.instance
-            } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')} ${err}`,
+            } Redis Host: ${host} Machine: ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')} ${err}`,
           });
 
           if (runningAsFallback) {
@@ -270,7 +270,7 @@ export class RedisCache implements CacheInterface {
           Logger.info({
             message: `[${connectionHash}] Connected to Read Redis ${
               this.instance
-            } ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
+            } Redis Host: ${host} Machine: ${hostName} ${format(new Date(), 'YYYY-MM-DD HH:mm:ss')}`,
           });
 
           redisReadClient[this.instance] = redisClientNew;
