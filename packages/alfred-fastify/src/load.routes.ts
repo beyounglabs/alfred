@@ -44,6 +44,9 @@ export async function loadRoutes<RC = RequestContext>(
 
     const isPreflight = /options/i.test(req.method);
     if (isPreflight) {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', req.method);
+      res.header('Access-Control-Allow-Headers', '*');
       return res.send();
     }
 
