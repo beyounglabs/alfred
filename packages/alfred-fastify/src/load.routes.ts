@@ -30,6 +30,12 @@ export async function loadRoutes<RC = RequestContext>(
         continue;
       }
 
+      if (route.allowedOrigins.includes('*')) {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', req.method);
+        res.header('Access-Control-Allow-Headers', '*');
+      }
+
       const origin = req.headers.origin ?? req.headers.host;
       if (!origin) {
         continue;
