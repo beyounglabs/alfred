@@ -30,7 +30,7 @@ export async function loadRoutes<RC = RequestContext>(
         continue;
       }
 
-      const origin = req.headers.origin;
+      const origin = req.headers.origin ?? req.headers.host;
       if (!origin) {
         continue;
       }
