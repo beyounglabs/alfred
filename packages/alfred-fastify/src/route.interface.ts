@@ -6,6 +6,7 @@ import { RouteInterface as AlfredRouteInterface } from '@beyounglabs/alfred';
 export interface RouteInterface<RC = RequestContext>
   extends AlfredRouteInterface {
   path: string;
+  allowedOrigins?: string[];
   action: (req: FastifyRequest<any>, res: FastifyReply, ctx: RC) => any;
   schema?: () => SwaggerFastifySchema;
 }

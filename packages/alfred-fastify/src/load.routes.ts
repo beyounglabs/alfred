@@ -24,6 +24,32 @@ export async function loadRoutes<RC = RequestContext>(
   apm: Apm,
   events?: LoadRouteExents<RC>,
 ) {
+  server.addHook('preHandler', (req, res, done) => {
+    for (const route of routes) {
+      if (!route.allowedOrigins) {
+        continue;
+      }
+
+      const origin = req.headers.origin;
+      if (!origin) {
+        continue;
+      }
+
+      if (route.allowedOrigins.includes(origin)) {
+        res.header('Access-Control-Allow-Origin', origin);
+        res.header('Access-Control-Allow-Methods', req.method);
+        res.header('Access-Control-Allow-Headers', '*');
+      }
+    }
+
+    const isPreflight = /options/i.test(req.method);
+    if (isPreflight) {
+      return res.send();
+    }
+
+    done();
+  });
+
   const defaultMiddlewares: any[] = []; // trimRequest.all
   for (const route of routes) {
     let middlewares = defaultMiddlewares.slice(0);
