@@ -47,6 +47,10 @@ export async function startServer<RC = RequestContext>(
   await loadRoutes<RC>(fastifyServer, appRoutes, apm, events);
 
   try {
+    if (events?.preStart) {
+      await events.preStart();
+    }
+
     const port = Number(process.env.PORT || 3000);
     console.log(`Starting on port ${port}`);
     await fastifyServer.listen({ port, host: '0.0.0.0' });

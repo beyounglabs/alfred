@@ -6,6 +6,7 @@ import { RouteInterface } from './route.interface';
 import { routeAuth } from '@beyounglabs/alfred';
 
 export type LoadRouteExents<RC = RequestContext> = {
+  preStart?: () => Promise<void>;
   preRequest?: (
     req: FastifyRequest<any>,
     res: FastifyReply,
