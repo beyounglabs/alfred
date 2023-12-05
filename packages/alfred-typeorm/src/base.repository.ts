@@ -16,6 +16,7 @@ export class BaseRepository<
   Entity extends ObjectLiteral,
 > extends Repository<Entity> {
   protected useCache: boolean = true;
+  protected foundOnCache: boolean = true;
 
   public setQueryRunner(queryRunner: QueryRunner) {
     Object.assign(this, {
@@ -172,9 +173,12 @@ export class BaseRepository<
     callback: T,
     expireInSeconds?: number,
   ): Promise<ReturnType<T>> {
+    this.foundOnCache = false;
+
     if (this.getUseCache() && cacheKey) {
       const cachedResult = await cache.get(cacheKey);
       if (cachedResult) {
+        this.foundOnCache = true;
         return cachedResult;
       }
     }
