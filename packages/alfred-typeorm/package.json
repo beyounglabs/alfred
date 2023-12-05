@@ -1,6 +1,6 @@
 {
   "name": "@beyounglabs/alfred-typeorm",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Alfred JS Framework (Typeorm)",
   "scripts": {
     "build": "tsc",

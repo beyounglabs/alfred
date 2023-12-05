@@ -16,7 +16,7 @@ export class BaseRepository<
   Entity extends ObjectLiteral,
 > extends Repository<Entity> {
   protected useCache: boolean = true;
-  protected foundOnCache: boolean = true;
+  public foundOnCache: boolean = true;
 
   public setQueryRunner(queryRunner: QueryRunner) {
     Object.assign(this, {
