@@ -109,7 +109,7 @@ export class BaseRepository<
 
     for (const propKey of propsKeys) {
       const value = props[propKey];
-      if (!value) {
+      if (value == null) {
         propList.push('');
         continue;
       }
@@ -124,11 +124,10 @@ export class BaseRepository<
 
     const methodName = this.getCalledMethodName().replace('.', '/');
 
-    const build = process.env.BUILD || '';
-
-    const propsMd5 = md5(JSON.stringify(propList));
-
-    return `${cache.getHashPrefix()}ORM_${methodName}/${propsMd5}:BUILD-${build}`;
+    return cache.generateHash('ORM', {
+      methodName,
+      propList
+    });
   }
 
   public searchQueryBuilder(search: any): SelectQueryBuilder<Entity> {
