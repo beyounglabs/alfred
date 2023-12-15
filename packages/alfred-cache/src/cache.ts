@@ -1,5 +1,5 @@
 import { Apm } from '@beyounglabs/alfred-apm';
-import { Logger } from '@beyounglabs/alfred';
+import { Logger, promiseTimeout } from '@beyounglabs/alfred';
 import { CacheFactory } from './cache.factory';
 import { CacheInterface } from './cache.interface';
 import { CompressionInterface } from './compression.interface';
@@ -17,7 +17,9 @@ export class Cache {
   constructor(instance?: string, apm?: Apm) {
     this.instance = instance || 'default';
     this.apm = apm;
-    drivers[this.instance] = CacheFactory.get(this.instance, this.apm);
+    if (!drivers[this.instance]) {
+      drivers[this.instance] = CacheFactory.get(this.instance, this.apm);
+    }
   }
 
   public async verifyOriginalDriverOnError(
@@ -57,7 +59,18 @@ export class Cache {
         return null;
       }
 
-      return await drivers[this.instance].get(cacheHash);
+      const response = await promiseTimeout(
+        [
+          async () => {
+            return await drivers[this.instance].get(cacheHash);
+          },
+        ],
+        2000,
+        'cache_timeout_2000ms',
+      );
+      
+      return response;
+      
     } catch (e) {
       return await this.startSpan('CACHE_GET_FALLBACK', async () => {
         Logger.error({
