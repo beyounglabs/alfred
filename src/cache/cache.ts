@@ -5,9 +5,13 @@ import { CacheFactory } from './cache.factory';
 import { CacheInterface } from './cache.interface';
 import { CompressionInterface } from './compression.interface';
 import { LocalCache } from './drivers/local.cache';
+import { promiseTimeout } from '../helpers/promise.timeout';
+
+
+const drivers: { [code: string]: CacheInterface } = {};
 
 export class Cache {
-  protected drivers: { [code: string]: CacheInterface } = {};
+
   protected isVerifyngOriginalCache: boolean = false;
   protected instance: string;
   protected apm?: Apm;
@@ -15,7 +19,9 @@ export class Cache {
   constructor(instance?: string, apm?: Apm) {
     this.instance = instance || 'default';
     this.apm = apm;
-    this.drivers[this.instance] = CacheFactory.get(this.instance, this.apm);
+    if (!drivers[this.instance]) {
+      drivers[this.instance] = CacheFactory.get(this.instance, this.apm);
+    }
   }
 
   public async verifyOriginalDriverOnError(
@@ -31,7 +37,7 @@ export class Cache {
 
       const originalDriver = CacheFactory.get(this.instance, this.apm);
       await originalDriver.get(cacheHash);
-      this.drivers[this.instance] = originalDriver;
+      drivers[this.instance] = originalDriver;
 
       this.isVerifyngOriginalCache = false;
     } catch (e) {
@@ -55,15 +61,26 @@ export class Cache {
         return null;
       }
 
-      return await this.drivers[this.instance].get(cacheHash);
+      const response = await promiseTimeout(
+        [
+          async () => {
+            return await drivers[this.instance].get(cacheHash);
+          },
+        ],
+        2000,
+        'cache_timeout_2000ms',
+      );
+
+      return response;
+
     } catch (e) {
       return await this.startSpan('CACHE_GET_FALLBACK', async () => {
         Logger.error({
           message: `Error on get cache, switching to local cache: ${e.message} `,
         });
         this.verifyOriginalDriverOnError(cacheHash);
-        this.drivers[this.instance] = new LocalCache();
-        return await this.drivers[this.instance].get(cacheHash);
+        drivers[this.instance] = new LocalCache();
+        return await drivers[this.instance].get(cacheHash);
       });
     }
   }
@@ -76,7 +93,7 @@ export class Cache {
         return cacheHashes.map(cacheHash => null);
       }
 
-      return await this.drivers[this.instance].getMultiple(cacheHashes);
+      return await drivers[this.instance].getMultiple(cacheHashes);
     } catch (e) {
       return await this.startSpan('CACHE_GET_FALLBACK', async () => {
         Logger.error({
@@ -86,23 +103,23 @@ export class Cache {
         if (cacheHashes.length > 0) {
           this.verifyOriginalDriverOnError(cacheHashes[0]);
         }
-        this.drivers[this.instance] = new LocalCache();
-        return await this.drivers[this.instance].getMultiple(cacheHashes);
+        drivers[this.instance] = new LocalCache();
+        return await drivers[this.instance].getMultiple(cacheHashes);
       });
     }
   }
 
   public async delete(cacheHash: string): Promise<any> {
     try {
-      return await this.drivers[this.instance].delete(cacheHash);
+      return await drivers[this.instance].delete(cacheHash);
     } catch (e) {
       Logger.error({
         message: `Error on delete cache, switching to local cache: ${e.message} `,
       });
 
       this.verifyOriginalDriverOnError(cacheHash);
-      this.drivers[this.instance] = new LocalCache();
-      return await this.drivers[this.instance].delete(cacheHash);
+      drivers[this.instance] = new LocalCache();
+      return await drivers[this.instance].delete(cacheHash);
     }
   }
 
@@ -112,27 +129,27 @@ export class Cache {
     expireInSeconds?: number,
   ): Promise<void> {
     try {
-      await this.drivers[this.instance].set(cacheHash, data, expireInSeconds);
+      await drivers[this.instance].set(cacheHash, data, expireInSeconds);
     } catch (e) {
       Logger.error({
         message: `Error on set cache, switching to local cache: ${e.message} `,
       });
       this.verifyOriginalDriverOnError(cacheHash);
-      this.drivers[this.instance] = new LocalCache();
-      await this.drivers[this.instance].set(cacheHash, data, expireInSeconds);
+      drivers[this.instance] = new LocalCache();
+      await drivers[this.instance].set(cacheHash, data, expireInSeconds);
     }
   }
 
   public setCompression(compression: CompressionInterface): void {
-    this.drivers[this.instance].setCompression(compression);
+    drivers[this.instance].setCompression(compression);
   }
 
   public async clearAll(): Promise<void> {
-    await this.drivers[this.instance].clearAll(this.getHashPrefix());
+    await drivers[this.instance].clearAll(this.getHashPrefix());
   }
 
   public async close(): Promise<void> {
-    await this.drivers[this.instance].close();
+    await drivers[this.instance].close();
   }
 
   public getHashPrefix(): string {
@@ -152,6 +169,6 @@ export class Cache {
   }
 
   public getDriver(): CacheInterface {
-    return this.drivers[this.instance];
+    return drivers[this.instance];
   }
 }
