@@ -107,5 +107,13 @@ export async function loadRoutes<RC = RequestContext>(
         }
       },
     });
+
+    process.on('unhandledRejection', error => {
+      console.error('unhandledRejection', error);
+    });
+
+    process.on('uncaughtException', error => {
+      console.error('uncaughtException', error);
+    });
   }
 }

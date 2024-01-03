@@ -76,5 +76,13 @@ export async function loadRoutes(
         }
       },
     );
+
+    process.on('unhandledRejection', error => {
+      console.error('unhandledRejection', error);
+    });
+
+    process.on('uncaughtException', error => {
+      console.error('uncaughtException', error);
+    });
   }
 }
